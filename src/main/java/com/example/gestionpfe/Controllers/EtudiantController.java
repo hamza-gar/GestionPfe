@@ -53,10 +53,11 @@ public class EtudiantController {
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse,HttpStatus.ACCEPTED);
     }
+
     @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteEtudiant(@PathVariable String id){
         etduiantService.deleteEtudiant(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

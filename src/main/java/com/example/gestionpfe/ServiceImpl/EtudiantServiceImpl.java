@@ -77,6 +77,7 @@ public class EtudiantServiceImpl implements EtudiantService {
         Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
 
         if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+        /*TODO: optional fields.*/
         etudiantEntity.setNom(etudiantdto.getNom());
         etudiantEntity.setPrenom(etudiantdto.getPrenom());
         etudiantEntity.setCin(etudiantdto.getCin());
