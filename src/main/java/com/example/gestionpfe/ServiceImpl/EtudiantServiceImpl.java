@@ -73,6 +73,35 @@ public class EtudiantServiceImpl implements EtudiantService {
     }
 
     @Override
+    public EtudiantDto updateEtudiant(String id, EtudiantDto etudiantdto) {
+        Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
+
+        if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+        etudiantEntity.setNom(etudiantdto.getNom());
+        etudiantEntity.setPrenom(etudiantdto.getPrenom());
+        etudiantEntity.setCin(etudiantdto.getCin());
+        etudiantEntity.setCne(etudiantdto.getCne());
+        etudiantEntity.setApogee(etudiantdto.getApogee());
+
+        Etudiant etudiantUpdated = etudianRepository.save(etudiantEntity);
+
+        EtudiantDto etudiantDto = new EtudiantDto();
+
+        BeanUtils.copyProperties(etudiantUpdated,etudiantDto);
+
+        return etudiantDto;
+    }
+
+    @Override
+    public void deleteEtudiant(String id) {
+        Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
+
+        if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+
+        etudianRepository.delete(etudiantEntity);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Etudiant etudiantEntity =  etudianRepository.findByEmail(email);
 
