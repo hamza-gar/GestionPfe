@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity(name = "equipes")
@@ -16,7 +17,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 public class Equipe {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
     /* TODO:
     *   + Add ForeignKeys for "etudiants" in "equipe" */

@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Etudiant implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
     @Column(name = "idEtudiant",nullable=false)
     private String idEtudiant;

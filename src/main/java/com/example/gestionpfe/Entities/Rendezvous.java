@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Rendezvous {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
 
     @Column(nullable = false)

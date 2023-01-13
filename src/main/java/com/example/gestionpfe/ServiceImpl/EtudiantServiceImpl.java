@@ -36,7 +36,7 @@ public class EtudiantServiceImpl implements EtudiantService {
         BeanUtils.copyProperties(etudiantDto,etudianEntity);
 
         etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
-        etudianEntity.setIdEtudiant(util.generateEtudiantId(32));
+        etudianEntity.setIdEtudiant(util.generateUserId(32));
 
 
         Etudiant newEtudiant = etudianRepository.save(etudianEntity);

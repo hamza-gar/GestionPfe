@@ -15,7 +15,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class Soutenance {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
 
     @Column(nullable = false)

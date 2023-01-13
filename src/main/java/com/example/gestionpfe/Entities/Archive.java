@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Archive {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
     @Column(nullable = false)
     private Float noteFinal;
