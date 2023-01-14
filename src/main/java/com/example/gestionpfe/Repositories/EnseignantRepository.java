@@ -1,7 +1,6 @@
 package com.example.gestionpfe.Repositories;
 
 import com.example.gestionpfe.Entities.Enseignant;
-import com.example.gestionpfe.Entities.Etudiant;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
