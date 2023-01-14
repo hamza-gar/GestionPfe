@@ -3,7 +3,6 @@ package com.example.gestionpfe.Security;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -33,6 +32,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     }
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
         String token  = request.getHeader(SecurityConstants.HEADER_STRING);
+
         if(token!=null){
             token = token.replace(SecurityConstants.TOKEN_PREFIX,"");
             String user = Jwts.parser().setSigningKey(SecurityConstants.TOKEN_SECRET).parseClaimsJws(token).getBody().getSubject();
@@ -43,4 +43,5 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
         }
         return null;
     }
+
 }

@@ -1,9 +1,7 @@
 package com.example.gestionpfe.Services;
 
-import com.example.gestionpfe.Dto.EnseignantDto;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.example.gestionpfe.Controllers.Dto.EnseignantDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface EnseignantService extends UserDetailsService {
     EnseignantDto addEnseignant(EnseignantDto enseignantDto);

@@ -1,9 +1,12 @@
-package com.example.gestionpfe.Security.Enseignant;
+package com.example.gestionpfe.Security.Administrateur;
 
+import com.example.gestionpfe.Controllers.Dto.AdminDto;
 import com.example.gestionpfe.Controllers.Dto.EnseignantDto;
+import com.example.gestionpfe.Requests.AdminLoginRequest;
 import com.example.gestionpfe.Requests.EnseignantLoginRequest;
 
 import com.example.gestionpfe.Security.SecurityConstants;
+import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.SpringApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,19 +27,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EnseignantAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-    public EnseignantAuthenticationFilter(AuthenticationManager authenticationManager) {
+
+    public AdminAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
-
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException {
         try {
-            EnseignantLoginRequest creds = new ObjectMapper().readValue(req.getInputStream(), EnseignantLoginRequest.class);
+            AdminLoginRequest creds = new ObjectMapper().readValue(req.getInputStream(), AdminLoginRequest.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
         }catch (IOException e){
@@ -52,10 +55,10 @@ public class EnseignantAuthenticationFilter extends UsernamePasswordAuthenticati
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 
-        EnseignantService enseignantService = (EnseignantService) SpringApplicationContext.getBean("enseignantServiceImpl");
-        EnseignantDto enseignantDto = enseignantService.getEnseignant(userName);
+        AdminService adminService = (AdminService) SpringApplicationContext.getBean("adminServiceImpl");
+        AdminDto adminDto = adminService.getAdmin(userName);
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        res.addHeader("enseignant_id",enseignantDto.getIdEnseignant());
+        res.addHeader("admin_id",adminDto.getIdAdmin());
     }
 }

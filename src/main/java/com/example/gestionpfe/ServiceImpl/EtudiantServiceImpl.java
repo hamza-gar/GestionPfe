@@ -1,6 +1,6 @@
 package com.example.gestionpfe.ServiceImpl;
 
-import com.example.gestionpfe.Dto.EtudiantDto;
+import com.example.gestionpfe.Controllers.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Services.EtudiantService;
