@@ -1,15 +1,12 @@
 package com.example.gestionpfe.Entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity(name = "domaines")
-@Getter
-@Setter
+@Data
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Domaine {
