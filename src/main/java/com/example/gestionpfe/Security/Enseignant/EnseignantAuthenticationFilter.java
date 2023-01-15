@@ -1,6 +1,6 @@
 package com.example.gestionpfe.Security.Enseignant;
 
-import com.example.gestionpfe.Controllers.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Requests.EnseignantLoginRequest;
 
 import com.example.gestionpfe.Security.SecurityConstants;

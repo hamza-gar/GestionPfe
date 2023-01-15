@@ -1,6 +1,6 @@
 package com.example.gestionpfe.Services;
 
-import com.example.gestionpfe.Controllers.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.EnseignantDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface EnseignantService extends UserDetailsService {

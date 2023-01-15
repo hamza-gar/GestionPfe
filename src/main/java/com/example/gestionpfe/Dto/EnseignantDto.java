@@ -1,4 +1,4 @@
-package com.example.gestionpfe.Controllers.Dto;
+package com.example.gestionpfe.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

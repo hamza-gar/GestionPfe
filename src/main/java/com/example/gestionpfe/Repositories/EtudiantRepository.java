@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface EtudiantRepository extends CrudRepository<Etudiant,Long> {
     Etudiant findByEmail(String email);
     Etudiant findByIdEtudiant(String idEtudiant);
+    Etudiant findByEmailVerificationToken(String emailVerificationToken);
 }

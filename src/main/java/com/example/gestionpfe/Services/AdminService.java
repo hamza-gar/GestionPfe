@@ -1,6 +1,6 @@
 package com.example.gestionpfe.Services;
 
-import com.example.gestionpfe.Controllers.Dto.AdminDto;
+import com.example.gestionpfe.Dto.AdminDto;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

@@ -1,4 +1,4 @@
-package com.example.gestionpfe.Controllers.Dto;
+package com.example.gestionpfe.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +23,6 @@ public class EtudiantDto implements Serializable {
     private String password;
     private String encryptedPassword;
     private String emailVerificationToken;
-    private Boolean emailVerificationStatus = false;
+    private Boolean emailVerificationStatus;
 
 }

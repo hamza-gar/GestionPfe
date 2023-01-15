@@ -1,9 +1,10 @@
 package com.example.gestionpfe.ServiceImpl;
 
-import com.example.gestionpfe.Controllers.Dto.EtudiantDto;
+import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Services.EtudiantService;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class EtudiantServiceImpl implements EtudiantService {
     Utils util;
 
     @Autowired
+    EmailSender emailSender;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -31,52 +35,57 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
 
-        if(checkEtudiant!=null) throw new RuntimeException("Etudiant deja exist !!!");
+        if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
         Etudiant etudianEntity = new Etudiant();
-        BeanUtils.copyProperties(etudiantDto,etudianEntity);
+        BeanUtils.copyProperties(etudiantDto, etudianEntity);
 
         etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
         etudianEntity.setIdEtudiant(util.generateUserId(32));
-
-
+        String token = util.generateUserId(26);
+        etudianEntity.setEmailVerificationToken(token);
+        etudianEntity.setEmailVerificationStatus(false);
+        emailSender.sendVerificationMail(etudianEntity.getEmail(), token);
+        /*TODO: SEND MAIL WITH TOKEN IN URL
+         *  example = localhost:8080/etudiants/verification/{token}*/
         Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
         EtudiantDto newEtudiantDto = new EtudiantDto();
 
-        BeanUtils.copyProperties(newEtudiant,newEtudiantDto);
+        BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
 
         return newEtudiantDto;
     }
 
+
     @Override
     public EtudiantDto getEtudiant(String email) {
-        Etudiant etudiantEntity =  etudianRepository.findByEmail(email);
-        if(etudiantEntity==null)throw new UsernameNotFoundException(email);
+        Etudiant etudiantEntity = etudianRepository.findByEmail(email);
+        if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
         EtudiantDto etudianDto = new EtudiantDto();
 
-        BeanUtils.copyProperties(etudiantEntity,etudianDto);
+        BeanUtils.copyProperties(etudiantEntity, etudianDto);
         return etudianDto;
     }
 
     @Override
     public EtudiantDto getEtudiantByIdEtudiant(String id) {
-        Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
+        Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);
 
-        if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+        if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         EtudiantDto etudiantDto = new EtudiantDto();
 
-        BeanUtils.copyProperties(etudiantEntity,etudiantDto);
+        BeanUtils.copyProperties(etudiantEntity, etudiantDto);
 
         return etudiantDto;
     }
 
     @Override
     public EtudiantDto updateEtudiant(String id, EtudiantDto etudiantdto) {
-        Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
+        Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);
 
-        if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+        if (etudiantEntity == null) throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
         etudiantEntity.setNom(etudiantdto.getNom());
         etudiantEntity.setPrenom(etudiantdto.getPrenom());
@@ -88,26 +97,50 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
 
-        BeanUtils.copyProperties(etudiantUpdated,etudiantDto);
+        BeanUtils.copyProperties(etudiantUpdated, etudiantDto);
 
         return etudiantDto;
     }
 
     @Override
-    public void deleteEtudiant(String id) {
-        Etudiant etudiantEntity =  etudianRepository.findByIdEtudiant(id);
+    public EtudiantDto verifyEtudiant(String token) {
+        Etudiant etudiant = etudianRepository.findByEmailVerificationToken(token);
+        if (etudiant == null) throw new UsernameNotFoundException(token);
+        etudiant.setEmailVerificationStatus(true);
+        Etudiant updatedEtudiant = etudianRepository.save(etudiant);
 
-        if(etudiantEntity == null)throw new UsernameNotFoundException(id);
+        EtudiantDto etudiantDto = new EtudiantDto();
+
+        BeanUtils.copyProperties(updatedEtudiant, etudiantDto);
+
+        return etudiantDto;
+    }
+
+    @Override
+    public EtudiantDto resendVerification(String etudiantId) {
+        Etudiant etudiant = etudianRepository.findByIdEtudiant(etudiantId);
+        if (etudiant == null) throw new UsernameNotFoundException(etudiantId);
+        emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken());
+        EtudiantDto etudiantDto = new EtudiantDto();
+        BeanUtils.copyProperties(etudiant, etudiantDto);
+        return etudiantDto;
+    }
+
+    @Override
+    public void deleteEtudiant(String id) {
+        Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);
+
+        if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         etudianRepository.delete(etudiantEntity);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Etudiant etudiantEntity =  etudianRepository.findByEmail(email);
+        Etudiant etudiantEntity = etudianRepository.findByEmail(email);
 
-        if(etudiantEntity==null)throw new UsernameNotFoundException(email);
+        if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
-        return new User(etudiantEntity.getEmail(),etudiantEntity.getEncryptedPassword(),new ArrayList<>());
+        return new User(etudiantEntity.getEmail(), etudiantEntity.getEncryptedPassword(), new ArrayList<>());
     }
 }

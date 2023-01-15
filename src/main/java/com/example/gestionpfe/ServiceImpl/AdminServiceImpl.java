@@ -1,6 +1,6 @@
 package com.example.gestionpfe.ServiceImpl;
 
-import com.example.gestionpfe.Controllers.Dto.AdminDto;
+import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Entities.Administrateur;
 import com.example.gestionpfe.Repositories.AdminRepository;
 

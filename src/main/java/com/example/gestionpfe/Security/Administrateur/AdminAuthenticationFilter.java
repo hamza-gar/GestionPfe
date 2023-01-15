@@ -1,13 +1,10 @@
 package com.example.gestionpfe.Security.Administrateur;
 
-import com.example.gestionpfe.Controllers.Dto.AdminDto;
-import com.example.gestionpfe.Controllers.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Requests.AdminLoginRequest;
-import com.example.gestionpfe.Requests.EnseignantLoginRequest;
 
 import com.example.gestionpfe.Security.SecurityConstants;
 import com.example.gestionpfe.Services.AdminService;
-import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.SpringApplicationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;

@@ -1,6 +1,6 @@
 package com.example.gestionpfe.Controllers;
 
-import com.example.gestionpfe.Controllers.Dto.AdminDto;
+import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Requests.AdminRequest;
 import com.example.gestionpfe.Responses.AdminResponse;
 import com.example.gestionpfe.Services.AdminService;

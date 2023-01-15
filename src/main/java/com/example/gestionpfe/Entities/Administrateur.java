@@ -27,4 +27,5 @@ public class Administrateur {
     private String encryptedPassword;
     @Column(nullable = false)
     private int authorityLevel;
+
 }

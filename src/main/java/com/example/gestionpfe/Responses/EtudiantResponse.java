@@ -17,4 +17,5 @@ public class EtudiantResponse {
     private String nom;
     private String prenom;
     private String email;
+    private Boolean emailVerificationStatus;
 }
