@@ -35,6 +35,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, SecurityConstants.ETUDIANT_SIGN_IN_URL).permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.ENSEIGNANT_SIGN_IN_URL).permitAll()
                 .antMatchers(HttpMethod.POST, SecurityConstants.ADMIN_SIGN_IN_URL).permitAll()
+                .antMatchers(HttpMethod.GET,"/enseignants/verification/{id:[a-zA-Z0-9]{26}}").permitAll()
                 .antMatchers(HttpMethod.GET,"/etudiants/verification/{id:[a-zA-Z0-9]{26}}").permitAll()
                 .anyRequest().authenticated()
                 .and()

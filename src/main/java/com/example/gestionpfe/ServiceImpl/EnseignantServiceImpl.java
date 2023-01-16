@@ -1,9 +1,12 @@
 package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Services.EnseignantService;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +27,9 @@ public class EnseignantServiceImpl implements EnseignantService {
     Utils util;
 
     @Autowired
+    EmailSender emailSender;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
@@ -37,6 +43,11 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
         enseignantEntity.setIdEnseignant(util.generateUserId(32));
+
+        String token = util.generateUserId(26);
+        enseignantEntity.setEmailVerificationToken(token);
+        enseignantEntity.setEmailVerificationStatus(false);
+        emailSender.sendVerificationMail(enseignantEntity.getEmail(), token,"enseignants");
 
 
         Enseignant newEnseignant = enseignantRepository.save(enseignantEntity);
@@ -90,6 +101,31 @@ public class EnseignantServiceImpl implements EnseignantService {
         BeanUtils.copyProperties(enseignantUpdated,newenseignantDto);
 
         return newenseignantDto;
+    }
+
+
+    @Override
+    public EnseignantDto verifyEnseignant(String token) {
+        Enseignant enseignant = enseignantRepository.findByEmailVerificationToken(token);
+        if (enseignant == null) throw new UsernameNotFoundException(token);
+        enseignant.setEmailVerificationStatus(true);
+        Enseignant updatedEnseignant = enseignantRepository.save(enseignant);
+
+        EnseignantDto enseignantDto = new EnseignantDto();
+
+        BeanUtils.copyProperties(updatedEnseignant, enseignantDto);
+
+        return enseignantDto;
+    }
+
+    @Override
+    public EnseignantDto resendVerification(String enseignantId) {
+        Enseignant enseignant = enseignantRepository.findByIdEnseignant(enseignantId);
+        if (enseignant == null) throw new UsernameNotFoundException(enseignantId);
+        emailSender.sendVerificationMail(enseignant.getEmail(), enseignant.getEmailVerificationToken(),"enseignants");
+        EnseignantDto enseignantDto = new EnseignantDto();
+        BeanUtils.copyProperties(enseignant, enseignantDto);
+        return enseignantDto;
     }
 
     @Override

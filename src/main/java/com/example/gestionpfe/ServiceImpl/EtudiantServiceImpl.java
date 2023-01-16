@@ -44,7 +44,9 @@ public class EtudiantServiceImpl implements EtudiantService {
         String token = util.generateUserId(26);
         etudianEntity.setEmailVerificationToken(token);
         etudianEntity.setEmailVerificationStatus(false);
-        emailSender.sendVerificationMail(etudianEntity.getEmail(), token);
+
+        emailSender.sendVerificationMail(etudianEntity.getEmail(), token,"etudiants");
+
         /*TODO: SEND MAIL WITH TOKEN IN URL
          *  example = localhost:8080/etudiants/verification/{token}*/
         Etudiant newEtudiant = etudianRepository.save(etudianEntity);
@@ -120,7 +122,7 @@ public class EtudiantServiceImpl implements EtudiantService {
     public EtudiantDto resendVerification(String etudiantId) {
         Etudiant etudiant = etudianRepository.findByIdEtudiant(etudiantId);
         if (etudiant == null) throw new UsernameNotFoundException(etudiantId);
-        emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken());
+        emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(),"etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
         BeanUtils.copyProperties(etudiant, etudiantDto);
         return etudiantDto;

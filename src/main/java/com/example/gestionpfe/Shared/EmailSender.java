@@ -16,6 +16,8 @@ public class EmailSender {
     @Autowired
     private JavaMailSender mailSender;
 
+    private static String type;
+
     static String htmlHeader = "<!DOCTYPE html>\n" +
             "<html>\n" +
             "<head>\n" +
@@ -24,7 +26,7 @@ public class EmailSender {
             "<body>\n" +
             "  <h1>Welcome to Our Service!</h1>\n" +
             "  <p>Thanks for registering with us. Please click the link below to verify your email address and complete your registration.</p>\n" +
-            "  <a href=\'http://localhost:8080/etudiants/verification/";
+            "  <a href=\'http://localhost:8080/";
 
     static String htmlFooter = "\'>Verify Email Address</a>\n" +
             "  <p>If the link above does not work, please copy and paste the following URL into your browser:</p>\n" +
@@ -35,7 +37,9 @@ public class EmailSender {
             "</body>\n" +
             "</html>";
 
-    public void sendVerificationMail(String toEmail, String token) {
+
+
+    public void sendVerificationMail(String toEmail, String token,String type) {
 
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -43,7 +47,7 @@ public class EmailSender {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(toEmail);
             helper.setSubject("Gestion PFE : Verification");
-            helper.setText(htmlHeader + token + htmlFooter, true);
+            helper.setText(htmlHeader +type+"/verification/"+ token + htmlFooter, true);
             mailSender.send(message);
         }catch (Exception e){
             e.printStackTrace();

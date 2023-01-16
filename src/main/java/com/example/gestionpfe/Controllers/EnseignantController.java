@@ -1,8 +1,10 @@
 package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Requests.EnseignantRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
+import com.example.gestionpfe.Responses.EtudiantResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,15 @@ public class EnseignantController {
         EnseignantDto enseignantDto = enseignantService.getEnseignantByIdEnseignant(id);
         EnseignantResponse  enseignantResponse = new EnseignantResponse();
         BeanUtils.copyProperties(enseignantDto,enseignantResponse);
+        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/verification/{token}")
+    public ResponseEntity<EnseignantResponse> verifyEnseignant(@PathVariable String token) {
+        EnseignantDto enseignantDto = enseignantService.verifyEnseignant(token);
+        EnseignantResponse enseignantResponse = new EnseignantResponse();
+        BeanUtils.copyProperties(enseignantDto, enseignantResponse);
+
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
 
@@ -52,6 +63,17 @@ public class EnseignantController {
         BeanUtils.copyProperties(UpdateEnseignant,enseignantResponse);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse,HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping(path="/sendVerification/{id}")
+    public ResponseEntity<EnseignantResponse> sendVerification(@PathVariable String id){
+
+        EnseignantDto enseignantDto = enseignantService.resendVerification(id);
+
+        EnseignantResponse enseignantResponse = new EnseignantResponse();
+        BeanUtils.copyProperties(enseignantDto, enseignantResponse);
+
+        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(path="/{id}")
