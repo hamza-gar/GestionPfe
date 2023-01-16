@@ -1,8 +1,11 @@
 package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.EtudiantDto;
+import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
+import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EtudiantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
@@ -15,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
@@ -25,6 +29,14 @@ public class EtudiantServiceImpl implements EtudiantService {
     Utils util;
 
     @Autowired
+    DomaineService domaineService;
+
+    @Autowired
+    DomaineRepository domaineRepository;
+
+
+
+    @Autowired
     EmailSender emailSender;
 
     @Autowired
@@ -33,29 +45,39 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Override
     public EtudiantDto addEtudiant(EtudiantDto etudiantDto) {
 
-        Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
+        String domaine = etudiantDto.getEmail().split("@")[1];
 
-        if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
-        Etudiant etudianEntity = new Etudiant();
-        BeanUtils.copyProperties(etudiantDto, etudianEntity);
+       if(domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine))
+       {
+           Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
 
-        etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
-        etudianEntity.setIdEtudiant(util.generateUserId(32));
-        String token = util.generateUserId(26);
-        etudianEntity.setEmailVerificationToken(token);
-        etudianEntity.setEmailVerificationStatus(false);
+           if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
+           Etudiant etudianEntity = new Etudiant();
+           BeanUtils.copyProperties(etudiantDto, etudianEntity);
 
-        emailSender.sendVerificationMail(etudianEntity.getEmail(), token,"etudiants");
+
+           etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
+           etudianEntity.setIdEtudiant(util.generateUserId(32));
+           String token = util.generateUserId(26);
+           etudianEntity.setEmailVerificationToken(token);
+           etudianEntity.setEmailVerificationStatus(false);
+
+           emailSender.sendVerificationMail(etudianEntity.getEmail(), token,"etudiants");
+           Etudiant newEtudiant = etudianRepository.save(etudianEntity);
+
+           EtudiantDto newEtudiantDto = new EtudiantDto();
+
+           BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
+
+           return newEtudiantDto;
+       }else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
+
+
+
 
         /*TODO: SEND MAIL WITH TOKEN IN URL
          *  example = localhost:8080/etudiants/verification/{token}*/
-        Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
-        EtudiantDto newEtudiantDto = new EtudiantDto();
-
-        BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
-
-        return newEtudiantDto;
     }
 
 

@@ -41,7 +41,11 @@ public class EnseignantController {
         EnseignantDto enseignantDto = new EnseignantDto();
         BeanUtils.copyProperties(enseignantRequest,enseignantDto);
 
+
         EnseignantDto AddEnseignant = enseignantService.addEnseignant(enseignantDto);
+
+        if(AddEnseignant==null)
+            return new ResponseEntity<EnseignantResponse>(new EnseignantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
 

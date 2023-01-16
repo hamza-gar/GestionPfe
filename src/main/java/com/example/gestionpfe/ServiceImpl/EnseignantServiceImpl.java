@@ -4,7 +4,9 @@ import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
+import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
@@ -30,33 +32,48 @@ public class EnseignantServiceImpl implements EnseignantService {
     EmailSender emailSender;
 
     @Autowired
+    DomaineService domaineService;
+
+    @Autowired
+    DomaineRepository domaineRepository;
+
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public EnseignantDto addEnseignant(EnseignantDto enseignantDto) {
 
-        Enseignant checkEnseignant = enseignantRepository.findByEmail(enseignantDto.getEmail());
+        String domaine = enseignantDto.getEmail().split("@")[1];
+        if(domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine))
+        {
+            throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
+        }else{
+            Enseignant checkEnseignant = enseignantRepository.findByEmail(enseignantDto.getEmail());
 
-        if(checkEnseignant!=null) throw new RuntimeException("Enseignant deja exist !!!");
-        Enseignant enseignantEntity = new Enseignant();
-        BeanUtils.copyProperties(enseignantDto,enseignantEntity);
+            if(checkEnseignant!=null) throw new RuntimeException("Enseignant deja exist !!!");
+            Enseignant enseignantEntity = new Enseignant();
+            BeanUtils.copyProperties(enseignantDto,enseignantEntity);
 
-        enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
-        enseignantEntity.setIdEnseignant(util.generateUserId(32));
+            enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
+            enseignantEntity.setIdEnseignant(util.generateUserId(32));
 
-        String token = util.generateUserId(26);
-        enseignantEntity.setEmailVerificationToken(token);
-        enseignantEntity.setEmailVerificationStatus(false);
-        emailSender.sendVerificationMail(enseignantEntity.getEmail(), token,"enseignants");
+            String token = util.generateUserId(26);
+            enseignantEntity.setEmailVerificationToken(token);
+            enseignantEntity.setEmailVerificationStatus(false);
+            emailSender.sendVerificationMail(enseignantEntity.getEmail(), token,"enseignants");
 
 
-        Enseignant newEnseignant = enseignantRepository.save(enseignantEntity);
+            Enseignant newEnseignant = enseignantRepository.save(enseignantEntity);
 
-        EnseignantDto newEnseignantDto = new EnseignantDto();
+            EnseignantDto newEnseignantDto = new EnseignantDto();
 
-        BeanUtils.copyProperties(newEnseignant,newEnseignantDto);
+            BeanUtils.copyProperties(newEnseignant,newEnseignantDto);
 
-        return newEnseignantDto;
+            return newEnseignantDto;
+        }
+
+
     }
 
     @Override

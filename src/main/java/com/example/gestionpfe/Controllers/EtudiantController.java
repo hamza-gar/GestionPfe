@@ -42,6 +42,8 @@ public class EtudiantController {
         BeanUtils.copyProperties(etudiantrequest, etudiantdto);
 
         EtudiantDto AddEtudiant = etudiantService.addEtudiant(etudiantdto);
+        if(AddEtudiant==null)
+            return new ResponseEntity<EtudiantResponse>(new EtudiantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
 
