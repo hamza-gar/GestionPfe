@@ -18,6 +18,5 @@ public class AdminDto {
     private String email;
     private String password;
     private String encryptedPassword;
-    private String emailVerificationToken;
-    private Boolean emailVerificationStatus = false;
+    private int authorityLevel;
 }

@@ -4,6 +4,7 @@ import com.example.gestionpfe.Security.Administrateur.AdminAuthenticationFilter;
 import com.example.gestionpfe.Security.Enseignant.EnseignantAuthenticationFilter;
 import com.example.gestionpfe.Security.Etudiant.EtudiantAuthenticationFilter;
 
+import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.EtudiantService;
 import org.springframework.http.HttpMethod;
@@ -19,10 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class WebSecurity extends WebSecurityConfigurerAdapter {
     private final EtudiantService etudiantDetailService;
     private final EnseignantService enseignantDetailService;
-    private final EnseignantService adminDetailService;
+    private final AdminService adminDetailService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurity(EtudiantService etudiantDetailService, EnseignantService enseignantDetailService, EnseignantService adminDetailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public WebSecurity(EtudiantService etudiantDetailService, EnseignantService enseignantDetailService, AdminService adminDetailService, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.etudiantDetailService = etudiantDetailService;
         this.enseignantDetailService = enseignantDetailService;
         this.adminDetailService = adminDetailService;
@@ -60,11 +61,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/etudiants/login");
         return filter;
     }
+
     protected AdminAuthenticationFilter getAdminAuthenticationFilter() throws Exception {
         final AdminAuthenticationFilter filter = new AdminAuthenticationFilter(authenticationManager());
         filter.setFilterProcessesUrl("/admins/login");
         return filter;
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth)throws Exception{
         auth.userDetailsService(etudiantDetailService).passwordEncoder(bCryptPasswordEncoder);

@@ -2,7 +2,6 @@ package com.example.gestionpfe.Security.Administrateur;
 
 import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Requests.AdminLoginRequest;
-
 import com.example.gestionpfe.Security.SecurityConstants;
 import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.SpringApplicationContext;
@@ -27,7 +26,6 @@ import java.util.Date;
 public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
-
     public AdminAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -36,15 +34,14 @@ public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException {
         try {
+            System.out.println("hi");
             AdminLoginRequest creds = new ObjectMapper().readValue(req.getInputStream(), AdminLoginRequest.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
         }catch (IOException e){
             throw new RuntimeException(e);
         }
-
     }
-
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication auth)throws IOException , ServletException {
@@ -52,8 +49,8 @@ public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFil
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 
-        AdminService adminService = (AdminService) SpringApplicationContext.getBean("adminServiceImpl");
-        AdminDto adminDto = adminService.getAdmin(userName);
+        AdminService admineService = (AdminService) SpringApplicationContext.getBean("adminServiceImpl");
+        AdminDto adminDto = admineService.getAdmin(userName);
 
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("admin_id",adminDto.getIdAdmin());

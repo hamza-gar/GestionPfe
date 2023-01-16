@@ -15,7 +15,7 @@ public class Administrateur {
     private long id;
     @Column(name = "idAdmin",nullable=false)
     private String idAdmin;
-    @Column(nullable = false, length = 20,unique = true)
+    @Column(nullable = false, length = 20)
     private String cin;
     @Column(nullable = false, length = 50)
     private String nom;

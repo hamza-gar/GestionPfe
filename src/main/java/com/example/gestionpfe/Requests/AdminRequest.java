@@ -10,9 +10,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminRequest {
-    private String cin;
     private String nom;
     private String prenom;
+    private String cin;
     private String email;
     private String password;
+    private int authorityLevel;
 }
