@@ -4,8 +4,12 @@ import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Entities.Role;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
+import com.example.gestionpfe.Repositories.RoleRepository;
+import com.example.gestionpfe.Security.Enseignant.EnseignantPrincipal;
+import com.example.gestionpfe.Security.Etudiant.EtudiantPrincipal;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Shared.EmailSender;
@@ -37,6 +41,8 @@ public class EnseignantServiceImpl implements EnseignantService {
     @Autowired
     DomaineRepository domaineRepository;
 
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -61,6 +67,8 @@ public class EnseignantServiceImpl implements EnseignantService {
             String token = util.generateUserId(26);
             enseignantEntity.setEmailVerificationToken(token);
             enseignantEntity.setEmailVerificationStatus(false);
+            Role role = roleRepository.findByName("ROLE_ENSEIGNANT");
+            enseignantEntity.setRole(role);
             emailSender.sendVerificationMail(enseignantEntity.getEmail(), token,"enseignants");
 
 
@@ -160,6 +168,6 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         if(enseignantEntity==null)throw new UsernameNotFoundException(email);
 
-        return new User(enseignantEntity.getEmail(),enseignantEntity.getEncryptedPassword(),new ArrayList<>());
+        return new EnseignantPrincipal(enseignantEntity);
     }
 }

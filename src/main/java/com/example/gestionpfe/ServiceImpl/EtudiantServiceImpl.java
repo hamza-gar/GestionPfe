@@ -3,22 +3,22 @@ package com.example.gestionpfe.ServiceImpl;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Entities.Role;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
+import com.example.gestionpfe.Repositories.RoleRepository;
+import com.example.gestionpfe.Security.Etudiant.EtudiantPrincipal;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EtudiantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
@@ -34,7 +34,8 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Autowired
     DomaineRepository domaineRepository;
 
-
+    @Autowired
+    RoleRepository roleRepository;
 
     @Autowired
     EmailSender emailSender;
@@ -47,30 +48,31 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         String domaine = etudiantDto.getEmail().split("@")[1];
 
-       if(domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine))
-       {
-           Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
+        if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
+            Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
 
-           if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
-           Etudiant etudianEntity = new Etudiant();
-           BeanUtils.copyProperties(etudiantDto, etudianEntity);
+            if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
+            Etudiant etudianEntity = new Etudiant();
+            BeanUtils.copyProperties(etudiantDto, etudianEntity);
 
 
-           etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
-           etudianEntity.setIdEtudiant(util.generateUserId(32));
-           String token = util.generateUserId(26);
-           etudianEntity.setEmailVerificationToken(token);
-           etudianEntity.setEmailVerificationStatus(false);
+            etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
+            etudianEntity.setIdEtudiant(util.generateUserId(32));
+            String token = util.generateUserId(26);
+            etudianEntity.setEmailVerificationToken(token);
+            etudianEntity.setEmailVerificationStatus(false);
+            Role erole = roleRepository.findByName("ROLE_ETUDIANT");
+            etudianEntity.setRole(erole);
+            emailSender.sendVerificationMail(etudianEntity.getEmail(), token, "etudiants");
 
-           emailSender.sendVerificationMail(etudianEntity.getEmail(), token,"etudiants");
-           Etudiant newEtudiant = etudianRepository.save(etudianEntity);
+            Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
-           EtudiantDto newEtudiantDto = new EtudiantDto();
+            EtudiantDto newEtudiantDto = new EtudiantDto();
 
-           BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
+            BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
 
-           return newEtudiantDto;
-       }else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
+            return newEtudiantDto;
+        } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
 
 
 
@@ -144,7 +146,7 @@ public class EtudiantServiceImpl implements EtudiantService {
     public EtudiantDto resendVerification(String etudiantId) {
         Etudiant etudiant = etudianRepository.findByIdEtudiant(etudiantId);
         if (etudiant == null) throw new UsernameNotFoundException(etudiantId);
-        emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(),"etudiants");
+        emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(), "etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
         BeanUtils.copyProperties(etudiant, etudiantDto);
         return etudiantDto;
@@ -165,6 +167,6 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
-        return new User(etudiantEntity.getEmail(), etudiantEntity.getEncryptedPassword(), new ArrayList<>());
+        return new EtudiantPrincipal(etudiantEntity);
     }
 }

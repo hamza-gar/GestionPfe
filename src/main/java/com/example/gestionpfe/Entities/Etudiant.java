@@ -14,11 +14,11 @@ public class Etudiant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
-    @Column(name = "idEtudiant",nullable=false)
+    @Column(name = "idEtudiant", nullable = false)
     private String idEtudiant;
     @Column(nullable = false)
     private Long apogee;
-    @Column(nullable = false,length = 20)
+    @Column(nullable = false, length = 20)
     private String cne;
     @Column(nullable = false, length = 20)
     private String cin;
@@ -26,7 +26,7 @@ public class Etudiant implements Serializable {
     private String nom;
     @Column(nullable = false, length = 50)
     private String prenom;
-    @Column(nullable = false ,length = 120,unique = true)
+    @Column(nullable = false, length = 120, unique = true)
     private String email;
     @Column(nullable = false)
     private String encryptedPassword;
@@ -35,4 +35,9 @@ public class Etudiant implements Serializable {
     @Column(nullable = false)//columnDefinition = "boolean default false"
     private Boolean emailVerificationStatus = false;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "etudiants_role",
+            joinColumns = @JoinColumn(name = "etudiants_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+    private Role role;
 }

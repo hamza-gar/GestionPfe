@@ -3,13 +3,14 @@ package com.example.gestionpfe.Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "enseignants")
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Enseignant {
+public class Enseignant implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
@@ -30,4 +31,9 @@ public class Enseignant {
     @Column(nullable = false)//columnDefinition = "boolean default false"
     private Boolean emailVerificationStatus = false;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "enseignants_role",
+            joinColumns = @JoinColumn(name = "enseignants_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+    private Role role;
 }

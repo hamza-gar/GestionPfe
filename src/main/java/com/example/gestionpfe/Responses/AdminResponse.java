@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AdminResponse {
-    private String idEnseignant;
+    private String idAdmin;
     private String cin;
     private String nom;
     private String prenom;

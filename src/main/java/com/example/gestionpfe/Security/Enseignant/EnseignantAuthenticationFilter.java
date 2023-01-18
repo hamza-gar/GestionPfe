@@ -48,7 +48,7 @@ public class EnseignantAuthenticationFilter extends UsernamePasswordAuthenticati
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication auth)throws IOException , ServletException {
-        String userName = ((User)auth.getPrincipal()).getUsername();
+        String userName = ((EnseignantPrincipal)auth.getPrincipal()).getUsername();
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 

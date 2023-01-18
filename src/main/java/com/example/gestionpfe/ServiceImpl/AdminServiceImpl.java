@@ -4,6 +4,7 @@ import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Entities.Administrateur;
 import com.example.gestionpfe.Repositories.AdminRepository;
 
+import com.example.gestionpfe.Security.Administrateur.AdminPrincipal;
 import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.Shared.Utils;
 import org.springframework.beans.BeanUtils;
@@ -109,6 +110,6 @@ public class AdminServiceImpl implements AdminService {
 
         if(adminEntity==null)throw new UsernameNotFoundException(email);
 
-        return new User(adminEntity.getEmail(),adminEntity.getEncryptedPassword(),new ArrayList<>());
+        return new AdminPrincipal(adminEntity);
     }
 }

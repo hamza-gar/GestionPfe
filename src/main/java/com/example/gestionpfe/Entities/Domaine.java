@@ -3,13 +3,14 @@ package com.example.gestionpfe.Entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity(name = "domaines")
 @Data
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Domaine {
+public class Domaine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;

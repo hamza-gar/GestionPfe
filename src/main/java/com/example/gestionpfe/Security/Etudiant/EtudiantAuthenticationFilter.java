@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EtudiantAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
     public EtudiantAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -47,7 +47,7 @@ public class EtudiantAuthenticationFilter extends UsernamePasswordAuthentication
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication auth)throws IOException , ServletException {
-        String userName = ((User)auth.getPrincipal()).getUsername();
+        String userName = ((EtudiantPrincipal)auth.getPrincipal()).getUsername();
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 

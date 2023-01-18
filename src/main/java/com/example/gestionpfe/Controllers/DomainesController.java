@@ -76,7 +76,7 @@ public class DomainesController {
     }
 
     @DeleteMapping(path="/{id}")
-    public ResponseEntity<Object> deleteAdmin(@PathVariable String id){
+    public ResponseEntity<Object> deleteDomaine(@PathVariable String id){
         domaineService.deleteDomaine(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
