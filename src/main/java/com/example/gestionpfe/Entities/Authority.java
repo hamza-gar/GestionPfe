@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "authority")
@@ -18,5 +19,8 @@ public class Authority {
 
     @Column(unique = false, nullable = false)
     private String name;
+
+    @ManyToMany(mappedBy = "authority")
+    private List<Role> roles;
 
 }

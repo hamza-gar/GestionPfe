@@ -3,6 +3,7 @@ package com.example.gestionpfe;
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.Repositories.*;
 import com.example.gestionpfe.Shared.Utils;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@Transactional
 public class InitialUsersSetup {
+
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
 
     @Autowired
     RoleRepository roleRepository;
@@ -139,16 +143,27 @@ public class InitialUsersSetup {
 
 
         Role sAdminRole = createRole("ROLE_SUPERADMIN", sAdminAuthorities);
+        logger.info("Role super Admin created.");
         Role adminRole = createRole("ROLE_ADMIN", adminAuthorities);
+        logger.info("Role Admin created.");
         Role etudiantRole = createRole("ROLE_ETUDIANT", etudiantAuthorities);
+        logger.info("Role Etudiant created.");
         Role enseignantRole = createRole("ROLE_ENSEIGNANT", enseignantAuthorities);
+        logger.info("Role Enseignant created.");
+
 
         Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true);
+        logger.info("Domaine etu.uae.ac.ma created.");
         Domaine ensDomaine = createDomaine("uae.ac.ma", false);
+        logger.info("Domaine super Admin created.");
         Domaine fake1 = createDomaine("gmail.com", true);
+        logger.info("Domaine gmail.com for etudiant created.");
         Domaine fake2 = createDomaine("gmail.com", false);
+        logger.info("Domaine gmail.com for enseignant created.");
 
         Administrateur administrateur = createAdministrateur(sAdminRole);
+        logger.info("Super Admin created.");
+
 
     }
 
@@ -231,7 +246,6 @@ public class InitialUsersSetup {
         if (role == null) {
             role = new Role();
             role.setName(name);
-            System.out.println(authorities.toString());
             role.setAuthority(authorities);
             role = roleRepository.save(role);
         }
