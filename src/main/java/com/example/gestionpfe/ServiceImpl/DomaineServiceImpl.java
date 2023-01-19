@@ -3,10 +3,12 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Entities.Domaine;
+import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Service
 public class DomaineServiceImpl implements DomaineService {
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     DomaineRepository domaineRepository;
@@ -38,14 +41,14 @@ public class DomaineServiceImpl implements DomaineService {
         if(checkDomaine!=null) throw new RuntimeException("domaine deja exist !!!");
         Domaine domaineEntity = new Domaine();
         domaineEntity = modelMapper.map(domainDto, Domaine.class);
-        //BeanUtils.copyProperties(domainDto,domaineEntity);
+        logger.info("domaineEntity : "+domaineEntity);
 
 
         Domaine newDomaine = domaineRepository.save(domaineEntity);
 
         DomaineDto newDomaineDto = new DomaineDto();
         newDomaineDto = modelMapper.map(newDomaine, DomaineDto.class);
-        //BeanUtils.copyProperties(newDomaine,newDomaineDto);
+        logger.info("domaine found successfully");
 
         return newDomaineDto;
     }
@@ -57,7 +60,7 @@ public class DomaineServiceImpl implements DomaineService {
 
         DomaineDto domaineDto = new DomaineDto();
         domaineDto = modelMapper.map(DomaineEntity, DomaineDto.class);
-        //BeanUtils.copyProperties(DomaineEntity,domaineDto);
+        logger.info("domaine found successfully");
         return domaineDto;
     }
 
@@ -69,7 +72,7 @@ public class DomaineServiceImpl implements DomaineService {
 
         DomaineDto domaineDto = new DomaineDto();
         domaineDto = modelMapper.map(DomaineEntity, DomaineDto.class);
-        //BeanUtils.copyProperties(DomaineEntity,domaineDto);
+        logger.info("domaine found successfully");
         return domaineDto;
     }
 
@@ -88,7 +91,7 @@ public class DomaineServiceImpl implements DomaineService {
 
         DomaineDto newdomaineDto = new DomaineDto();
         newdomaineDto = modelMapper.map(domaineUpdated, DomaineDto.class);
-        //BeanUtils.copyProperties(domaineUpdated,newdomaineDto);
+        logger.info("domaine updated successfully");
 
         return newdomaineDto;
     }
@@ -115,7 +118,7 @@ public class DomaineServiceImpl implements DomaineService {
         for(Domaine domaineEntity:domaines){
             DomaineDto domaine = new DomaineDto();
             domaine = modelMapper.map(domaineEntity, DomaineDto.class);
-            //BeanUtils.copyProperties(domaineEntity,domaine);
+            logger.info("domaine found successfully");
 
             domainesDto.add(domaine);
         }
@@ -126,7 +129,7 @@ public class DomaineServiceImpl implements DomaineService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Domaine DomaineEntity =  domaineRepository.findByNomDomaine(username);
-
+        logger.info("domaine found successfully");
         if(DomaineEntity==null)throw new UsernameNotFoundException(username);
 
         return new User(DomaineEntity.getNomDomaine(),DomaineEntity.getEtablissement(),new ArrayList<>());

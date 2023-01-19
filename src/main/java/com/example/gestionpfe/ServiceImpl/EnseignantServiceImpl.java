@@ -5,6 +5,7 @@ import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Role;
+import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.RoleRepository;
@@ -15,6 +16,7 @@ import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 
 @Service
 public class EnseignantServiceImpl implements EnseignantService {
-
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
@@ -64,7 +66,7 @@ public class EnseignantServiceImpl implements EnseignantService {
             if(checkEnseignant!=null) throw new RuntimeException("Enseignant deja exist !!!");
             Enseignant enseignantEntity = new Enseignant();
             enseignantEntity = modelMapper.map(enseignantDto,Enseignant.class);
-            //BeanUtils.copyProperties(enseignantDto,enseignantEntity);
+            logger.info("EnseignantEntity mapping: "+enseignantEntity);
 
             enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
             enseignantEntity.setIdEnseignant(util.generateUserId(32));
@@ -81,7 +83,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
             EnseignantDto newEnseignantDto = new EnseignantDto();
             newEnseignantDto = modelMapper.map(newEnseignant,EnseignantDto.class);
-            //BeanUtils.copyProperties(newEnseignant,newEnseignantDto);
+            logger.info("newEnseignantDto mapping: "+newEnseignantDto);
 
             return newEnseignantDto;
         }
@@ -96,7 +98,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
-        //BeanUtils.copyProperties(enseignantEntity,enseignantDto);
+        logger.info("enseignantDto mapping: "+enseignantDto);
         return enseignantDto;
     }
 
@@ -108,7 +110,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
-        //BeanUtils.copyProperties(enseignantEntity,enseignantDto);
+        logger.info("enseignantDto mapping: "+enseignantDto);
 
         return enseignantDto;
     }
@@ -128,7 +130,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto newenseignantDto = new EnseignantDto();
         newenseignantDto = modelMapper.map(enseignantUpdated,EnseignantDto.class);
-        //BeanUtils.copyProperties(enseignantUpdated,newenseignantDto);
+        logger.info("newenseignantDto mapping: "+newenseignantDto);
 
         return newenseignantDto;
     }
@@ -143,7 +145,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(updatedEnseignant,EnseignantDto.class);
-        //BeanUtils.copyProperties(updatedEnseignant, enseignantDto);
+        logger.info("enseignantDto mapping: "+enseignantDto);
 
         return enseignantDto;
     }
@@ -155,14 +157,14 @@ public class EnseignantServiceImpl implements EnseignantService {
         emailSender.sendVerificationMail(enseignant.getEmail(), enseignant.getEmailVerificationToken(),"enseignants");
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignant,EnseignantDto.class);
-        //BeanUtils.copyProperties(enseignant, enseignantDto);
+        logger.info("enseignantDto mapping: "+enseignantDto);
         return enseignantDto;
     }
 
     @Override
     public void deleteEnseignant(String id) {
         Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
-
+        logger.info("enseignantEntity mapping: "+enseignantEntity);
         if(enseignantEntity == null)throw new UsernameNotFoundException(id);
 
         enseignantRepository.delete(enseignantEntity);
@@ -171,7 +173,7 @@ public class EnseignantServiceImpl implements EnseignantService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Enseignant enseignantEntity =  enseignantRepository.findByEmail(email);
-
+        logger.info("enseignantEntity mapping: "+enseignantEntity);
         if(enseignantEntity==null)throw new UsernameNotFoundException(email);
 
         return new EnseignantPrincipal(enseignantEntity);

@@ -4,6 +4,7 @@ import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Role;
+import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.RoleRepository;
@@ -13,6 +14,7 @@ import com.example.gestionpfe.Services.EtudiantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
+
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     EtudiantRepository etudianRepository;
@@ -52,11 +56,12 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
             Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
+            logger.info("checkEtudiant : " + checkEtudiant);
 
             if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
             Etudiant etudianEntity = new Etudiant();
             etudianEntity = modelMapper.map(etudiantDto, Etudiant.class);
-            //BeanUtils.copyProperties(etudiantDto, etudianEntity);
+            logger.info("etudianEntity mapping: " + etudianEntity);
 
 
             etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
@@ -67,21 +72,18 @@ public class EtudiantServiceImpl implements EtudiantService {
             Role erole = roleRepository.findByName("ROLE_ETUDIANT");
             etudianEntity.setRole(erole);
             emailSender.sendVerificationMail(etudianEntity.getEmail(), token, "etudiants");
-
+            logger.info("emailSender : " + emailSender);
             Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
             EtudiantDto newEtudiantDto = new EtudiantDto();
+
             newEtudiantDto = modelMapper.map(newEtudiant, EtudiantDto.class);
-            //BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
+            logger.info("newEtudiantDto mapping: " + newEtudiantDto);
 
             return newEtudiantDto;
         } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
 
 
-
-
-        /*TODO: SEND MAIL WITH TOKEN IN URL
-         *  example = localhost:8080/etudiants/verification/{token}*/
 
     }
 
@@ -93,7 +95,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudianDto = new EtudiantDto();
         etudianDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
-        //BeanUtils.copyProperties(etudiantEntity, etudianDto);
+        logger.info("etudianDto mapping: " + etudianDto);
         return etudianDto;
     }
 
@@ -105,7 +107,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
-        //BeanUtils.copyProperties(etudiantEntity, etudiantDto);
+        logger.info("etudiantDto mapping: " + etudiantDto);
 
         return etudiantDto;
     }
@@ -126,7 +128,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiantUpdated, EtudiantDto.class);
-        //BeanUtils.copyProperties(etudiantUpdated, etudiantDto);
+        logger.info("etudiantDto mapping: " + etudiantDto);
 
         return etudiantDto;
     }
@@ -140,8 +142,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(updatedEtudiant, EtudiantDto.class);
-       // BeanUtils.copyProperties(updatedEtudiant, etudiantDto);
-
+        logger.info("etudiantDto mapping: " + etudiantDto);
         return etudiantDto;
     }
 
@@ -152,14 +153,14 @@ public class EtudiantServiceImpl implements EtudiantService {
         emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(), "etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
-        //BeanUtils.copyProperties(etudiant, etudiantDto);
+        logger.info("etudiantDto mapping: " + etudiantDto);
         return etudiantDto;
     }
 
     @Override
     public void deleteEtudiant(String id) {
         Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);
-
+        logger.info("etudiantEntity : " + etudiantEntity);
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         etudianRepository.delete(etudiantEntity);
@@ -168,7 +169,7 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Etudiant etudiantEntity = etudianRepository.findByEmail(email);
-
+        logger.info("etudiantEntity : " + etudiantEntity);
         if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
         return new EtudiantPrincipal(etudiantEntity);

@@ -142,7 +142,7 @@ public class InitialUsersSetup {
         enseignantAuthorities.add(DELETE_ENSEIGNANT_AUTHORITY);
 
 
-        Role sAdminRole = createRole("ROLE_SUPERADMIN", sAdminAuthorities);
+        Role sAdminRole = createRole("ROLE_SUPER_ADMIN", sAdminAuthorities);
         logger.info("Role super Admin created.");
         Role adminRole = createRole("ROLE_ADMIN", adminAuthorities);
         logger.info("Role Admin created.");
