@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class DomainesController {
     @Autowired
     DomaineService domaineService;
 
+    @PreAuthorize("hasAuthority('GET_DOMAINE_AUTHORITY')")
     @GetMapping(path="/{id}")
     public ResponseEntity<DomaineResponse> getDomaine(@PathVariable String id){
         DomaineDto domainDto = domaineService.getDomaineById(id);
@@ -34,6 +36,7 @@ public class DomainesController {
         return new ResponseEntity<DomaineResponse>(domaineResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GET_ALL_DOMAINE_AUTHORITY')")
     @GetMapping
     public List<DomaineResponse> getAllDomaines(@RequestParam(value = "page") int page,@RequestParam(value="limit" )int limit){
         List<DomaineResponse> domaineResponse = new ArrayList<>();
@@ -49,7 +52,7 @@ public class DomainesController {
     }
 
 
-
+    @PreAuthorize("hasAuthority('ADD_DOMAINE_AUTHORITY')")
     @PostMapping
     public ResponseEntity<DomaineResponse> addDomaine(@RequestBody DomaineRequest domaineRequest){
         DomaineDto domainDto = new DomaineDto();
@@ -63,6 +66,7 @@ public class DomainesController {
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_DOMAINE_AUTHORITY')")
     @PutMapping(path="/{id}")
     public ResponseEntity<DomaineResponse> updateDomaine(@PathVariable String id,@RequestBody DomaineRequest domaineRequest){
 
@@ -77,6 +81,7 @@ public class DomainesController {
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.ACCEPTED);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_DOMAINE_AUTHORITY')")
     @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteDomaine(@PathVariable String id){
         domaineService.deleteDomaine(id);
