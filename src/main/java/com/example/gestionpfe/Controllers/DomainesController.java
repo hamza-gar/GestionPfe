@@ -31,7 +31,6 @@ public class DomainesController {
         DomaineDto domainDto = domaineService.getDomaineById(id);
         DomaineResponse  domaineResponse = new DomaineResponse();
         domaineResponse = modelMapper.map(domainDto,DomaineResponse.class);
-        //BeanUtils.copyProperties(domainDto,domaineResponse);
         return new ResponseEntity<DomaineResponse>(domaineResponse, HttpStatus.OK);
     }
 
@@ -43,7 +42,6 @@ public class DomainesController {
         for(DomaineDto domainDto:domaines){
             DomaineResponse domaine = new DomaineResponse();
             domaine = modelMapper.map(domainDto,DomaineResponse.class);
-            //BeanUtils.copyProperties(domainDto,domaine);
 
             domaineResponse.add(domaine);
         }
@@ -56,13 +54,11 @@ public class DomainesController {
     public ResponseEntity<DomaineResponse> addDomaine(@RequestBody DomaineRequest domaineRequest){
         DomaineDto domainDto = new DomaineDto();
         domainDto = modelMapper.map(domaineRequest,DomaineDto.class);
-        //BeanUtils.copyProperties(domaineRequest,domainDto);
 
         DomaineDto AddDomaine = domaineService.addDomaine(domainDto);
 
         DomaineResponse  domaineResponse = new DomaineResponse();
         domaineResponse = modelMapper.map(AddDomaine,DomaineResponse.class);
-        //BeanUtils.copyProperties(AddDomaine,domaineResponse);
 
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.CREATED);
     }
@@ -72,13 +68,11 @@ public class DomainesController {
 
         DomaineDto domainDto = new DomaineDto();
         domainDto = modelMapper.map(domaineRequest,DomaineDto.class);
-        //BeanUtils.copyProperties(domaineRequest,domainDto);
 
         DomaineDto UpdateDomaine = domaineService.updateDomaine(id,domainDto);
 
         DomaineResponse  domaineResponse = new DomaineResponse();
         domaineResponse = modelMapper.map(UpdateDomaine,DomaineResponse.class);
-        //BeanUtils.copyProperties(UpdateDomaine,domaineResponse);
 
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.ACCEPTED);
     }

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,12 +23,12 @@ public class EtudiantController {
     EtudiantService etudiantService;
 
     //added now
+    @PreAuthorize("hasAuthority('GET_BY_IDETUDIANT_AUTHORITY')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<EtudiantResponse> getEtudiant(@PathVariable String id) {
         EtudiantDto etudiantdto = etudiantService.getEtudiantByIdEtudiant(id);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
-        //BeanUtils.copyProperties(etudiantdto, etudiantResponse);
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
 
@@ -36,11 +37,10 @@ public class EtudiantController {
         EtudiantDto etudiantDto = etudiantService.verifyEtudiant(token);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantDto, EtudiantResponse.class);
-        //BeanUtils.copyProperties(etudiantDto, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAuthority('ADD_ETUDIANT_AUTHORITY')")
     @PostMapping
     public ResponseEntity<EtudiantResponse> addEtudiant(@RequestBody EtudiantRequest etudiantrequest) {
         EtudiantDto etudiantdto = new EtudiantDto();
@@ -53,23 +53,20 @@ public class EtudiantController {
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(AddEtudiant, EtudiantResponse.class);
-        //BeanUtils.copyProperties(AddEtudiant, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAuthority('UPDATE_ETUDIANT_AUTHORITY')")
     @PutMapping(path = "/{id}")
     public ResponseEntity<EtudiantResponse> updateEtudiant(@PathVariable String id, @RequestBody EtudiantRequest etudiantrequest) {
 
         EtudiantDto etudiantdto = new EtudiantDto();
         etudiantdto = modelMapper.map(etudiantrequest, EtudiantDto.class);
-        //BeanUtils.copyProperties(etudiantrequest, etudiantdto);
 
         EtudiantDto UpdateEtudiant = etudiantService.updateEtudiant(id, etudiantdto);
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(UpdateEtudiant, EtudiantResponse.class);
-        //BeanUtils.copyProperties(UpdateEtudiant, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.ACCEPTED);
     }
@@ -81,11 +78,10 @@ public class EtudiantController {
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
-        //BeanUtils.copyProperties(etudiantdto, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAuthority('DELETE_ETUDIANT_AUTHORITY')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteEtudiant(@PathVariable String id) {
         etudiantService.deleteEtudiant(id);
