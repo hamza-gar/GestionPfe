@@ -1,8 +1,9 @@
 package com.example.gestionpfe.Services;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
-import com.example.gestionpfe.Dto.EtudiantDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
 
 public interface EnseignantService extends UserDetailsService {
     EnseignantDto addEnseignant(EnseignantDto enseignantDto);
@@ -11,6 +12,7 @@ public interface EnseignantService extends UserDetailsService {
     EnseignantDto updateEnseignant(String id,EnseignantDto enseignantDto);
     EnseignantDto verifyEnseignant(String token);
     EnseignantDto resendVerification(String enseignantId);
+    List<EnseignantDto> getAllEnseignants(int page, int limit);
     void deleteEnseignant(String id);
 
 

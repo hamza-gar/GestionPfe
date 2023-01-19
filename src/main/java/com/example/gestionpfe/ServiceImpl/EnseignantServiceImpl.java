@@ -19,6 +19,9 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EnseignantServiceImpl implements EnseignantService {
@@ -159,6 +163,21 @@ public class EnseignantServiceImpl implements EnseignantService {
         enseignantDto = modelMapper.map(enseignant,EnseignantDto.class);
         logger.info("enseignantDto mapping: "+enseignantDto);
         return enseignantDto;
+    }
+
+    @Override
+    public List<EnseignantDto> getAllEnseignants(int page, int limit) {
+        List<EnseignantDto> enseignantDtos = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<Enseignant> enseignantsPage = enseignantRepository.findAll(pageableRequest);
+        List<Enseignant> enseignants = enseignantsPage.getContent();
+        for (Enseignant enseignantEntity : enseignants) {
+            EnseignantDto enseignantDto = new EnseignantDto();
+            enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
+            enseignantDtos.add(enseignantDto);
+        }
+        logger.info("All Enseignants found successfully");
+        return enseignantDtos;
     }
 
     @Override

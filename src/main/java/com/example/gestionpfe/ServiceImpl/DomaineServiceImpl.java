@@ -118,10 +118,11 @@ public class DomaineServiceImpl implements DomaineService {
         for(Domaine domaineEntity:domaines){
             DomaineDto domaine = new DomaineDto();
             domaine = modelMapper.map(domaineEntity, DomaineDto.class);
-            logger.info("domaine found successfully");
+
 
             domainesDto.add(domaine);
         }
+        logger.info("All domaines found successfully");
 
         return domainesDto;
     }

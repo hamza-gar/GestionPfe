@@ -14,6 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/enseignants")
 public class EnseignantController {
@@ -29,6 +32,21 @@ public class EnseignantController {
         EnseignantResponse  enseignantResponse = new EnseignantResponse();
         enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('GET_ALL_ENSEIGNANT_AUTHORITY')")
+    @GetMapping
+    public List<EnseignantResponse> getAllEnseignants(@RequestParam(value = "page") int page, @RequestParam(value="limit" )int limit){
+        List<EnseignantResponse> enseignantResponse = new ArrayList<>();
+        List<EnseignantDto> enseignants = enseignantService.getAllEnseignants(page,limit);
+
+        for(EnseignantDto enseignantDto:enseignants){
+            EnseignantResponse enseignant = new EnseignantResponse();
+            enseignant = modelMapper.map(enseignantDto,EnseignantResponse.class);
+
+            enseignantResponse.add(enseignant);
+        }
+        return enseignantResponse;
     }
 
     @GetMapping(path = "/verification/{token}")
