@@ -1,5 +1,6 @@
 package com.example.gestionpfe.ServiceImpl;
 
+import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.Entities.Etudiant;
@@ -15,12 +16,17 @@ import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -164,6 +170,21 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         etudianRepository.delete(etudiantEntity);
+    }
+
+    @Override
+    public List<EtudiantDto> getAllEtudiants(int page, int limit) {
+        List<EtudiantDto>etudiantDtos = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<Etudiant> etudiantPages = etudianRepository.findAll(pageableRequest);
+        List<Etudiant> etudiants = etudiantPages.getContent();
+        for(Etudiant etudiant : etudiants){
+            EtudiantDto etudiantDto = new EtudiantDto();
+            etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
+            logger.info("all etudiants found successfully");
+            etudiantDtos.add(etudiantDto);
+        }
+        return etudiantDtos;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.example.gestionpfe.Controllers;
 
+import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Requests.EtudiantRequest;
+import com.example.gestionpfe.Responses.DomaineResponse;
 import com.example.gestionpfe.Responses.EtudiantResponse;
 import com.example.gestionpfe.Services.EtudiantService;
 import org.modelmapper.ModelMapper;
@@ -13,6 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/etudiants")
@@ -40,12 +45,25 @@ public class EtudiantController {
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
-    @PreAuthorize("hasAuthority('ADD_ETUDIANT_AUTHORITY')")
+    @PreAuthorize("hasAuthority('GET_ALL_ETUDIANT_AUTHORITY')")
+    @GetMapping
+    public List<EtudiantResponse> getAllEtudiants(@RequestParam(value = "page") int page, @RequestParam(value="limit" )int limit){
+        List<EtudiantResponse> etudiantResponse = new ArrayList<>();
+        List<EtudiantDto> etudiants = etudiantService.getAllEtudiants(page,limit);
+
+        for(EtudiantDto etudiantDto:etudiants){
+            EtudiantResponse etudiant = new EtudiantResponse();
+            etudiant = modelMapper.map(etudiantDto,EtudiantResponse.class);
+
+            etudiantResponse.add(etudiant);
+        }
+        return etudiantResponse;
+    }
+
     @PostMapping
     public ResponseEntity<EtudiantResponse> addEtudiant(@RequestBody EtudiantRequest etudiantrequest) {
         EtudiantDto etudiantdto = new EtudiantDto();
         etudiantdto = modelMapper.map(etudiantrequest, EtudiantDto.class);
-       // BeanUtils.copyProperties(etudiantrequest, etudiantdto);
 
         EtudiantDto AddEtudiant = etudiantService.addEtudiant(etudiantdto);
         if(AddEtudiant==null)
