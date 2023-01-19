@@ -12,3 +12,5 @@ public interface EtudiantService extends UserDetailsService {
     EtudiantDto resendVerification(String etudiantId);
     void deleteEtudiant(String id);
 }
+
+

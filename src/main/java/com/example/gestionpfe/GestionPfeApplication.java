@@ -11,11 +11,13 @@ public class GestionPfeApplication {
     public static void main(String[] args) {
         SpringApplication.run(GestionPfeApplication.class, args);
     }
-
+    
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
 
     @Bean
     public SpringApplicationContext springApplicationContext(){

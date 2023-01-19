@@ -158,8 +158,8 @@ public class InitialUsersSetup {
         logger.info("Domaine super Admin created.");
         Domaine fake1 = createDomaine("gmail.com", true);
         logger.info("Domaine gmail.com for etudiant created.");
-        Domaine fake2 = createDomaine("gmail.com", false);
-        logger.info("Domaine gmail.com for enseignant created.");
+        Domaine fake2 = createDomaine("hotmail.com", false);
+        logger.info("Domaine hotmail.com for enseignant created.");
 
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
