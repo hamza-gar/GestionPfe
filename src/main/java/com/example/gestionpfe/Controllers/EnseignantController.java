@@ -6,6 +6,7 @@ import com.example.gestionpfe.Requests.EnseignantRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
 import com.example.gestionpfe.Responses.EtudiantResponse;
 import com.example.gestionpfe.Services.EnseignantService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/enseignants")
 public class EnseignantController {
+    ModelMapper modelMapper = new ModelMapper();
     @Autowired
     EnseignantService enseignantService;
 
@@ -23,7 +25,8 @@ public class EnseignantController {
     public ResponseEntity<EnseignantResponse> getEnseignant(@PathVariable String id){
         EnseignantDto enseignantDto = enseignantService.getEnseignantByIdEnseignant(id);
         EnseignantResponse  enseignantResponse = new EnseignantResponse();
-        BeanUtils.copyProperties(enseignantDto,enseignantResponse);
+        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        //BeanUtils.copyProperties(enseignantDto,enseignantResponse);
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
 
@@ -31,7 +34,8 @@ public class EnseignantController {
     public ResponseEntity<EnseignantResponse> verifyEnseignant(@PathVariable String token) {
         EnseignantDto enseignantDto = enseignantService.verifyEnseignant(token);
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        BeanUtils.copyProperties(enseignantDto, enseignantResponse);
+        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        //BeanUtils.copyProperties(enseignantDto, enseignantResponse);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
@@ -39,7 +43,8 @@ public class EnseignantController {
     @PostMapping
     public ResponseEntity<EnseignantResponse> addEnseignant(@RequestBody EnseignantRequest enseignantRequest){
         EnseignantDto enseignantDto = new EnseignantDto();
-        BeanUtils.copyProperties(enseignantRequest,enseignantDto);
+        enseignantDto = modelMapper.map(enseignantRequest,EnseignantDto.class);
+        //BeanUtils.copyProperties(enseignantRequest,enseignantDto);
 
 
         EnseignantDto AddEnseignant = enseignantService.addEnseignant(enseignantDto);
@@ -48,8 +53,8 @@ public class EnseignantController {
             return new ResponseEntity<EnseignantResponse>(new EnseignantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-
-        BeanUtils.copyProperties(AddEnseignant,enseignantResponse);
+        enseignantResponse = modelMapper.map(AddEnseignant,EnseignantResponse.class);
+        //BeanUtils.copyProperties(AddEnseignant,enseignantResponse);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse,HttpStatus.CREATED);
     }
@@ -58,13 +63,14 @@ public class EnseignantController {
     public ResponseEntity<EnseignantResponse> updateEnseignant(@PathVariable String id,@RequestBody EnseignantRequest enseignantRequest){
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        BeanUtils.copyProperties(enseignantRequest,enseignantDto);
+        enseignantDto = modelMapper.map(enseignantRequest,EnseignantDto.class);
+        //BeanUtils.copyProperties(enseignantRequest,enseignantDto);
 
         EnseignantDto UpdateEnseignant = enseignantService.updateEnseignant(id,enseignantDto);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-
-        BeanUtils.copyProperties(UpdateEnseignant,enseignantResponse);
+        enseignantResponse = modelMapper.map(UpdateEnseignant,EnseignantResponse.class);
+        //BeanUtils.copyProperties(UpdateEnseignant,enseignantResponse);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse,HttpStatus.ACCEPTED);
     }
@@ -75,7 +81,8 @@ public class EnseignantController {
         EnseignantDto enseignantDto = enseignantService.resendVerification(id);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        BeanUtils.copyProperties(enseignantDto, enseignantResponse);
+        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        //BeanUtils.copyProperties(enseignantDto, enseignantResponse);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }

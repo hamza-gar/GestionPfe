@@ -8,6 +8,7 @@ import com.example.gestionpfe.Responses.AdminResponse;
 import com.example.gestionpfe.Responses.DomaineResponse;
 import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.Services.DomaineService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/domaines")
 public class DomainesController {
+    ModelMapper modelMapper = new ModelMapper();
+
     @Autowired
     DomaineService domaineService;
 
@@ -27,7 +30,8 @@ public class DomainesController {
     public ResponseEntity<DomaineResponse> getDomaine(@PathVariable String id){
         DomaineDto domainDto = domaineService.getDomaineById(id);
         DomaineResponse  domaineResponse = new DomaineResponse();
-        BeanUtils.copyProperties(domainDto,domaineResponse);
+        domaineResponse = modelMapper.map(domainDto,DomaineResponse.class);
+        //BeanUtils.copyProperties(domainDto,domaineResponse);
         return new ResponseEntity<DomaineResponse>(domaineResponse, HttpStatus.OK);
     }
 
@@ -38,7 +42,8 @@ public class DomainesController {
 
         for(DomaineDto domainDto:domaines){
             DomaineResponse domaine = new DomaineResponse();
-            BeanUtils.copyProperties(domainDto,domaine);
+            domaine = modelMapper.map(domainDto,DomaineResponse.class);
+            //BeanUtils.copyProperties(domainDto,domaine);
 
             domaineResponse.add(domaine);
         }
@@ -49,13 +54,14 @@ public class DomainesController {
     @PostMapping
     public ResponseEntity<DomaineResponse> addDomaine(@RequestBody DomaineRequest domaineRequest){
         DomaineDto domainDto = new DomaineDto();
-        BeanUtils.copyProperties(domaineRequest,domainDto);
+        domainDto = modelMapper.map(domaineRequest,DomaineDto.class);
+        //BeanUtils.copyProperties(domaineRequest,domainDto);
 
         DomaineDto AddDomaine = domaineService.addDomaine(domainDto);
 
         DomaineResponse  domaineResponse = new DomaineResponse();
-
-        BeanUtils.copyProperties(AddDomaine,domaineResponse);
+        domaineResponse = modelMapper.map(AddDomaine,DomaineResponse.class);
+        //BeanUtils.copyProperties(AddDomaine,domaineResponse);
 
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.CREATED);
     }
@@ -64,13 +70,14 @@ public class DomainesController {
     public ResponseEntity<DomaineResponse> updateDomaine(@PathVariable String id,@RequestBody DomaineRequest domaineRequest){
 
         DomaineDto domainDto = new DomaineDto();
-        BeanUtils.copyProperties(domaineRequest,domainDto);
+        domainDto = modelMapper.map(domaineRequest,DomaineDto.class);
+        //BeanUtils.copyProperties(domaineRequest,domainDto);
 
         DomaineDto UpdateDomaine = domaineService.updateDomaine(id,domainDto);
 
         DomaineResponse  domaineResponse = new DomaineResponse();
-
-        BeanUtils.copyProperties(UpdateDomaine,domaineResponse);
+        domaineResponse = modelMapper.map(UpdateDomaine,DomaineResponse.class);
+        //BeanUtils.copyProperties(UpdateDomaine,domaineResponse);
 
         return new ResponseEntity<DomaineResponse>(domaineResponse,HttpStatus.ACCEPTED);
     }

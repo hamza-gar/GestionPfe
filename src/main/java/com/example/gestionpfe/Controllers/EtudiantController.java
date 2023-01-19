@@ -5,6 +5,7 @@ import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Requests.EtudiantRequest;
 import com.example.gestionpfe.Responses.EtudiantResponse;
 import com.example.gestionpfe.Services.EtudiantService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/etudiants")
 public class EtudiantController {
+    ModelMapper modelMapper = new ModelMapper();
+
     @Autowired
     EtudiantService etudiantService;
 
@@ -23,7 +26,8 @@ public class EtudiantController {
     public ResponseEntity<EtudiantResponse> getEtudiant(@PathVariable String id) {
         EtudiantDto etudiantdto = etudiantService.getEtudiantByIdEtudiant(id);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
-        BeanUtils.copyProperties(etudiantdto, etudiantResponse);
+        etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
+        //BeanUtils.copyProperties(etudiantdto, etudiantResponse);
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
 
@@ -31,7 +35,8 @@ public class EtudiantController {
     public ResponseEntity<EtudiantResponse> verifyEtudiant(@PathVariable String token) {
         EtudiantDto etudiantDto = etudiantService.verifyEtudiant(token);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
-        BeanUtils.copyProperties(etudiantDto, etudiantResponse);
+        etudiantResponse = modelMapper.map(etudiantDto, EtudiantResponse.class);
+        //BeanUtils.copyProperties(etudiantDto, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
@@ -39,15 +44,16 @@ public class EtudiantController {
     @PostMapping
     public ResponseEntity<EtudiantResponse> addEtudiant(@RequestBody EtudiantRequest etudiantrequest) {
         EtudiantDto etudiantdto = new EtudiantDto();
-        BeanUtils.copyProperties(etudiantrequest, etudiantdto);
+        etudiantdto = modelMapper.map(etudiantrequest, EtudiantDto.class);
+       // BeanUtils.copyProperties(etudiantrequest, etudiantdto);
 
         EtudiantDto AddEtudiant = etudiantService.addEtudiant(etudiantdto);
         if(AddEtudiant==null)
             return new ResponseEntity<EtudiantResponse>(new EtudiantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
-
-        BeanUtils.copyProperties(AddEtudiant, etudiantResponse);
+        etudiantResponse = modelMapper.map(AddEtudiant, EtudiantResponse.class);
+        //BeanUtils.copyProperties(AddEtudiant, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.CREATED);
     }
@@ -56,13 +62,14 @@ public class EtudiantController {
     public ResponseEntity<EtudiantResponse> updateEtudiant(@PathVariable String id, @RequestBody EtudiantRequest etudiantrequest) {
 
         EtudiantDto etudiantdto = new EtudiantDto();
-        BeanUtils.copyProperties(etudiantrequest, etudiantdto);
+        etudiantdto = modelMapper.map(etudiantrequest, EtudiantDto.class);
+        //BeanUtils.copyProperties(etudiantrequest, etudiantdto);
 
         EtudiantDto UpdateEtudiant = etudiantService.updateEtudiant(id, etudiantdto);
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
-
-        BeanUtils.copyProperties(UpdateEtudiant, etudiantResponse);
+        etudiantResponse = modelMapper.map(UpdateEtudiant, EtudiantResponse.class);
+        //BeanUtils.copyProperties(UpdateEtudiant, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.ACCEPTED);
     }
@@ -73,7 +80,8 @@ public class EtudiantController {
         EtudiantDto etudiantdto = etudiantService.resendVerification(id);
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
-        BeanUtils.copyProperties(etudiantdto, etudiantResponse);
+        etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
+        //BeanUtils.copyProperties(etudiantdto, etudiantResponse);
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }

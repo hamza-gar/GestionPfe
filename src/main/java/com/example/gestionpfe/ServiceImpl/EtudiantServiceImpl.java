@@ -12,6 +12,7 @@ import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EtudiantService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
+    ModelMapper modelMapper = new ModelMapper();
     @Autowired
     EtudiantRepository etudianRepository;
 
@@ -53,7 +55,8 @@ public class EtudiantServiceImpl implements EtudiantService {
 
             if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
             Etudiant etudianEntity = new Etudiant();
-            BeanUtils.copyProperties(etudiantDto, etudianEntity);
+            etudianEntity = modelMapper.map(etudiantDto, Etudiant.class);
+            //BeanUtils.copyProperties(etudiantDto, etudianEntity);
 
 
             etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
@@ -68,8 +71,8 @@ public class EtudiantServiceImpl implements EtudiantService {
             Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
             EtudiantDto newEtudiantDto = new EtudiantDto();
-
-            BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
+            newEtudiantDto = modelMapper.map(newEtudiant, EtudiantDto.class);
+            //BeanUtils.copyProperties(newEtudiant, newEtudiantDto);
 
             return newEtudiantDto;
         } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
@@ -89,8 +92,8 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
         EtudiantDto etudianDto = new EtudiantDto();
-
-        BeanUtils.copyProperties(etudiantEntity, etudianDto);
+        etudianDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
+        //BeanUtils.copyProperties(etudiantEntity, etudianDto);
         return etudianDto;
     }
 
@@ -101,8 +104,8 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-
-        BeanUtils.copyProperties(etudiantEntity, etudiantDto);
+        etudiantDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
+        //BeanUtils.copyProperties(etudiantEntity, etudiantDto);
 
         return etudiantDto;
     }
@@ -122,8 +125,8 @@ public class EtudiantServiceImpl implements EtudiantService {
         Etudiant etudiantUpdated = etudianRepository.save(etudiantEntity);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-
-        BeanUtils.copyProperties(etudiantUpdated, etudiantDto);
+        etudiantDto = modelMapper.map(etudiantUpdated, EtudiantDto.class);
+        //BeanUtils.copyProperties(etudiantUpdated, etudiantDto);
 
         return etudiantDto;
     }
@@ -136,8 +139,8 @@ public class EtudiantServiceImpl implements EtudiantService {
         Etudiant updatedEtudiant = etudianRepository.save(etudiant);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-
-        BeanUtils.copyProperties(updatedEtudiant, etudiantDto);
+        etudiantDto = modelMapper.map(updatedEtudiant, EtudiantDto.class);
+       // BeanUtils.copyProperties(updatedEtudiant, etudiantDto);
 
         return etudiantDto;
     }
@@ -148,7 +151,8 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiant == null) throw new UsernameNotFoundException(etudiantId);
         emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(), "etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
-        BeanUtils.copyProperties(etudiant, etudiantDto);
+        etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
+        //BeanUtils.copyProperties(etudiant, etudiantDto);
         return etudiantDto;
     }
 

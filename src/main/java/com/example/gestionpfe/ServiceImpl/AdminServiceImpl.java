@@ -7,6 +7,7 @@ import com.example.gestionpfe.Repositories.AdminRepository;
 import com.example.gestionpfe.Security.Administrateur.AdminPrincipal;
 import com.example.gestionpfe.Services.AdminService;
 import com.example.gestionpfe.Shared.Utils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 
 @Service
 public class AdminServiceImpl implements AdminService {
+    ModelMapper modelMapper = new ModelMapper();
     @Autowired
     AdminRepository adminRepository;
 
@@ -35,7 +37,8 @@ public class AdminServiceImpl implements AdminService {
 
         if(checkAdmin!=null) throw new RuntimeException("Admin deja exist !!!");
         Administrateur adminEntity = new Administrateur();
-        BeanUtils.copyProperties(adminDto,adminEntity);
+        adminEntity = modelMapper.map(adminDto, Administrateur.class);
+        //BeanUtils.copyProperties(adminDto,adminEntity);
 
         adminEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(adminDto.getPassword()));
         adminEntity.setIdAdmin(util.generateUserId(32));
@@ -44,8 +47,8 @@ public class AdminServiceImpl implements AdminService {
         Administrateur newAdmin = adminRepository.save(adminEntity);
 
         AdminDto newAdminDto = new AdminDto();
-
-        BeanUtils.copyProperties(newAdmin,newAdminDto);
+        newAdminDto = modelMapper.map(newAdmin, AdminDto.class);
+        //BeanUtils.copyProperties(newAdmin,newAdminDto);
 
         return newAdminDto;
     }
@@ -57,8 +60,8 @@ public class AdminServiceImpl implements AdminService {
         if(adminEntity==null)throw new UsernameNotFoundException(email);
 
         AdminDto adminDto = new AdminDto();
-
-        BeanUtils.copyProperties(adminEntity,adminDto);
+        adminDto = modelMapper.map(adminEntity, AdminDto.class);
+        //BeanUtils.copyProperties(adminEntity,adminDto);
         return adminDto;
     }
 
@@ -69,8 +72,8 @@ public class AdminServiceImpl implements AdminService {
         if(adminEntity == null)throw new UsernameNotFoundException(id);
 
         AdminDto adminDto = new AdminDto();
-
-        BeanUtils.copyProperties(adminEntity,adminDto);
+        adminDto = modelMapper.map(adminEntity, AdminDto.class);
+        //BeanUtils.copyProperties(adminEntity,adminDto);
 
         return adminDto;
     }
@@ -89,8 +92,8 @@ public class AdminServiceImpl implements AdminService {
         Administrateur adminUpdated = adminRepository.save(adminEntity);
 
         AdminDto newAdminDto = new AdminDto();
-
-        BeanUtils.copyProperties(adminUpdated,newAdminDto);
+        newAdminDto = modelMapper.map(adminUpdated, AdminDto.class);
+        //BeanUtils.copyProperties(adminUpdated,newAdminDto);
 
         return newAdminDto;
     }
