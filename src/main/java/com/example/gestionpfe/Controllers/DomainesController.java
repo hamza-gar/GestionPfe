@@ -51,6 +51,7 @@ public class DomainesController {
     }
 
 
+
     @PostMapping
     public ResponseEntity<DomaineResponse> addDomaine(@RequestBody DomaineRequest domaineRequest){
         DomaineDto domainDto = new DomaineDto();

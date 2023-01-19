@@ -163,8 +163,6 @@ public class InitialUsersSetup {
 
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
-
-
     }
 
     @Transactional
