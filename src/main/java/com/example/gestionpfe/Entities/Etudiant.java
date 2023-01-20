@@ -41,8 +41,8 @@ public class Etudiant implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Role role;
 
-    @ManyToOne
-    @JoinColumn(name = "filiere_id", nullable = false)
-    private Filiere filiere;
+//    @ManyToOne
+//    @JoinColumn(name = "filiere_id", nullable = false)
+//    private Filiere filiere;
 
 }

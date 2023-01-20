@@ -51,6 +51,9 @@ public class InitialUsersSetup {
     SujetRepository sujetRepository;
 
 
+    @Autowired
+    DepartementRepository departementRepository;
+
     @EventListener
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -160,15 +163,21 @@ public class InitialUsersSetup {
         Domaine fake2 = createDomaine("hotmail.com", false);
         logger.info("Domaine hotmail.com for enseignant created.");
 
-
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
 
-        Filiere filiere = createFiliere("Informatique", "info", administrateur);
+        Departement departement = createDepartement("Departement Informatique");
+
+
+        Enseignant enseignant = createEnseignant(enseignantRole,departement);
+        logger.info("Enseignant created.");
+
+        Filiere filiere = createFiliere("Informatique",  enseignant, departement);
         logger.info("Filiere Informatique created.");
 
         Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3);
     }
+
     @Transactional
     public Sujet createSujet(String s, String s1, int tailleEquipe) {
         Sujet sujet = new Sujet();
@@ -181,14 +190,25 @@ public class InitialUsersSetup {
 
 
     @Transactional
-    public Filiere createFiliere(String informatique, String info, Administrateur administrateur) {
+    public Departement createDepartement(String departementName) {
+        Departement departement = departementRepository.findByNomDepartement(departementName);
+        if (departement == null) {
+            departement = new Departement();
+            departement.setNomDepartement(departementName);
+            departement = departementRepository.save(departement);
+        }
+        return departement;
+    }
+
+    @Transactional
+    public Filiere createFiliere(String informatique, Enseignant enseignant, Departement departement) {
         Filiere filiere = new Filiere();
         logger.info("Filiere created.");
         filiere.setNomFiliere(informatique);
         logger.info("Filiere nom created.");
-        filiere.setDepartement(null);
+        filiere.setDepartement(departement);
         logger.info("Filiere departement created.");
-        filiere.setResponsable(null);
+        filiere.setResponsable(enseignant);
         logger.info("Filiere responsable created.");
         filiereRepository.save(filiere);
         logger.info("Filiere saved.");
@@ -249,7 +269,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Enseignant createEnseignant(Role enseignantRole) {
+    public Enseignant createEnseignant(Role enseignantRole,Departement departement) {
         Enseignant enseignant = enseignantRepository.findByEmail("abdellah.samourail@prof.com");
         if (enseignant == null) {
             enseignant = new Enseignant();
@@ -263,6 +283,8 @@ public class InitialUsersSetup {
             enseignant.setEmailVerificationStatus(true);
             enseignant.setEncryptedPassword(bCryptPasswordEncoder.encode("123456"));
             enseignant.setRole(enseignantRole);
+            enseignant.setDepartement(departement);
+            enseignant.setFiliere(null);
 
             enseignant = enseignantRepository.save(enseignant);
         }

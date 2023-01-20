@@ -126,13 +126,4 @@ public class DomaineServiceImpl implements DomaineService {
 
         return domainesDto;
     }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Domaine DomaineEntity =  domaineRepository.findByNomDomaine(username);
-        logger.info("domaine found successfully");
-        if(DomaineEntity==null)throw new UsernameNotFoundException(username);
-
-        return new User(DomaineEntity.getNomDomaine(),DomaineEntity.getEtablissement(),new ArrayList<>());
-    }
 }

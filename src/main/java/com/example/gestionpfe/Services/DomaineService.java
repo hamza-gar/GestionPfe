@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface DomaineService extends UserDetailsService {
+public interface DomaineService {
     DomaineDto addDomaine(DomaineDto domainDto);
     DomaineDto getDomaine(String nomDomaine);
     DomaineDto getDomaineById(String id);
