@@ -47,6 +47,10 @@ public class InitialUsersSetup {
     @Autowired
     FiliereRepository filiereRepository;
 
+    @Autowired
+    SujetRepository sujetRepository;
+
+
     @EventListener
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -162,7 +166,20 @@ public class InitialUsersSetup {
 
         Filiere filiere = createFiliere("Informatique", "info", administrateur);
         logger.info("Filiere Informatique created.");
+
+        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3);
     }
+    @Transactional
+    public Sujet createSujet(String s, String s1, int tailleEquipe) {
+        Sujet sujet = new Sujet();
+        sujet.setNomSujet(s);
+        sujet.setDescriptionSujet(s1);
+        sujet.setTailleEquipe(tailleEquipe);
+        sujetRepository.save(sujet);
+        return sujet;
+    }
+
+
     @Transactional
     public Filiere createFiliere(String informatique, String info, Administrateur administrateur) {
         Filiere filiere = new Filiere();

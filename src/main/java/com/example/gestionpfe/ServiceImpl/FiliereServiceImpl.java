@@ -98,7 +98,7 @@ public class FiliereServiceImpl implements FiliereService {
         Filiere filiereEntity =  filiereRepository.findById(id);
 
         if(filiereEntity == null)throw new UsernameNotFoundException(id);
-
+        logger.info("filiere deleted successfully");
         filiereRepository.delete(filiereEntity);
     }
 
