@@ -23,11 +23,11 @@ public class Filiere implements Serializable {
     private String nomFiliere;
 
     @ManyToOne
-    @JoinColumn(name = "departement_id", nullable = false)
+    @JoinColumn(name = "departement_id",nullable = false)
     private Departement departement;
 
     @OneToOne
-    @JoinColumn(name = "filiere_id", nullable = false)
+    @JoinColumn(name = "responsable_id",nullable = true)
     private Enseignant responsable;
 
     @OneToMany(mappedBy = "filiere",cascade = {CascadeType.ALL})

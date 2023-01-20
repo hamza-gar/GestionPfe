@@ -44,6 +44,9 @@ public class InitialUsersSetup {
     @Autowired
     AuthorityRepository authorityRepository;
 
+    @Autowired
+    FiliereRepository filiereRepository;
+
     @EventListener
     @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
@@ -156,6 +159,23 @@ public class InitialUsersSetup {
 
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
+
+        Filiere filiere = createFiliere("Informatique", "info", administrateur);
+        logger.info("Filiere Informatique created.");
+    }
+    @Transactional
+    public Filiere createFiliere(String informatique, String info, Administrateur administrateur) {
+        Filiere filiere = new Filiere();
+        logger.info("Filiere created.");
+        filiere.setNomFiliere(informatique);
+        logger.info("Filiere nom created.");
+        filiere.setDepartement(null);
+        logger.info("Filiere departement created.");
+        filiere.setResponsable(null);
+        logger.info("Filiere responsable created.");
+        filiereRepository.save(filiere);
+        logger.info("Filiere saved.");
+        return filiere;
     }
 
 

@@ -12,6 +12,7 @@ import javax.persistence.Column;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DomaineDto {
+
     private long id;
     private String nomDomaine;
     private String etablissement;
