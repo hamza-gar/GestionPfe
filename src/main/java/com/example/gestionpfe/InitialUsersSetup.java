@@ -63,9 +63,6 @@ public class InitialUsersSetup {
         sAdminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
         adminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
 
-//        Authority ADD_ETUDIANT_AUTHORITY = createAuthority("ADD_ETUDIANT_AUTHORITY");
-//        sAdminAuthorities.add(ADD_ETUDIANT_AUTHORITY);
-//        adminAuthorities.add(ADD_ETUDIANT_AUTHORITY);
 
         Authority UPDATE_ETUDIANT_AUTHORITY = createAuthority("UPDATE_ETUDIANT_AUTHORITY");
         sAdminAuthorities.add(UPDATE_ETUDIANT_AUTHORITY);
@@ -126,11 +123,6 @@ public class InitialUsersSetup {
         adminAuthorities.add(GET_ALL_ENSEIGNANT_AUTHORITY);
         enseignantAuthorities.add(GET_ALL_ENSEIGNANT_AUTHORITY);
 
-//        Authority ADD_ENSEIGNANT_AUTHORITY = createAuthority("ADD_ENSEIGNANT_AUTHORITY");
-//        sAdminAuthorities.add(ADD_ENSEIGNANT_AUTHORITY);
-//        adminAuthorities.add(GET_BY_IDENSEIGNANT_AUTHORITY);
-//        enseignantAuthorities.add(GET_BY_IDENSEIGNANT_AUTHORITY);
-
         Authority UPDATE_ENSEIGNANT_AUTHORITY = createAuthority("UPDATE_ENSEIGNANT_AUTHORITY");
         sAdminAuthorities.add(UPDATE_ENSEIGNANT_AUTHORITY);
         adminAuthorities.add(UPDATE_ENSEIGNANT_AUTHORITY);
@@ -161,9 +153,11 @@ public class InitialUsersSetup {
         Domaine fake2 = createDomaine("hotmail.com", false);
         logger.info("Domaine hotmail.com for enseignant created.");
 
+
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
     }
+
 
     @Transactional
     public Administrateur createAdministrateur(Role role) {

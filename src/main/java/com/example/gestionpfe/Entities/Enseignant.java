@@ -36,4 +36,11 @@ public class Enseignant implements Serializable {
             joinColumns = @JoinColumn(name = "enseignants_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "departement_id",nullable = false)
+    private Departement departement;
+
+    @OneToOne(mappedBy = "responsable",cascade = {CascadeType.ALL})
+    private Filiere filiere;
 }

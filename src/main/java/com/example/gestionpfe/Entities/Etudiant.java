@@ -12,7 +12,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Etudiant implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "idEtudiant", nullable = false)
     private String idEtudiant;
@@ -40,4 +40,9 @@ public class Etudiant implements Serializable {
             joinColumns = @JoinColumn(name = "etudiants_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Role role;
+
+    @ManyToOne
+    @JoinColumn(name = "filiere_id", nullable = false)
+    private Filiere filiere;
+
 }

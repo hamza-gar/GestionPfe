@@ -17,6 +17,9 @@ public class Archive {
     @Column(nullable = false)
     private Float noteFinal;
 
+    @OneToMany(mappedBy = "archive",cascade = CascadeType.ALL)
+    private List<Remarque> remarques;
+
     /* TODO:
     *   + Add ForeignKeys for "remarques"
     *   + Add ForeignKey for "etudiant" "encadrant" "pfe"*/

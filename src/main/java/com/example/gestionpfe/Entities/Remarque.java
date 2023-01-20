@@ -19,6 +19,10 @@ public class Remarque {
     @Column(nullable = false)
     private Float note;
 
+    @ManyToOne
+    @JoinColumn(name = "archive_id",nullable = false)
+    private Archive archive;
+
     /*TODO:
     *  + Add ForeignKey for "etudiant" "jury"*/
 
