@@ -51,10 +51,8 @@ public class EnseignantAuthenticationFilter extends UsernamePasswordAuthenticati
         String userName = ((EnseignantPrincipal)auth.getPrincipal()).getUsername();
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
-
         EnseignantService enseignantService = (EnseignantService) SpringApplicationContext.getBean("enseignantServiceImpl");
         EnseignantDto enseignantDto = enseignantService.getEnseignant(userName);
-
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("enseignant_id",enseignantDto.getIdEnseignant());
     }

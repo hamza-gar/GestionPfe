@@ -70,7 +70,7 @@ public class EnseignantServiceImpl implements EnseignantService {
             if(checkEnseignant!=null) throw new RuntimeException("Enseignant deja exist !!!");
             Enseignant enseignantEntity = new Enseignant();
             enseignantEntity = modelMapper.map(enseignantDto,Enseignant.class);
-            logger.info("EnseignantEntity mapping: "+enseignantEntity);
+
 
             enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
             enseignantEntity.setIdEnseignant(util.generateUserId(32));
@@ -87,7 +87,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
             EnseignantDto newEnseignantDto = new EnseignantDto();
             newEnseignantDto = modelMapper.map(newEnseignant,EnseignantDto.class);
-            logger.info("newEnseignantDto mapping: "+newEnseignantDto);
+
 
             return newEnseignantDto;
         }
@@ -102,7 +102,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
-        logger.info("enseignantDto mapping: "+enseignantDto);
+
         return enseignantDto;
     }
 
@@ -114,7 +114,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
-        logger.info("enseignantDto mapping: "+enseignantDto);
+
 
         return enseignantDto;
     }
@@ -134,7 +134,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto newenseignantDto = new EnseignantDto();
         newenseignantDto = modelMapper.map(enseignantUpdated,EnseignantDto.class);
-        logger.info("newenseignantDto mapping: "+newenseignantDto);
+
 
         return newenseignantDto;
     }
@@ -149,7 +149,7 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(updatedEnseignant,EnseignantDto.class);
-        logger.info("enseignantDto mapping: "+enseignantDto);
+
 
         return enseignantDto;
     }
@@ -161,7 +161,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         emailSender.sendVerificationMail(enseignant.getEmail(), enseignant.getEmailVerificationToken(),"enseignants");
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignant,EnseignantDto.class);
-        logger.info("enseignantDto mapping: "+enseignantDto);
+
         return enseignantDto;
     }
 
@@ -176,14 +176,14 @@ public class EnseignantServiceImpl implements EnseignantService {
             enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
             enseignantDtos.add(enseignantDto);
         }
-        logger.info("All Enseignants found successfully");
+
         return enseignantDtos;
     }
 
     @Override
     public void deleteEnseignant(String id) {
         Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
-        logger.info("enseignantEntity mapping: "+enseignantEntity);
+
         if(enseignantEntity == null)throw new UsernameNotFoundException(id);
 
         enseignantRepository.delete(enseignantEntity);
@@ -192,7 +192,7 @@ public class EnseignantServiceImpl implements EnseignantService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Enseignant enseignantEntity =  enseignantRepository.findByEmail(email);
-        logger.info("enseignantEntity mapping: "+enseignantEntity);
+
         if(enseignantEntity==null)throw new UsernameNotFoundException(email);
 
         return new EnseignantPrincipal(enseignantEntity);

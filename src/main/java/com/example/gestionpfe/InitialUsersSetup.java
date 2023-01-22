@@ -158,7 +158,7 @@ public class InitialUsersSetup {
         logger.info("Domaine etu.uae.ac.ma created.");
         Domaine ensDomaine = createDomaine("uae.ac.ma", false);
         logger.info("Domaine super Admin created.");
-        Domaine fake1 = createDomaine("gmail.com", true);
+        Domaine fake1 = createDomaine("gmail.com", false);
         logger.info("Domaine gmail.com for etudiant created.");
         Domaine fake2 = createDomaine("hotmail.com", false);
         logger.info("Domaine hotmail.com for enseignant created.");

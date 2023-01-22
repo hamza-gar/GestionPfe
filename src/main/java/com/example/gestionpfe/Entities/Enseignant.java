@@ -38,7 +38,7 @@ public class Enseignant implements Serializable {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "departement_id",nullable = false)
+    @JoinColumn(name = "departement_id",nullable = true)
     private Departement departement;
 
     @OneToOne(mappedBy = "responsable",cascade = {CascadeType.ALL})

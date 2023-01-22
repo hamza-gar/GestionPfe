@@ -2,10 +2,15 @@ package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
+import com.example.gestionpfe.Dto.SujetDto;
+import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.EnseignantRequest;
+import com.example.gestionpfe.Requests.SujetRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
 import com.example.gestionpfe.Responses.EtudiantResponse;
+import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
+import com.example.gestionpfe.Services.SujetService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +29,8 @@ public class EnseignantController {
     @Autowired
     EnseignantService enseignantService;
 
+    @Autowired
+    SujetService sujetService;
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDENSEIGNANT_AUTHORITY')")
     @GetMapping(path="/{id}")
@@ -57,7 +64,7 @@ public class EnseignantController {
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
-    @PreAuthorize("hasAuthority('ADD_ENSEIGNANT_AUTHORITY')")
+
     @PostMapping
     public ResponseEntity<EnseignantResponse> addEnseignant(@RequestBody EnseignantRequest enseignantRequest){
         EnseignantDto enseignantDto = new EnseignantDto();
@@ -106,4 +113,23 @@ public class EnseignantController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+//    @PostMapping(path="/addSujet")
+//    public ResponseEntity<SujetResponse> addSujet(@RequestBody SujetRequest sujetRequest){
+//        SujetDto sujetDto = new SujetDto();
+//        sujetDto = modelMapper.map(sujetRequest,SujetDto.class);
+//
+//
+//        SujetDto AddSujet = sujetService.addSujet(sujetDto);
+//
+//        if(AddSujet==null)
+//            return new ResponseEntity<SujetResponse>(new SujetResponse(), HttpStatus.NOT_ACCEPTABLE);
+//
+//        SujetResponse sujetResponse = new SujetResponse();
+//        sujetResponse = modelMapper.map(AddSujet,SujetResponse.class);
+//
+//        return new ResponseEntity<SujetResponse>(sujetResponse,HttpStatus.CREATED);
+//    }
+
 }

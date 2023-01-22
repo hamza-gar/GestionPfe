@@ -36,25 +36,25 @@ public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
             throws AuthenticationException {
         try {
+            System.out.println("trying to authenticate");
             AdminLoginRequest creds = new ObjectMapper().readValue(req.getInputStream(), AdminLoginRequest.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
         }catch (IOException e){
+            System.out.println("error in authentication");
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication auth)throws IOException , ServletException {
+        System.out.println("authentication successful");
         String userName = ((AdminPrincipal)auth.getPrincipal()).getUsername();
         String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
-
         AdminService adminService = (AdminService) SpringApplicationContext.getBean("adminServiceImpl");
         AdminDto adminDto = adminService.getAdmin(userName);
-
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("admin_id",adminDto.getIdAdmin());
     }
