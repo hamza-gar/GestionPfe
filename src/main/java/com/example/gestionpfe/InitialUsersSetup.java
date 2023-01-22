@@ -64,6 +64,7 @@ public class InitialUsersSetup {
         List<Authority> etudiantAuthorities = new ArrayList<>();
         List<Authority> enseignantAuthorities = new ArrayList<>();
 
+        logger.info("Creating Authorities...");
         Authority GET_BY_IDETUDIANT_AUTHORITY = createAuthority("GET_BY_IDETUDIANT_AUTHORITY");
         sAdminAuthorities.add(GET_BY_IDETUDIANT_AUTHORITY);
         adminAuthorities.add(GET_BY_IDETUDIANT_AUTHORITY);
@@ -143,38 +144,41 @@ public class InitialUsersSetup {
         adminAuthorities.add(DELETE_ENSEIGNANT_AUTHORITY);
         enseignantAuthorities.add(DELETE_ENSEIGNANT_AUTHORITY);
 
+        logger.info("All Authorities created.");
 
+        logger.info("Creating Roles...");
         Role sAdminRole = createRole("ROLE_SUPER_ADMIN", sAdminAuthorities);
-        logger.info("Role super Admin created.");
         Role adminRole = createRole("ROLE_ADMIN", adminAuthorities);
-        logger.info("Role Admin created.");
         Role etudiantRole = createRole("ROLE_ETUDIANT", etudiantAuthorities);
-        logger.info("Role Etudiant created.");
         Role enseignantRole = createRole("ROLE_ENSEIGNANT", enseignantAuthorities);
-        logger.info("Role Enseignant created.");
 
+        logger.info("All Roles created.");
 
+        logger.info("Creating Domaines...");
         Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true);
-        logger.info("Domaine etu.uae.ac.ma created.");
         Domaine ensDomaine = createDomaine("uae.ac.ma", false);
-        logger.info("Domaine super Admin created.");
-        Domaine fake1 = createDomaine("gmail.com", false);
-        logger.info("Domaine gmail.com for etudiant created.");
+        Domaine fake1 = createDomaine("gmail.com", true);
         Domaine fake2 = createDomaine("hotmail.com", false);
-        logger.info("Domaine hotmail.com for enseignant created.");
+        logger.info("All Domaines created.");
 
+        logger.info("Creating Departements...");
+        Departement departement = createDepartement("Departement Informatique");
+
+        logger.info("Creating Users...");
         Administrateur administrateur = createAdministrateur(sAdminRole);
         logger.info("Super Admin created.");
 
-        Departement departement = createDepartement("Departement Informatique");
 
 
+        logger.info("Creating Enseignants...");
         Enseignant enseignant = createEnseignant(enseignantRole,departement);
         logger.info("Enseignant created.");
 
+        logger.info("Creating Filieres...");
         Filiere filiere = createFiliere("Informatique",  enseignant, departement);
         logger.info("Filiere Informatique created.");
 
+        logger.info("Creating subjects...");
         Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3);
     }
 

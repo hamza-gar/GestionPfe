@@ -45,10 +45,10 @@ public class AdminServiceImpl implements AdminService {
 
         Administrateur checkAdmin = adminRepository.findByEmail(adminDto.getEmail());
 
-        if(checkAdmin!=null) throw new RuntimeException("Admin deja exist !!!");
+        if (checkAdmin != null) throw new RuntimeException("Admin deja exist !!!");
         Administrateur adminEntity = new Administrateur();
         adminEntity = modelMapper.map(adminDto, Administrateur.class);
-        logger.info("AdminEntity mapping: "+adminEntity);
+        logger.info("AdminEntity mapping: " + adminEntity);
 
         adminEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(adminDto.getPassword()));
         adminEntity.setIdAdmin(util.generateUserId(32));
@@ -58,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto newAdminDto = new AdminDto();
         newAdminDto = modelMapper.map(newAdmin, AdminDto.class);
-        logger.info("AdminDto mapping: "+newAdminDto);
+        logger.info("AdminDto mapping: " + newAdminDto);
 
         return newAdminDto;
     }
@@ -66,33 +66,33 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminDto getAdmin(String email) {
-        Administrateur adminEntity =  adminRepository.findByEmail(email);
-        if(adminEntity==null)throw new UsernameNotFoundException(email);
+        Administrateur adminEntity = adminRepository.findByEmail(email);
+        if (adminEntity == null) throw new UsernameNotFoundException(email);
 
         AdminDto adminDto = new AdminDto();
         adminDto = modelMapper.map(adminEntity, AdminDto.class);
-        logger.info("AdminDto mapping: "+adminDto);
+        logger.info("AdminDto mapping: " + adminDto);
         return adminDto;
     }
 
     @Override
     public AdminDto getAdminByIdAdmin(String id) {
-        Administrateur adminEntity =  adminRepository.findByIdAdmin(id);
+        Administrateur adminEntity = adminRepository.findByIdAdmin(id);
 
-        if(adminEntity == null)throw new UsernameNotFoundException(id);
+        if (adminEntity == null) throw new UsernameNotFoundException(id);
 
         AdminDto adminDto = new AdminDto();
         adminDto = modelMapper.map(adminEntity, AdminDto.class);
-        logger.info("AdminDto mapping: "+adminDto);
+        logger.info("AdminDto mapping: " + adminDto);
 
         return adminDto;
     }
 
     @Override
     public AdminDto updateAdmin(String id, AdminDto adminDto) {
-        Administrateur adminEntity =  adminRepository.findByIdAdmin(id);
+        Administrateur adminEntity = adminRepository.findByIdAdmin(id);
 
-        if(adminEntity == null)throw new UsernameNotFoundException(id);
+        if (adminEntity == null) throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
         adminEntity.setNom(adminDto.getNom());
         adminEntity.setPrenom(adminDto.getPrenom());
@@ -103,16 +103,16 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto newAdminDto = new AdminDto();
         newAdminDto = modelMapper.map(adminUpdated, AdminDto.class);
-        logger.info("AdminDto mapping: "+newAdminDto);
+        logger.info("AdminDto mapping: " + newAdminDto);
 
         return newAdminDto;
     }
 
     @Override
     public void deleteAdmin(String id) {
-        Administrateur adminEntity =  adminRepository.findByIdAdmin(id);
+        Administrateur adminEntity = adminRepository.findByIdAdmin(id);
 
-        if(adminEntity == null)throw new UsernameNotFoundException(id);
+        if (adminEntity == null) throw new UsernameNotFoundException(id);
 
         adminRepository.delete(adminEntity);
     }
@@ -124,7 +124,7 @@ public class AdminServiceImpl implements AdminService {
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<Administrateur> adminsPage = adminRepository.findAll(pageableRequest);
         List<Administrateur> admins = adminsPage.getContent();
-        for (Administrateur adminEntity: admins) {
+        for (Administrateur adminEntity : admins) {
             AdminDto adminDto = new AdminDto();
             adminDto = modelMapper.map(adminEntity, AdminDto.class);
             adminDtos.add(adminDto);
@@ -135,10 +135,14 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Administrateur adminEntity =  adminRepository.findByEmail(email);
+        Administrateur adminEntity = adminRepository.findByEmail(email);
 
-        if(adminEntity==null)throw new UsernameNotFoundException(email);
+        if (adminEntity == null) {
+            logger.error("Admin not found with email : " + email);
+            throw new UsernameNotFoundException(email);
+        }
 
+        logger.info("Admin loaded successfully with email : " + adminEntity.getEmail());
         return new AdminPrincipal(adminEntity);
     }
 }

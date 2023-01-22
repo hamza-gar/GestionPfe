@@ -63,7 +63,8 @@ public class EnseignantServiceImpl implements EnseignantService {
         String domaine = enseignantDto.getEmail().split("@")[1];
         if(domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine))
         {
-            throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
+            logger.info("le domaine ne figure pas dans la liste des domaines verifie !");
+            throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie !");
         }else{
             Enseignant checkEnseignant = enseignantRepository.findByEmail(enseignantDto.getEmail());
 
@@ -88,6 +89,7 @@ public class EnseignantServiceImpl implements EnseignantService {
             EnseignantDto newEnseignantDto = new EnseignantDto();
             newEnseignantDto = modelMapper.map(newEnseignant,EnseignantDto.class);
 
+            logger.info("Enseignant added successfully.");
 
             return newEnseignantDto;
         }
@@ -103,6 +105,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
 
+        logger.info("Enseignant retrieved by email successfully.");
         return enseignantDto;
     }
 
@@ -115,6 +118,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
 
+        logger.info("Enseignant retrieved by idEnseignant successfully.");
 
         return enseignantDto;
     }
@@ -135,6 +139,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         EnseignantDto newenseignantDto = new EnseignantDto();
         newenseignantDto = modelMapper.map(enseignantUpdated,EnseignantDto.class);
 
+        logger.info("Enseignant updated successfully.");
 
         return newenseignantDto;
     }
@@ -162,6 +167,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignant,EnseignantDto.class);
 
+        logger.info("Resent verification mail to: "+enseignantDto.getEmail());
         return enseignantDto;
     }
 
@@ -176,7 +182,7 @@ public class EnseignantServiceImpl implements EnseignantService {
             enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
             enseignantDtos.add(enseignantDto);
         }
-
+        logger.info("All Enseignants retrieved successfully");
         return enseignantDtos;
     }
 
@@ -184,8 +190,11 @@ public class EnseignantServiceImpl implements EnseignantService {
     public void deleteEnseignant(String id) {
         Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
 
-        if(enseignantEntity == null)throw new UsernameNotFoundException(id);
-
+        if(enseignantEntity == null){
+            logger.info("Enseignant not found with id:"+id);
+            return;
+        }
+        logger.info("Enseignant deleted : "+enseignantEntity.getIdEnseignant());
         enseignantRepository.delete(enseignantEntity);
     }
 
@@ -194,7 +203,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         Enseignant enseignantEntity =  enseignantRepository.findByEmail(email);
 
         if(enseignantEntity==null)throw new UsernameNotFoundException(email);
-
+        logger.info("Enseignant loaded by username: "+ enseignantEntity.getIdEnseignant());
         return new EnseignantPrincipal(enseignantEntity);
     }
 }

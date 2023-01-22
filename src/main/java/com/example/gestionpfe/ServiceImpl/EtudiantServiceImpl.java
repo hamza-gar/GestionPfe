@@ -190,9 +190,12 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Etudiant etudiantEntity = etudianRepository.findByEmail(email);
-        logger.info("etudiantEntity : " + etudiantEntity);
-        if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
+        if (etudiantEntity == null) {
+            logger.info("etudiantEntity not found with email :" + email);
+            throw new UsernameNotFoundException(email);
+        }
+        logger.info("etudiantEntity found with email :" + email);
         return new EtudiantPrincipal(etudiantEntity);
     }
 }
