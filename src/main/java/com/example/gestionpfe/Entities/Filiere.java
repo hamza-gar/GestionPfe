@@ -23,14 +23,17 @@ public class Filiere implements Serializable {
     private String nomFiliere;
 
     @ManyToOne
-    @JoinColumn(name = "departement_id",nullable = true)
+    @JoinColumn(name = "departement_id",unique = true,nullable = false)
     private Departement departement;
 
     @OneToOne
-    @JoinColumn(name = "responsable_id",nullable = true)
+    @JoinColumn(name = "responsable_id",unique = true,nullable = false)
     private Enseignant responsable;
 
-//    @OneToMany(mappedBy = "filiere",cascade = {CascadeType.ALL})
-//    private List<Etudiant> etudiants;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "filiere_etudiant",
+            joinColumns = @JoinColumn(name = "filiere_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
+    private List<Etudiant> etudiants;
 
 }

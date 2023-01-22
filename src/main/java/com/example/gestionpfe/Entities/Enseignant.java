@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity(name = "enseignants")
 @Data
@@ -12,9 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Enseignant implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "idEnseignant",nullable=false)
+    @Column(name = "idEnseignant", nullable = false)
     private String idEnseignant;
     @Column(nullable = false, length = 20)
     private String cin;
@@ -22,7 +23,7 @@ public class Enseignant implements Serializable {
     private String nom;
     @Column(nullable = false, length = 50)
     private String prenom;
-    @Column(nullable = false ,length = 120,unique = true)
+    @Column(nullable = false, length = 120, unique = true)
     private String email;
     @Column(nullable = false)
     private String encryptedPassword;
@@ -38,9 +39,15 @@ public class Enseignant implements Serializable {
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "departement_id",nullable = true)
+    @JoinColumn(name = "departement_id", nullable = true)
     private Departement departement;
 
-    @OneToOne(mappedBy = "responsable",cascade = {CascadeType.ALL})
+    @OneToOne(mappedBy = "responsable", cascade = {CascadeType.ALL})
     private Filiere filiere;
+
+    @OneToMany
+    @JoinTable(name = "encadrant_sujet",
+            joinColumns = @JoinColumn(name = "encadrant_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "sujet_id", referencedColumnName = "id"))
+    private List<Sujet> sujets;
 }

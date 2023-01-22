@@ -2,7 +2,6 @@ package com.example.gestionpfe.ServiceImpl;
 
 
 import com.example.gestionpfe.Dto.SujetDto;
-import com.example.gestionpfe.Entities.Filiere;
 import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.SujetRepository;

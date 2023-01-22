@@ -21,6 +21,9 @@ public class InitialUsersSetup {
     private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
 
     @Autowired
+    EquipeRepository equipeRepository;
+
+    @Autowired
     RoleRepository roleRepository;
 
     @Autowired
@@ -144,6 +147,59 @@ public class InitialUsersSetup {
         adminAuthorities.add(DELETE_ENSEIGNANT_AUTHORITY);
         enseignantAuthorities.add(DELETE_ENSEIGNANT_AUTHORITY);
 
+        Authority GET_BY_IDSUJET_AUTHORITY = createAuthority("GET_BY_IDSUJET_AUTHORITY");
+        sAdminAuthorities.add(GET_BY_IDSUJET_AUTHORITY);
+        adminAuthorities.add(GET_BY_IDSUJET_AUTHORITY);
+        enseignantAuthorities.add(GET_BY_IDSUJET_AUTHORITY);
+        etudiantAuthorities.add(GET_BY_IDSUJET_AUTHORITY);
+
+        Authority GET_ALL_SUJETS_AUTHORITY = createAuthority("GET_ALL_SUJETS_AUTHORITY");
+        sAdminAuthorities.add(GET_ALL_SUJETS_AUTHORITY);
+        adminAuthorities.add(GET_ALL_SUJETS_AUTHORITY);
+        enseignantAuthorities.add(GET_ALL_SUJETS_AUTHORITY);
+        etudiantAuthorities.add(GET_ALL_SUJETS_AUTHORITY);
+
+        Authority ADD_SUJET_AUTHORITY = createAuthority("ADD_SUJET_AUTHORITY");
+        enseignantAuthorities.add(ADD_SUJET_AUTHORITY);
+
+        Authority UPDATE_SUJET_AUTHORITY = createAuthority("UPDATE_SUJET_AUTHORITY");
+        enseignantAuthorities.add(UPDATE_SUJET_AUTHORITY);
+
+        Authority DELETE_SUJET_AUTHORITY = createAuthority("DELETE_SUJET_AUTHORITY");
+        enseignantAuthorities.add(DELETE_SUJET_AUTHORITY);
+        sAdminAuthorities.add(DELETE_SUJET_AUTHORITY);
+        adminAuthorities.add(DELETE_SUJET_AUTHORITY);
+
+        Authority GET_BY_IDEQUIPE_AUTHORITY = createAuthority("GET_BY_IDEQUIPE_AUTHORITY");
+        enseignantAuthorities.add(GET_BY_IDEQUIPE_AUTHORITY);
+        etudiantAuthorities.add(GET_BY_IDEQUIPE_AUTHORITY);
+
+        Authority GET_ALL_EQUIPES_AUTHORITY = createAuthority("GET_ALL_EQUIPES_AUTHORITY");
+        enseignantAuthorities.add(GET_ALL_EQUIPES_AUTHORITY);
+        etudiantAuthorities.add(GET_ALL_EQUIPES_AUTHORITY);
+
+        Authority ADD_EQUIPE_AUTHORITY = createAuthority("ADD_EQUIPE_AUTHORITY");
+        etudiantAuthorities.add(ADD_EQUIPE_AUTHORITY);
+
+        Authority ADD_ETUDIANT_TO_EQUIPE_AUTHORITY = createAuthority("ADD_ETUDIANT_TO_EQUIPE_AUTHORITY");
+        etudiantAuthorities.add(ADD_ETUDIANT_TO_EQUIPE_AUTHORITY);
+
+//        Authority DELETE_ETUDIANT_FROM_EQUIPE_AUTHORITY = createAuthority("DELETE_ETUDIANT_FROM_EQUIPE_AUTHORITY");
+//        etudiantAuthorities.add(DELETE_ETUDIANT_FROM_EQUIPE_AUTHORITY);
+
+        Authority DELETE_EQUIPE_AUTHORITY = createAuthority("DELETE_EQUIPE_AUTHORITY");
+        sAdminAuthorities.add(DELETE_EQUIPE_AUTHORITY);
+        adminAuthorities.add(DELETE_EQUIPE_AUTHORITY);
+        enseignantAuthorities.add(DELETE_EQUIPE_AUTHORITY);
+
+
+        Authority DELETE_SELF_FROM_EQUIPE_AUTHORITY = createAuthority("DELETE_SELF_FROM_EQUIPE_AUTHORITY");
+        etudiantAuthorities.add(DELETE_SELF_FROM_EQUIPE_AUTHORITY);
+
+
+
+
+
         logger.info("All Authorities created.");
 
         logger.info("Creating Roles...");
@@ -169,26 +225,77 @@ public class InitialUsersSetup {
         logger.info("Super Admin created.");
 
 
-
         logger.info("Creating Enseignants...");
-        Enseignant enseignant = createEnseignant(enseignantRole,departement);
+        Enseignant enseignant = createEnseignant(enseignantRole, departement);
         logger.info("Enseignant created.");
 
+
         logger.info("Creating Filieres...");
-        Filiere filiere = createFiliere("Informatique",  enseignant, departement);
+        Filiere filiere = createFiliere("Informatique", enseignant, departement);
         logger.info("Filiere Informatique created.");
 
+        logger.info("Creating Etudiants...");
+        Etudiant etudiant1 = createEtudiant("aba@etu.com", etudiantRole, filiere);
+        Etudiant etudiant2 = createEtudiant("aba1@etu.com", etudiantRole, filiere);
+        Etudiant etudiant3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
+        logger.info("Etudiants created.");
+
+
+
         logger.info("Creating subjects...");
-        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3);
+        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3, enseignant);
+        logger.info("Subject created.");
+
+        logger.info("Creating groupes...");
+        Equipe groupe = createEquipe(3,sujet);
+
+        logger.info("Group created.");
+
+        logger.info("Adding students to group...");
+        groupe=addEtudiantToEquipe(etudiant1, groupe);
+        groupe=addEtudiantToEquipe(etudiant2, groupe);
+        groupe=addEtudiantToEquipe(etudiant3, groupe);
+        logger.info("Students added to group.");
+
     }
 
     @Transactional
-    public Sujet createSujet(String s, String s1, int tailleEquipe) {
-        Sujet sujet = new Sujet();
-        sujet.setNomSujet(s);
-        sujet.setDescriptionSujet(s1);
-        sujet.setTailleEquipe(tailleEquipe);
-        sujetRepository.save(sujet);
+    public Equipe createEquipe(int tailleEquipe,Sujet sujet) {
+        Equipe equipe = equipeRepository.findByIdEquipe(utils.generateUserId(32));
+        if (equipe == null) {
+            equipe = new Equipe();
+            equipe.setIdEquipe(utils.generateUserId(32));
+            equipe.setTailleEquipe(tailleEquipe);
+            equipe.setIsPrivate(false);
+            equipe.setCryptedPassword("123456");
+            equipe.setSujet(sujet);
+            equipe = equipeRepository.save(equipe);
+        }
+        return equipe;
+    }
+
+    @Transactional
+    public Equipe addEtudiantToEquipe(Etudiant etudiant, Equipe equipe) {
+        if(equipe.getEtudiant() == null) {
+            equipe.setEtudiant(new ArrayList<>());
+        }
+        equipe.getEtudiant().add(etudiant);
+        equipe = equipeRepository.save(equipe);
+        return equipe;
+    }
+
+    @Transactional
+    public Sujet createSujet(String s, String s1, int tailleEquipe, Enseignant encadrant) {
+        Sujet sujet = sujetRepository.findByNomSujet(s);
+        if (sujet == null) {
+            sujet = new Sujet();
+            sujet.setIdSujet(utils.generateUserId(32));
+            sujet.setNomSujet(s);
+            sujet.setDescriptionSujet(s1);
+            sujet.setTailleEquipe(tailleEquipe);
+            sujet.setEncadrant(encadrant);
+            sujet = sujetRepository.save(sujet);
+        }
         return sujet;
     }
 
@@ -206,15 +313,14 @@ public class InitialUsersSetup {
 
     @Transactional
     public Filiere createFiliere(String informatique, Enseignant enseignant, Departement departement) {
-        Filiere filiere = new Filiere();
-        logger.info("Filiere created.");
-        filiere.setNomFiliere(informatique);
-        logger.info("Filiere nom created.");
-        filiere.setDepartement(departement);
-        logger.info("Filiere departement created.");
-        filiere.setResponsable(enseignant);
-        logger.info("Filiere responsable created.");
-        filiereRepository.save(filiere);
+        Filiere filiere = filiereRepository.findByNomFiliere(informatique);
+        if (filiere == null) {
+            filiere = new Filiere();
+            filiere.setNomFiliere(informatique);
+            filiere.setDepartement(departement);
+            filiere.setResponsable(enseignant);
+            filiereRepository.save(filiere);
+        }
         logger.info("Filiere saved.");
         return filiere;
     }
@@ -251,7 +357,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Etudiant createEtudiant(Role etudiantRole) {
+    public Etudiant createEtudiant(String mail, Role etudiantRole, Filiere filiere) {
         Etudiant etudiant = etudiantRepository.findByEmail("abdellah.samourail@gmail.com");
 
         if (etudiant == null) {
@@ -261,19 +367,20 @@ public class InitialUsersSetup {
             etudiant.setCin("kb19022");
             etudiant.setNom("lakhssassi");
             etudiant.setPrenom("Abdellah");
-            etudiant.setEmail("abdellah.samourail@gmail.com");
+            etudiant.setEmail(mail);
             etudiant.setIdEtudiant(utils.generateUserId(32));
             etudiant.setEmailVerificationToken(utils.generateUserId(32));
             etudiant.setEmailVerificationStatus(true);
             etudiant.setEncryptedPassword(bCryptPasswordEncoder.encode("123456"));
             etudiant.setRole(etudiantRole);
+            etudiant.setFiliere(filiere);
             etudiant = etudiantRepository.save(etudiant);
         }
         return etudiant;
     }
 
     @Transactional
-    public Enseignant createEnseignant(Role enseignantRole,Departement departement) {
+    public Enseignant createEnseignant(Role enseignantRole, Departement departement) {
         Enseignant enseignant = enseignantRepository.findByEmail("abdellah.samourail@prof.com");
         if (enseignant == null) {
             enseignant = new Enseignant();

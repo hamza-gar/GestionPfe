@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class SujetResponse {
     private long id;
+    private String idSujet;
     private String nomSujet;
     private String descriptionSujet;
     private int tailleEquipe;

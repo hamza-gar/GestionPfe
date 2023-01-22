@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Equipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
@@ -27,12 +27,16 @@ public class Equipe {
     @Column
     private String cryptedPassword;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "equipe_etudiant",
-            joinColumns = @JoinColumn(name = "equipe_id"),
-            inverseJoinColumns = @JoinColumn(name = "etudiant_id"))
+            joinColumns = @JoinColumn(name = "equipe_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
     private List<Etudiant> etudiant;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sujet_id", referencedColumnName = "id",nullable = false)
+    private Sujet sujet;
+
     /* TODO:
-    *   + Add ForeignKeys for "etudiants" in "equipe" */
+     *   + Add ForeignKeys for "etudiants" in "equipe" */
 }

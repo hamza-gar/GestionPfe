@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity(name = "etudiants")
 @Data
@@ -35,18 +36,18 @@ public class Etudiant implements Serializable {
     @Column(nullable = false)//columnDefinition = "boolean default false"
     private Boolean emailVerificationStatus = false;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     @JoinTable(name = "etudiants_role",
             joinColumns = @JoinColumn(name = "etudiants_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Role role;
 
+    @ManyToMany(mappedBy = "etudiant")
+    private List<Equipe> equipe;
+
+
     @ManyToOne
-    private Equipe equipe;
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "filiere_id", nullable = false)
-//    private Filiere filiere;
+    @JoinColumn(name = "filiere_id", nullable = false)
+    private Filiere filiere;
 
 }

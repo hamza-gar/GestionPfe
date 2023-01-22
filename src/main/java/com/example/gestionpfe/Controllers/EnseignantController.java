@@ -1,18 +1,11 @@
 package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
-import com.example.gestionpfe.Dto.EtudiantDto;
-import com.example.gestionpfe.Dto.SujetDto;
-import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.EnseignantRequest;
-import com.example.gestionpfe.Requests.SujetRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
-import com.example.gestionpfe.Responses.EtudiantResponse;
-import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.SujetService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

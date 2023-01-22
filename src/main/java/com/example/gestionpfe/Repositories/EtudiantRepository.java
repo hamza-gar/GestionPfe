@@ -1,5 +1,6 @@
 package com.example.gestionpfe.Repositories;
 
+import com.example.gestionpfe.Entities.Equipe;
 import com.example.gestionpfe.Entities.Etudiant;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
