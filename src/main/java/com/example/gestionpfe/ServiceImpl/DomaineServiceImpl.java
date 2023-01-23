@@ -41,7 +41,7 @@ public class DomaineServiceImpl implements DomaineService {
         if(checkDomaine!=null) throw new RuntimeException("domaine deja exist !!!");
         Domaine domaineEntity = new Domaine();
         domaineEntity = modelMapper.map(domainDto, Domaine.class);
-        logger.info("domaineEntity : "+domaineEntity);
+
 
 
         Domaine newDomaine = domaineRepository.save(domaineEntity);

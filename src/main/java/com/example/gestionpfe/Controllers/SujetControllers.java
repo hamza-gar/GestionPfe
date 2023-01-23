@@ -22,7 +22,7 @@ public class SujetControllers {
 
     @Autowired
     SujetService sujetService;
-
+    @PreAuthorize("hasAuthority('GET_BY_IDSUJET_AUTHORITY')")
     @GetMapping(path="/{id}")
     public ResponseEntity<SujetResponse> getSujet(@PathVariable String id){
         SujetDto sujetDto = sujetService.getSujetById(id);
@@ -30,7 +30,7 @@ public class SujetControllers {
         sujetResponse = modelMapper.map(sujetDto,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAuthority('GET_ALL_SUJETS_AUTHORITY')")
     @GetMapping
     public List<SujetResponse> getAllSujets(@RequestParam(value = "page") int page, @RequestParam(value="limit" ) int limit){
         List<SujetResponse> sujetResponse = new ArrayList<>();
@@ -56,7 +56,7 @@ public class SujetControllers {
         sujetResponse = modelMapper.map(createdSujet,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.CREATED);
     }
-
+    @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")
     @PutMapping(path="/{id}")
     public ResponseEntity<SujetResponse> updateSujet(@PathVariable String id,@RequestBody SujetRequest sujetRequest){
         SujetDto sujetDto = new SujetDto();
@@ -67,7 +67,7 @@ public class SujetControllers {
         sujetResponse = modelMapper.map(updatedSujet,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
-
+    @PreAuthorize("hasAuthority('DELETE_SUJET_AUTHORITY')")
     @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteSujet(@PathVariable String id){
         sujetService.deleteSujet(id);
