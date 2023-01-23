@@ -69,7 +69,6 @@ public class EtudiantServiceImpl implements EtudiantService {
             etudianEntity = modelMapper.map(etudiantDto, Etudiant.class);
 
 
-
             etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
             etudianEntity.setIdEtudiant(util.generateUserId(32));
             String token = util.generateUserId(26);
@@ -85,10 +84,9 @@ public class EtudiantServiceImpl implements EtudiantService {
 
             newEtudiantDto = modelMapper.map(newEtudiant, EtudiantDto.class);
 
-
+            logger.info("Etudiant created:" + newEtudiantDto.getEmail());
             return newEtudiantDto;
         } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
-
 
 
     }
@@ -101,7 +99,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudianDto = new EtudiantDto();
         etudianDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
-        logger.info("etudianDto mapping: " + etudianDto);
+        logger.info("Etudiant retrieved:" + etudianDto.getEmail());
         return etudianDto;
     }
 
@@ -113,7 +111,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
-        logger.info("etudiantDto mapping: " + etudiantDto);
+        logger.info("Etudiant retrieved:" + etudiantDto.getEmail());
 
         return etudiantDto;
     }
@@ -134,7 +132,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiantUpdated, EtudiantDto.class);
-        logger.info("etudiantDto mapping: " + etudiantDto);
+        logger.info("Etudiant updated successfully : " + etudiantDto.getEmail());
 
         return etudiantDto;
     }
@@ -148,7 +146,7 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(updatedEtudiant, EtudiantDto.class);
-        logger.info("etudiantDto mapping: " + etudiantDto);
+        logger.info("Etudiant verified." + etudiantDto.getEmail());
         return etudiantDto;
     }
 
@@ -159,31 +157,33 @@ public class EtudiantServiceImpl implements EtudiantService {
         emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(), "etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
         etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
-        logger.info("etudiantDto mapping: " + etudiantDto);
+        logger.info("Resent verification to student : " + etudiantDto.getEmail());
         return etudiantDto;
     }
 
     @Override
     public void deleteEtudiant(String id) {
         Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);
-        logger.info("etudiantEntity : " + etudiantEntity);
+
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         etudianRepository.delete(etudiantEntity);
+        logger.info("etudiant deleted successfully");
     }
 
     @Override
     public List<EtudiantDto> getAllEtudiants(int page, int limit) {
-        List<EtudiantDto>etudiantDtos = new ArrayList<>();
+        List<EtudiantDto> etudiantDtos = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<Etudiant> etudiantPages = etudianRepository.findAll(pageableRequest);
         List<Etudiant> etudiants = etudiantPages.getContent();
-        for(Etudiant etudiant : etudiants){
+        for (Etudiant etudiant : etudiants) {
             EtudiantDto etudiantDto = new EtudiantDto();
             etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
-            logger.info("all etudiants found successfully");
+
             etudiantDtos.add(etudiantDto);
         }
+        logger.info("all etudiants found successfully");
         return etudiantDtos;
     }
 

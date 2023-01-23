@@ -155,7 +155,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(updatedEnseignant,EnseignantDto.class);
 
-
+        logger.info("Enseignant verified successfully.");
         return enseignantDto;
     }
 

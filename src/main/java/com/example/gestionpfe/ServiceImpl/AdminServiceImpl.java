@@ -58,7 +58,7 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto newAdminDto = new AdminDto();
         newAdminDto = modelMapper.map(newAdmin, AdminDto.class);
-        logger.info("AdminDto mapping: " + newAdminDto);
+        logger.info("Admin added succesfully: " + newAdmin.getEmail() + " added.");
 
         return newAdminDto;
     }
@@ -71,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto adminDto = new AdminDto();
         adminDto = modelMapper.map(adminEntity, AdminDto.class);
-        logger.info("AdminDto mapping: " + adminDto);
+        logger.info("Admin retrieved succesfully: " + adminEntity.getEmail() + " retrieved.");
         return adminDto;
     }
 
@@ -83,8 +83,7 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto adminDto = new AdminDto();
         adminDto = modelMapper.map(adminEntity, AdminDto.class);
-        logger.info("AdminDto mapping: " + adminDto);
-
+        logger.info("Admin retrieved succesfully: " + adminEntity.getEmail() + " retrieved.");
         return adminDto;
     }
 
@@ -103,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
 
         AdminDto newAdminDto = new AdminDto();
         newAdminDto = modelMapper.map(adminUpdated, AdminDto.class);
-        logger.info("AdminDto mapping: " + newAdminDto);
+        logger.info("Admin updated succesfully: " + adminUpdated.getEmail() + " updated.");
 
         return newAdminDto;
     }
@@ -114,7 +113,9 @@ public class AdminServiceImpl implements AdminService {
 
         if (adminEntity == null) throw new UsernameNotFoundException(id);
 
+
         adminRepository.delete(adminEntity);
+        logger.info("Admin deleted succesfully: " + adminEntity.getEmail() + " deleted. ");
     }
 
     @Override
@@ -129,6 +130,7 @@ public class AdminServiceImpl implements AdminService {
             adminDto = modelMapper.map(adminEntity, AdminDto.class);
             adminDtos.add(adminDto);
         }
+        logger.info("Admins retrieved succesfully: " + adminDtos.size() + " admins found. ");
         return adminDtos;
     }
 

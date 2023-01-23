@@ -47,7 +47,7 @@ public class Etudiant implements Serializable {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "filiere_id", nullable = false)
+    @JoinColumn(name = "filiere_id")
     private Filiere filiere;
 
 }

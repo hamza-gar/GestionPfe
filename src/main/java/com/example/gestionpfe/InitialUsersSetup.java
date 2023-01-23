@@ -198,8 +198,6 @@ public class InitialUsersSetup {
 
 
 
-
-
         logger.info("All Authorities created.");
 
         logger.info("Creating Roles...");
