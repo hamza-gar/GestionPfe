@@ -30,7 +30,7 @@ public class Filiere implements Serializable {
     @JoinColumn(name = "responsable_id",unique = true,nullable = false)
     private Enseignant responsable;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "filiere_etudiant",
             joinColumns = @JoinColumn(name = "filiere_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))

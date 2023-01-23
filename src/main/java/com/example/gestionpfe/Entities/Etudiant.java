@@ -46,7 +46,7 @@ public class Etudiant implements Serializable {
     private List<Equipe> equipe;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filiere_id", nullable = false)
     private Filiere filiere;
 
