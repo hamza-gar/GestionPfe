@@ -62,12 +62,12 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
             Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
-            logger.info("checkEtudiant : " + checkEtudiant);
+
 
             if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
             Etudiant etudianEntity = new Etudiant();
             etudianEntity = modelMapper.map(etudiantDto, Etudiant.class);
-            logger.info("etudianEntity mapping: " + etudianEntity);
+
 
 
             etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
@@ -78,13 +78,13 @@ public class EtudiantServiceImpl implements EtudiantService {
             Role erole = roleRepository.findByName("ROLE_ETUDIANT");
             etudianEntity.setRole(erole);
             emailSender.sendVerificationMail(etudianEntity.getEmail(), token, "etudiants");
-            logger.info("emailSender : " + emailSender);
+
             Etudiant newEtudiant = etudianRepository.save(etudianEntity);
 
             EtudiantDto newEtudiantDto = new EtudiantDto();
 
             newEtudiantDto = modelMapper.map(newEtudiant, EtudiantDto.class);
-            logger.info("newEtudiantDto mapping: " + newEtudiantDto);
+
 
             return newEtudiantDto;
         } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
