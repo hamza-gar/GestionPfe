@@ -1,9 +1,13 @@
 package com.example.gestionpfe.Dto;
 
+import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Entities.Sujet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,5 +19,6 @@ public class EquipeDto {
     private int tailleEquipe;
     private Boolean isPrivate;
     private String cryptedPassword;
-    private long sujetId;
+    private List<Etudiant> etudiant;
+    private Sujet sujet;
 }

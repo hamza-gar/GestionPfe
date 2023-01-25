@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface SujetRepository extends PagingAndSortingRepository<Sujet,Long> {
     Sujet findByNomSujet(String nomSujet);
     Sujet findById(String id);
+    Sujet findByIdSujet(String idSujet);
 }

@@ -15,6 +15,8 @@ public interface EtudiantService extends UserDetailsService {
     EtudiantDto resendVerification(String etudiantId);
     void deleteEtudiant(String id);
     List<EtudiantDto> getAllEtudiants(int page, int limit);
+    Boolean etudiantAlreadyInSujet(String idEtudiant, String idSujet);
+    Boolean etudiantIn3Sujets(String idEtudiant,String idEnseignant);
 }
 
 

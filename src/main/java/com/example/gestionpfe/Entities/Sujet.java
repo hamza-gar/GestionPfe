@@ -27,10 +27,7 @@ public class Sujet {
     @Column(nullable = false)
     private int tailleEquipe;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "sujet_equipe",
-            joinColumns = @JoinColumn(name = "sujet_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "equipe_id", referencedColumnName = "id"))
+    @OneToMany(mappedBy = "sujet")
     private List<Equipe> equipe;
 
     @ManyToOne

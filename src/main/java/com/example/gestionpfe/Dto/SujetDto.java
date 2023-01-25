@@ -1,6 +1,7 @@
 package com.example.gestionpfe.Dto;
 
 
+import com.example.gestionpfe.Entities.Enseignant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +17,5 @@ public class SujetDto {
     private String nomSujet;
     private String descriptionSujet;
     private int tailleEquipe;
+    private Enseignant encadrant;
 }

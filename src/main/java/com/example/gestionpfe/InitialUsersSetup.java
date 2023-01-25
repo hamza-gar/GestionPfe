@@ -196,6 +196,30 @@ public class InitialUsersSetup {
         Authority DELETE_SELF_FROM_EQUIPE_AUTHORITY = createAuthority("DELETE_SELF_FROM_EQUIPE_AUTHORITY");
         etudiantAuthorities.add(DELETE_SELF_FROM_EQUIPE_AUTHORITY);
 
+        Authority GET_BY_IDFILIERE_AUTHORITY = createAuthority("GET_BY_IDFILIERE_AUTHORITY");
+        sAdminAuthorities.add(GET_BY_IDFILIERE_AUTHORITY);
+        adminAuthorities.add(GET_BY_IDFILIERE_AUTHORITY);
+        enseignantAuthorities.add(GET_BY_IDFILIERE_AUTHORITY);
+        etudiantAuthorities.add(GET_BY_IDFILIERE_AUTHORITY);
+
+        Authority GET_ALL_FILIERES_AUTHORITY = createAuthority("GET_ALL_FILIERES_AUTHORITY");
+        sAdminAuthorities.add(GET_ALL_FILIERES_AUTHORITY);
+        adminAuthorities.add(GET_ALL_FILIERES_AUTHORITY);
+        enseignantAuthorities.add(GET_ALL_FILIERES_AUTHORITY);
+        etudiantAuthorities.add(GET_ALL_FILIERES_AUTHORITY);
+
+        Authority ADD_FILIERE_AUTHORITY = createAuthority("ADD_FILIERE_AUTHORITY");
+        sAdminAuthorities.add(ADD_FILIERE_AUTHORITY);
+        adminAuthorities.add(ADD_FILIERE_AUTHORITY);
+
+        Authority UPDATE_FILIERE_AUTHORITY = createAuthority("UPDATE_FILIERE_AUTHORITY");
+        sAdminAuthorities.add(UPDATE_FILIERE_AUTHORITY);
+        adminAuthorities.add(UPDATE_FILIERE_AUTHORITY);
+
+        Authority DELETE_FILIERE_AUTHORITY = createAuthority("DELETE_FILIERE_AUTHORITY");
+        sAdminAuthorities.add(DELETE_FILIERE_AUTHORITY);
+        adminAuthorities.add(DELETE_FILIERE_AUTHORITY);
+
 
 
         logger.info("All Authorities created.");
@@ -317,6 +341,8 @@ public class InitialUsersSetup {
             filiere.setNomFiliere(informatique);
             filiere.setDepartement(departement);
             filiere.setResponsable(enseignant);
+            filiere.setIdFiliere(utils.generateUserId(32));
+            filiere.setEtablissement("Abdelmalek Essaadi");
             filiereRepository.save(filiere);
         }
         logger.info("Filiere saved.");
@@ -356,7 +382,7 @@ public class InitialUsersSetup {
 
     @Transactional
     public Etudiant createEtudiant(String mail, Role etudiantRole, Filiere filiere) {
-        Etudiant etudiant = etudiantRepository.findByEmail("abdellah.samourail@gmail.com");
+        Etudiant etudiant = etudiantRepository.findByEmail(mail);
 
         if (etudiant == null) {
             etudiant = new Etudiant();

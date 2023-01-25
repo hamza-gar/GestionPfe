@@ -33,8 +33,8 @@ public class Equipe {
             inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
     private List<Etudiant> etudiant;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sujet_id", referencedColumnName = "id",nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "sujet_id", referencedColumnName = "id", nullable = false)
     private Sujet sujet;
 
     /* TODO:

@@ -60,7 +60,7 @@ public class SujetServiceImpl implements SujetService {
 
     @Override
     public SujetDto getSujetById(String id) {
-    Sujet sujetEntity = sujetRepository.findById(id);
+    Sujet sujetEntity = sujetRepository.findByIdSujet(id);
 
     if (sujetEntity == null) throw new RuntimeException(id);
 

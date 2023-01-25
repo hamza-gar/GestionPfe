@@ -26,6 +26,6 @@ public class Departement implements Serializable {
     @OneToMany(mappedBy = "departement",cascade = {CascadeType.ALL})
     private List<Enseignant> enseignants;
 
-    @OneToMany(mappedBy = "departement",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "departement")
     private List<Filiere> filieres;
 }

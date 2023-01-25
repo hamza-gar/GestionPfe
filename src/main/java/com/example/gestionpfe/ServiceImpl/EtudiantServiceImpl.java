@@ -2,16 +2,16 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
-import com.example.gestionpfe.Entities.Domaine;
-import com.example.gestionpfe.Entities.Etudiant;
-import com.example.gestionpfe.Entities.Role;
+import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.RoleRepository;
+import com.example.gestionpfe.Repositories.SujetRepository;
 import com.example.gestionpfe.Security.Etudiant.EtudiantPrincipal;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EtudiantService;
+import com.example.gestionpfe.Services.SujetService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -54,6 +55,9 @@ public class EtudiantServiceImpl implements EtudiantService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    SujetRepository sujetRepository;
 
     @Override
     public EtudiantDto addEtudiant(EtudiantDto etudiantDto) {
@@ -186,6 +190,55 @@ public class EtudiantServiceImpl implements EtudiantService {
         logger.info("all etudiants found successfully");
         return etudiantDtos;
     }
+
+    @Override
+    public Boolean etudiantAlreadyInSujet(String idEtudiant, String idSujet) {
+        Etudiant etudiant = etudianRepository.findByIdEtudiant(idEtudiant);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with id :" + idEtudiant);
+            throw new UsernameNotFoundException(idEtudiant);
+        }
+        Sujet sujet = sujetRepository.findByIdSujet(idSujet);
+        if (sujet == null) {
+            logger.info("sujet not found with id :" + idSujet);
+            throw new UsernameNotFoundException(idSujet);
+        }
+        List<Equipe> equipes = sujet.getEquipe();
+        logger.info("Retrieving equipes of sujet : " + idSujet);
+        for (Equipe equipe : equipes) {
+            logger.info("Equipe found : " + equipe.getIdEquipe());
+            logger.info("comparing sujet id : " + equipe.getSujet().getIdSujet() + " with " + idSujet);
+            if (equipe.getSujet().getIdSujet().equals(idSujet)){
+                logger.info("Etudiant already in sujet");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean etudiantIn3Sujets(String idEtudiant, String idEnseignant) {
+        Etudiant etudiant = etudianRepository.findByIdEtudiant(idEtudiant);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with id :" + idEtudiant);
+            throw new UsernameNotFoundException(idEtudiant);
+        }
+        List<Sujet> sujets = etudiant.getEquipe().stream().map(Equipe::getSujet).collect(Collectors.toList());
+
+        int count = 0;
+        for (Sujet sujet : sujets) {
+            if (sujet.getEncadrant().getIdEnseignant().equals(idEnseignant)) {
+                count++;
+
+            }
+            if (count == 3) {
+                logger.info("Etudiant already in 3 sujets");
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -25,21 +25,21 @@ public class FiliereController {
     @Autowired
     FiliereService filiereService;
 
+    @PreAuthorize("hasAuthority('GET_BY_IDFILIERE_AUTHORITY')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<FiliereResponse> getFiliere(@PathVariable String id) {
-        FiliereDto filiereDto = filiereService.getFiliereById(id);
+        FiliereDto filiereDto = filiereService.getFiliereByIdFiliere(id);
         FiliereResponse filiereResponse = new FiliereResponse();
         filiereResponse = modelMapper.map(filiereDto, FiliereResponse.class);
         return ResponseEntity.ok(filiereResponse);
     }
 
-
+    @PreAuthorize("hasAuthority('GET_ALL_FILIERES_AUTHORITY')")
     @GetMapping
     public ResponseEntity<List<FiliereResponse>> getAllFilieres(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         List<FiliereResponse> filiereResponse = new ArrayList<>();
         List<FiliereDto> filieres = filiereService.getAllFilieres(page, limit);
 
-        logger.info("uhmmmm");
         for (FiliereDto filiereDto : filieres) {
             FiliereResponse filiere = new FiliereResponse();
             filiere = modelMapper.map(filiereDto, FiliereResponse.class);
@@ -51,6 +51,7 @@ public class FiliereController {
 
     }
 
+    @PreAuthorize("hasAuthority('ADD_FILIERE_AUTHORITY')")
     @PostMapping
     public ResponseEntity<FiliereResponse> addFiliere(@RequestBody Filiere filiere) {
         FiliereDto filiereDto = new FiliereDto();
@@ -62,6 +63,7 @@ public class FiliereController {
         return ResponseEntity.ok(filiereResponse);
     }
 
+    @PreAuthorize("hasAuthority('UPDATE_FILIERE_AUTHORITY')")
     @PutMapping(path = "/{id}")
     public ResponseEntity<FiliereResponse> updateFiliere(@PathVariable String id, @RequestBody Filiere filiere) {
         FiliereDto filiereDto = new FiliereDto();
@@ -73,6 +75,7 @@ public class FiliereController {
         return ResponseEntity.ok(filiereResponse);
     }
 
+    @PreAuthorize("hasAuthority('DELETE_FILIERE_AUTHORITY')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Object> deleteFiliere(@PathVariable String id) {
         filiereService.deleteFiliere(id);

@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SujetResponse {
-    private long id;
     private String idSujet;
     private String nomSujet;
     private String descriptionSujet;

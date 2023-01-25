@@ -56,6 +56,7 @@ public class SujetControllers {
         sujetResponse = modelMapper.map(createdSujet,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")
     @PutMapping(path="/{id}")
     public ResponseEntity<SujetResponse> updateSujet(@PathVariable String id,@RequestBody SujetRequest sujetRequest){
@@ -67,6 +68,7 @@ public class SujetControllers {
         sujetResponse = modelMapper.map(updatedSujet,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
+
     @PreAuthorize("hasAuthority('DELETE_SUJET_AUTHORITY')")
     @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteSujet(@PathVariable String id){

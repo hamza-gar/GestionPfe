@@ -17,7 +17,9 @@ import lombok.Setter;
 public class FiliereDto {
 
     private long id;
+    private String idFiliere;
     private String nomFiliere;
+    private String etablissement;
     private Departement departement;
     private Enseignant responsable;
 }

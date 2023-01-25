@@ -11,7 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EquipeRequest {
-    private int tailleEquipe;
     private Boolean isPrivate;
     private String cryptedPassword;
+    private String sujetId;
+
 }

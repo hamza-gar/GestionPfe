@@ -45,9 +45,6 @@ public class Enseignant implements Serializable {
     @OneToOne(mappedBy = "responsable", cascade = {CascadeType.ALL})
     private Filiere filiere;
 
-    @OneToMany
-    @JoinTable(name = "encadrant_sujet",
-            joinColumns = @JoinColumn(name = "encadrant_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "sujet_id", referencedColumnName = "id"))
+    @OneToMany(mappedBy = "encadrant")
     private List<Sujet> sujets;
 }

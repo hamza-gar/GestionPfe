@@ -1,8 +1,10 @@
 package com.example.gestionpfe.ServiceImpl;
 
 
+import com.example.gestionpfe.Dto.DepartementDto;
 import com.example.gestionpfe.Dto.FiliereDto;
 
+import com.example.gestionpfe.Entities.Departement;
 import com.example.gestionpfe.Entities.Filiere;
 import com.example.gestionpfe.InitialUsersSetup;
 
@@ -11,6 +13,7 @@ import com.example.gestionpfe.Services.FiliereService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +43,7 @@ public class FiliereServiceImpl implements FiliereService {
         if(checkFiliere!=null) throw new RuntimeException("filiere deja exist !!!");
         Filiere filiereEntity = new Filiere();
         filiereEntity = modelMapper.map(filiereDTO, Filiere.class);
-        logger.info("filiereEntity : "+filiereEntity);
+        filiereEntity.setIdFiliere(util.generateUserId(32));
 
 
         Filiere newFiliere = filiereRepository.save(filiereEntity);
@@ -64,8 +67,8 @@ public class FiliereServiceImpl implements FiliereService {
     }
 
     @Override
-    public FiliereDto getFiliereById(String id) {
-        Filiere filiereEntity =  filiereRepository.findById(id);
+    public FiliereDto getFiliereByIdFiliere(String id) {
+        Filiere filiereEntity =  filiereRepository.findByIdFiliere(id);
 
         if(filiereEntity == null)throw new UsernameNotFoundException(id);
 
@@ -77,7 +80,7 @@ public class FiliereServiceImpl implements FiliereService {
 
     @Override
     public FiliereDto updateFiliere(String id, FiliereDto filiereDTO) {
-        Filiere filiereEntity =  filiereRepository.findById(id);
+        Filiere filiereEntity =  filiereRepository.findByIdFiliere(id);
 
         if(filiereEntity == null)throw new UsernameNotFoundException(id);
 
@@ -95,7 +98,7 @@ public class FiliereServiceImpl implements FiliereService {
 
     @Override
     public void deleteFiliere(String id) {
-        Filiere filiereEntity =  filiereRepository.findById(id);
+        Filiere filiereEntity =  filiereRepository.findByIdFiliere(id);
 
         if(filiereEntity == null)throw new UsernameNotFoundException(id);
         logger.info("filiere deleted successfully");
@@ -105,7 +108,6 @@ public class FiliereServiceImpl implements FiliereService {
     @Override
     public List<FiliereDto> getAllFilieres(int page, int limit) {
         List<FiliereDto>filieresDto = new ArrayList<>();
-
         Pageable pageableRequest =  PageRequest.of(page,limit);
 
         Page<Filiere> FilierePages = filiereRepository.findAll(pageableRequest);
@@ -114,6 +116,8 @@ public class FiliereServiceImpl implements FiliereService {
 
         for(Filiere filiereEntity:filieres){
             FiliereDto filiere = new FiliereDto();
+            logger.info("filiere :"+filiereEntity.getNomFiliere()+" found successfully");
+
             filiere = modelMapper.map(filiereEntity, FiliereDto.class);
 
 

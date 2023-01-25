@@ -15,6 +15,7 @@ public class FiliereRequest {
 
     private String nomFiliere;
     private Departement departement;
-    private Enseignant responsable;
+    private String etablissement;
+    private EnseignantRequest responsable;
 
 }

@@ -60,7 +60,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/etudiants/*").hasRole("ETUDIANT")
                 .antMatchers(HttpMethod.GET, "/enseignants/*").hasRole("ENSEIGNANT")
                 .antMatchers(HttpMethod.GET,"/admins/*").hasRole("SUPERADMIN")
-                .anyRequest().authenticated()
                 .and()
                 .addFilter(getEtudiantAuthenticationFilter())
                 .addFilter(new AuthorizationFilter(authenticationManager(), adminRepository, etudiantRepository, enseignantRepository))
@@ -88,6 +87,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/admins/login");
         return filter;
     }
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

@@ -1,5 +1,6 @@
 package com.example.gestionpfe.Responses;
 
+import com.example.gestionpfe.Entities.Enseignant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FiliereResponse {
-    private long id;
+    private String idFiliere;
     private String nomFiliere;
-    private long departementId;
-    private long responsableId;
+    private String etablissement;
+    private String nomDepartement;
+    private EnseignantResponse responsable;
 }
