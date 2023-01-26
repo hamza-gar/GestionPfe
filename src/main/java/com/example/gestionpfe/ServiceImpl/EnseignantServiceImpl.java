@@ -33,7 +33,7 @@ import java.util.List;
 
 @Service
 public class EnseignantServiceImpl implements EnseignantService {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(EnseignantServiceImpl.class);
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired

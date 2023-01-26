@@ -18,7 +18,7 @@ import java.util.List;
 
 @Service
 public class DepartementServiceImpl implements DepartementService {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(DepartementServiceImpl.class);
 
     ModelMapper modelMapper = new ModelMapper();
 

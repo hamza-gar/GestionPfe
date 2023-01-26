@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 public class SujetServiceImpl implements SujetService {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(SujetServiceImpl.class);
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired

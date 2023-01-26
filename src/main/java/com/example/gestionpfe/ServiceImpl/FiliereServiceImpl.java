@@ -27,7 +27,7 @@ import java.util.List;
 
 @Service
 public class FiliereServiceImpl implements FiliereService {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(FiliereServiceImpl.class);
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired

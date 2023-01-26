@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Service
 public class EtudiantServiceImpl implements EtudiantService {
 
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(EtudiantServiceImpl.class);
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     EtudiantRepository etudianRepository;

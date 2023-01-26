@@ -26,7 +26,7 @@ import java.util.List;
 
 @Service
 public class DomaineServiceImpl implements DomaineService {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(DomaineServiceImpl.class);
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     DomaineRepository domaineRepository;
