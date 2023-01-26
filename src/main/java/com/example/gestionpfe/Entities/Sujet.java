@@ -27,13 +27,11 @@ public class Sujet {
     @Column(nullable = false)
     private int tailleEquipe;
 
-    @OneToMany(mappedBy = "sujet")
+    @OneToMany(mappedBy = "sujet", cascade = {CascadeType.REMOVE})
     private List<Equipe> equipe;
 
     @ManyToOne
     @JoinColumn(name = "encadrant_id", referencedColumnName = "id",nullable = false)
     private Enseignant encadrant;
 
-    /*TODO:
-     *  + Add foreignKey "enseignant" "soutenance"*/
 }

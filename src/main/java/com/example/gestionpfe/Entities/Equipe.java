@@ -33,7 +33,7 @@ public class Equipe {
             inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
     private List<Etudiant> etudiant;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "sujet_id", referencedColumnName = "id", nullable = false)
     private Sujet sujet;
 

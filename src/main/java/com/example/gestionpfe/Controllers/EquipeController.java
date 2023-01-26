@@ -107,6 +107,7 @@ public class EquipeController {
             logger.info("equipe is full");
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
+
         etudiants.add(modelMapper.map(etudiantdto,Etudiant.class));
         equipeDto.setEtudiant(etudiants);
 
@@ -125,6 +126,7 @@ public class EquipeController {
     }
 
     /*TODO quitter equipe*/
+    @PreAuthorize("hasAuthority('DELETE_SELF_FROM_EQUIPE_AUTHORITY')")
     @PutMapping(path="/{id}")
     public ResponseEntity<EquipeResponse> removeSelfFromEquipe(@PathVariable String id){
         EquipeDto equipeDto = equipeService.getEquipeByIdEquipe(id);
