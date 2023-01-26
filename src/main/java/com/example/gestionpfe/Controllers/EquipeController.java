@@ -2,23 +2,18 @@ package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.EquipeDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
-import com.example.gestionpfe.Dto.SujetDto;
 import com.example.gestionpfe.Entities.Etudiant;
-import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.EquipeRequest;
 import com.example.gestionpfe.Responses.EquipeResponse;
 import com.example.gestionpfe.Services.EquipeService;
 import com.example.gestionpfe.Services.EtudiantService;
-import com.example.gestionpfe.Services.SujetService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;

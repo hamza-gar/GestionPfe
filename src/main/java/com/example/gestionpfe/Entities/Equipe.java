@@ -37,6 +37,9 @@ public class Equipe {
     @JoinColumn(name = "sujet_id", referencedColumnName = "id", nullable = false)
     private Sujet sujet;
 
+    @OneToOne(mappedBy="equipe")
+    private Rendezvous rendezvous;
+
     /* TODO:
      *   + Add ForeignKeys for "etudiants" in "equipe" */
 }

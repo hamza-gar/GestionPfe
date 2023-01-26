@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/filieres")
 public class FiliereController {
-    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
+    private final static Logger logger = org.slf4j.LoggerFactory.getLogger(FiliereController.class);
 
     ModelMapper modelMapper = new ModelMapper();
 
