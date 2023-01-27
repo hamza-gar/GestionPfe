@@ -4,10 +4,12 @@ package com.example.gestionpfe.ServiceImpl;
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
 import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Equipe;
 import com.example.gestionpfe.Entities.Filiere;
 import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
+import com.example.gestionpfe.Repositories.EquipeRepository;
 import com.example.gestionpfe.Repositories.FiliereRepository;
 import com.example.gestionpfe.Repositories.SujetRepository;
 import com.example.gestionpfe.Responses.FiliereResponse;
@@ -42,6 +44,9 @@ public class SujetServiceImpl implements SujetService {
     @Autowired
     EnseignantRepository enseignantRepository;
 
+    @Autowired
+    EquipeRepository equipeRepository;
+
     @Override
     public SujetDto addSujet(SujetDto sujetDTO, String username) {
         Sujet checkSujet = sujetRepository.findByNomSujet(sujetDTO.getNomSujet());
@@ -60,6 +65,7 @@ public class SujetServiceImpl implements SujetService {
         sujetEntity = modelMapper.map(sujetDTO, Sujet.class);
         sujetEntity.setEncadrant(enseignant);
         sujetEntity.setIdSujet(util.generateUserId(32));
+        sujetEntity.setLocked(false);
 
         Sujet newSujet = sujetRepository.save(sujetEntity);
 
@@ -79,6 +85,17 @@ public class SujetServiceImpl implements SujetService {
         sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
         logger.info("sujet found successfully");
 
+        return sujetDto;
+    }
+
+    @Override
+    public SujetDto getSujetByIdSujet(String filiere) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(filiere);
+        if (sujetEntity == null) throw new RuntimeException(filiere);
+
+        SujetDto sujetDto = new SujetDto();
+        sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+        logger.info("sujet found successfully");
         return sujetDto;
     }
 
@@ -123,6 +140,39 @@ public class SujetServiceImpl implements SujetService {
         logger.info("sujet updated successfully");
 
         return updatedSujetDto;
+    }
+
+    @Override
+    public SujetDto lockSujet(String mailEnseignant, String idSujet,String idEquipe) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(idSujet);
+        if (sujetEntity == null) {
+            logger.info("sujet not found");
+            throw new RuntimeException(idSujet);
+        }
+        logger.info("sujet found successfully");
+        if(!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)){
+            logger.info("you are the owner of this sujet");
+            throw new RuntimeException("you are the owner of this sujet");
+        }
+        logger.info("you are the owner of this sujet");
+        if(!sujetEntity.getEquipe().contains(equipeRepository.findByIdEquipe(idEquipe))){
+            logger.info("this equipe is not in this sujet");
+            throw new RuntimeException("this equipe is not in this sujet");
+        }
+        logger.info("this equipe is in this sujet");
+
+        List<Equipe> equipeList = new ArrayList<>();
+        for (Equipe equipe : sujetEntity.getEquipe()) {
+            if(!equipe.getIdEquipe().equals(idEquipe)){
+                equipeRepository.delete(equipe);
+            }else
+                equipeList.add(equipe);
+        }
+        sujetEntity.setEquipe(equipeList);
+        sujetEntity.setLocked(true);
+        Sujet sujet = sujetRepository.save(sujetEntity);
+        logger.info("sujet locked successfully");
+        return modelMapper.map(sujet,SujetDto.class);
     }
 
     @Override

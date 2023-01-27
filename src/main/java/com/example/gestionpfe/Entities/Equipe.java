@@ -27,19 +27,17 @@ public class Equipe {
     @Column
     private String cryptedPassword;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "equipe_etudiant",
             joinColumns = @JoinColumn(name = "equipe_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
     private List<Etudiant> etudiant;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "sujet_id", referencedColumnName = "id", nullable = false)
     private Sujet sujet;
 
     @OneToOne(mappedBy="equipe")
     private Rendezvous rendezvous;
 
-    /* TODO:
-     *   + Add ForeignKeys for "etudiants" in "equipe" */
 }

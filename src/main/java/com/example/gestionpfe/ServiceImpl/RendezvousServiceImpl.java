@@ -1,9 +1,13 @@
 package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.RendezvousDto;
+import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Rendezvous;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.AdminRepository;
+import com.example.gestionpfe.Repositories.EnseignantRepository;
+import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.RendezvousRepository;
 import com.example.gestionpfe.Services.RendezvousService;
 import com.example.gestionpfe.Shared.Utils;
@@ -21,7 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class RendezvousServiceImpl implements RendezvousService{
+public class RendezvousServiceImpl implements RendezvousService {
     private final static Logger logger = org.slf4j.LoggerFactory.getLogger(RendezvousServiceImpl.class);
 
     ModelMapper modelMapper = new ModelMapper();
@@ -34,10 +38,16 @@ public class RendezvousServiceImpl implements RendezvousService{
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    EnseignantRepository enseignantRepository;
+
+    @Autowired
+    EtudiantRepository etudiantRepository;
+
     @Override
     public RendezvousDto addRendezvous(RendezvousDto rendezvousDto) {
         Rendezvous checkRendezvous = rendezvousRepository.findByIdRendezvous(rendezvousDto.getIdRendezvous());
-        if(checkRendezvous != null) throw new RuntimeException("Rendezvous deja exist !!!");
+        if (checkRendezvous != null) throw new RuntimeException("Rendezvous deja exist !!!");
         Rendezvous rendezvousEntity = new Rendezvous();
         rendezvousEntity = modelMapper.map(rendezvousDto, Rendezvous.class);
         logger.info("RendezvousEntity mapping: " + rendezvousEntity.toString());
@@ -56,7 +66,7 @@ public class RendezvousServiceImpl implements RendezvousService{
     @Override
     public RendezvousDto getRendezvousByDate(Date dateRendezvous) {
         Rendezvous rendezvousEntity = rendezvousRepository.findByDateRendezvous(dateRendezvous);
-        if(rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
+        if (rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
         RendezvousDto rendezvousDto = new RendezvousDto();
         rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
         logger.info("Rendezvous found successfully");
@@ -64,19 +74,30 @@ public class RendezvousServiceImpl implements RendezvousService{
     }
 
     @Override
-    public RendezvousDto getRendezvousByIdRendezvous(String id) {
+    public RendezvousDto getRendezvousByIdRendezvous(String username, String id) {
         Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(id);
-        if(rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
-        RendezvousDto rendezvousDto = new RendezvousDto();
-        rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
-        logger.info("Rendezvous found successfully");
-        return rendezvousDto;
+        if (rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
+
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant != null) {
+            if (etudiant.getEquipe().get(0).getSujet().getNomSujet().equals(rendezvousEntity.getEquipe().getSujet().getNomSujet())) {
+                logger.info("Rendezvous found successfully");
+                return modelMapper.map(rendezvousEntity, RendezvousDto.class);
+            }
+        } else {
+            if (rendezvousEntity.getEncadrant().getEmail().equals(username)){
+                logger.info("Rendezvous found successfully");
+                return modelMapper.map(rendezvousEntity, RendezvousDto.class);
+            }
+        }
+        logger.info("Not authorized !!!");
+        throw new RuntimeException("Not authorized !!!");
     }
 
     @Override
     public RendezvousDto updateRendezvous(String id, RendezvousDto rendezvous) {
         Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(id);
-        if(rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
+        if (rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
 
         rendezvousEntity.setDateRendezvous(rendezvous.getDateRendezvous());
 
@@ -91,23 +112,31 @@ public class RendezvousServiceImpl implements RendezvousService{
     @Override
     public void deleteRendezvous(String id) {
         Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(id);
-        if(rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
+        if (rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
         rendezvousRepository.delete(rendezvousEntity);
         logger.info("Rendezvous deleted successfully");
     }
 
     @Override
-    public List<RendezvousDto> getAllRendezvous(int page, int limit) {
-        List<RendezvousDto>rendezvousDtos = new ArrayList<>();
+    public List<RendezvousDto> getAllRendezvous(String username,int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if(enseignant == null) {
+            logger.info("Not authorized !!!");
+            throw new RuntimeException("Not authorized !!!");
+        }
+
+        List<RendezvousDto> rendezvousDtos = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<Rendezvous> rendezvousPage = rendezvousRepository.findAll(pageableRequest);
 
-        List<Rendezvous>rendezvous = rendezvousPage.getContent();
+        List<Rendezvous> rendezvous = rendezvousPage.getContent();
 
-        for(Rendezvous rendezvousEntity : rendezvous){
+        for (Rendezvous rendezvousEntity : rendezvous) {
             RendezvousDto rendezvousDto = new RendezvousDto();
-                    rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
-            rendezvousDtos.add(rendezvousDto);
+            if(rendezvousEntity.getEncadrant().getEmail().equals(username)){
+                rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
+                rendezvousDtos.add(rendezvousDto);
+            }
         }
         logger.info("all Rendezvous found successfully");
         return rendezvousDtos;

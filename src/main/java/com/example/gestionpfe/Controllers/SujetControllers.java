@@ -1,8 +1,11 @@
 package com.example.gestionpfe.Controllers;
 
 
+import com.example.gestionpfe.Dto.EquipeDto;
 import com.example.gestionpfe.Dto.SujetDto;
+import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.SujetRequest;
+import com.example.gestionpfe.Responses.EquipeResponse;
 import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.SujetService;
@@ -80,6 +83,17 @@ public class SujetControllers {
         SujetResponse sujetResponse = new SujetResponse();
         sujetResponse = modelMapper.map(createdSujet,SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.CREATED);
+    }
+
+    @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")
+    @PutMapping(path="/lock")
+    public ResponseEntity<SujetResponse> lockSujet(@RequestParam(value = "idSujet") String idSujet,@RequestParam(value = "idEquipe") String idEquipe){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String mail = principal.toString();
+
+        SujetDto sujetDto = sujetService.lockSujet(mail,idSujet,idEquipe);
+
+        return new ResponseEntity<SujetResponse>(modelMapper.map(sujetDto,SujetResponse.class), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")

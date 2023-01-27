@@ -25,6 +25,9 @@ public class Sujet {
     private String descriptionSujet;
 
     @Column(nullable = false)
+    private Boolean locked = false;
+
+    @Column(nullable = false)
     private int tailleEquipe;
 
     @OneToMany(mappedBy = "sujet", cascade = {CascadeType.REMOVE})

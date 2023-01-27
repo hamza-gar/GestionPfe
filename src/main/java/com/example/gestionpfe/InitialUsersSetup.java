@@ -260,6 +260,8 @@ public class InitialUsersSetup {
         Etudiant etudiant1 = createEtudiant("aba@etu.com", etudiantRole, filiere);
         Etudiant etudiant2 = createEtudiant("aba1@etu.com", etudiantRole, filiere);
         Etudiant etudiant3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
+        Etudiant etudiant4 = createEtudiant("aba3@etu.com", etudiantRole, filiere);
+        Etudiant etudiant5 = createEtudiant("aba4@etu.com", etudiantRole, filiere);
         logger.info("Etudiants created.");
 
 
@@ -270,13 +272,14 @@ public class InitialUsersSetup {
 
         logger.info("Creating groupes...");
         Equipe groupe = createEquipe(3,sujet);
+        Equipe groupe2 = createEquipe(3,sujet);
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
         groupe=addEtudiantToEquipe(etudiant1, groupe);
         groupe=addEtudiantToEquipe(etudiant2, groupe);
-        groupe=addEtudiantToEquipe(etudiant3, groupe);
+        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
         logger.info("Students added to group.");
 
     }

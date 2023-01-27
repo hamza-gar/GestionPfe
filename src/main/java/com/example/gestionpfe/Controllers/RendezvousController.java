@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,29 +25,37 @@ public class RendezvousController {
     @Autowired
     private RendezvousService rendezvousService;
 
-// @PreAuthorize("hasAuthority('GET_BY_IDRENDEZVOUS_AUTHORITY')")
+    @PreAuthorize("hasAuthority('GET_BY_IDRENDEZVOUS_AUTHORITY')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<RendezvousResponse>getRendezvousByIdRendezvous(@PathVariable String id){
-        RendezvousDto rendezvousDto = rendezvousService.getRendezvousByIdRendezvous(id);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+        RendezvousDto rendezvousDto = rendezvousService.getRendezvousByIdRendezvous(username,id);
         RendezvousResponse rendezvousResponse = new RendezvousResponse();
         rendezvousResponse = modelMapper.map(rendezvousDto, RendezvousResponse.class);
         return ResponseEntity.ok(rendezvousResponse);
     }
- // @PreAuthorize("hasAuthority('GET_ALL_RENDEZVOUS_AUTHORITY')")
+
+    @PreAuthorize("hasAuthority('GET_ALL_RENDEZVOUS_AUTHORITY')")
     @GetMapping
     public ResponseEntity<List<RendezvousResponse>>   getAllRendezvous(@RequestParam(value= "page") int page, @RequestParam(value = "limit") int limit){
-    List<RendezvousResponse> rendezvousResponse = new ArrayList<>();
-    List<RendezvousDto> rendezvous = rendezvousService.getAllRendezvous(page,limit);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
 
-    for(RendezvousDto rendezvousDto : rendezvous){
-        RendezvousResponse rendezvous1 = new RendezvousResponse();
-        rendezvous1 = modelMapper.map(rendezvousDto, RendezvousResponse.class);
+        List<RendezvousResponse> rendezvousResponse = new ArrayList<>();
+        List<RendezvousDto> rendezvous = rendezvousService.getAllRendezvous(username,page,limit);
 
-        rendezvousResponse.add(rendezvous1);
+        for(RendezvousDto rendezvousDto : rendezvous){
+            RendezvousResponse rendezvous1 = new RendezvousResponse();
+            rendezvous1 = modelMapper.map(rendezvousDto, RendezvousResponse.class);
 
+            rendezvousResponse.add(rendezvous1);
+
+        }
+        return ResponseEntity.ok(rendezvousResponse);
     }
-    return ResponseEntity.ok(rendezvousResponse);
-    }
+
+
 
     // @PreAuthorize("hasAuthority('ADD_RENDEZVOUS_AUTHORITY')")
     @PostMapping
