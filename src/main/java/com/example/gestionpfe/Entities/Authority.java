@@ -3,6 +3,7 @@ package com.example.gestionpfe.Entities;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,5 +23,10 @@ public class Authority {
 
     @ManyToMany(mappedBy = "authority")
     private List<Role> roles;
+
+    @Override
+    public String toString(){
+        return "Authority id : "+ id + ", Authority name : " + name+".";
+    }
 
 }

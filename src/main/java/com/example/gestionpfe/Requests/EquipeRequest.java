@@ -13,6 +13,6 @@ import lombok.Setter;
 public class EquipeRequest {
     private Boolean isPrivate;
     private String cryptedPassword;
+    private String idEquipe;
     private String sujetId;
-
 }

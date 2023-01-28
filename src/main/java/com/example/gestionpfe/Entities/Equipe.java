@@ -27,7 +27,7 @@ public class Equipe {
     @Column
     private String cryptedPassword;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(name = "equipe_etudiant",
             joinColumns = @JoinColumn(name = "equipe_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "etudiant_id", referencedColumnName = "id"))
@@ -40,6 +40,4 @@ public class Equipe {
     @OneToOne(mappedBy="equipe")
     private Rendezvous rendezvous;
 
-    /* TODO:
-     *   + Add ForeignKeys for "etudiants" in "equipe" */
 }

@@ -9,8 +9,8 @@ import java.util.List;
 public interface RendezvousService {
     RendezvousDto addRendezvous(RendezvousDto rendezvousDto);
     RendezvousDto getRendezvousByDate(Date dateRendezvous);
-    RendezvousDto getRendezvousByIdRendezvous(String id);
+    RendezvousDto getRendezvousByIdRendezvous(String username,String id);
     RendezvousDto updateRendezvous(String id,RendezvousDto rendezvous);
     void deleteRendezvous(String id);
-    List<RendezvousDto> getAllRendezvous(int page, int limit);
+    List<RendezvousDto> getAllRendezvous(String username,int page, int limit);
 }

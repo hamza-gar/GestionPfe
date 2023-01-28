@@ -16,6 +16,7 @@ public class SujetDto {
     private String idSujet;
     private String nomSujet;
     private String descriptionSujet;
+    private Boolean locked;
     private int tailleEquipe;
     private Enseignant encadrant;
 }

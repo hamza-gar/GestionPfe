@@ -1,10 +1,19 @@
 package com.example.gestionpfe.ServiceImpl;
 
 
+import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
+import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Equipe;
+import com.example.gestionpfe.Entities.Filiere;
 import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.InitialUsersSetup;
+import com.example.gestionpfe.Repositories.EnseignantRepository;
+import com.example.gestionpfe.Repositories.EquipeRepository;
+import com.example.gestionpfe.Repositories.FiliereRepository;
 import com.example.gestionpfe.Repositories.SujetRepository;
+import com.example.gestionpfe.Responses.FiliereResponse;
+import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.SujetService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -29,33 +38,65 @@ public class SujetServiceImpl implements SujetService {
     @Autowired
     SujetRepository sujetRepository;
 
+    @Autowired
+    FiliereRepository filiereRepository;
+
+    @Autowired
+    EnseignantRepository enseignantRepository;
+
+    @Autowired
+    EquipeRepository equipeRepository;
+
     @Override
-    public SujetDto addSujet(SujetDto sujetDTO) {
-    Sujet checkSujet = sujetRepository.findByNomSujet(sujetDTO.getNomSujet());
-    if (checkSujet != null) throw new RuntimeException("sujet deja exist !!!");
-    Sujet sujetEntity = new Sujet();
-    sujetEntity = modelMapper.map(sujetDTO, Sujet.class);
-    logger.info("sujetEntity : " + sujetEntity);
+    public SujetDto addSujet(SujetDto sujetDTO, String username) {
+        Sujet checkSujet = sujetRepository.findByNomSujet(sujetDTO.getNomSujet());
+        if (checkSujet != null) {
+            logger.info("sujet already exists");
+            throw new RuntimeException("sujet deja exist !!!");
+        }
 
-    Sujet newSujet = sujetRepository.save(sujetEntity);
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("enseignant not found");
+            throw new RuntimeException("enseignant not found");
+        }
 
-    SujetDto newSujetDto = new SujetDto();
-    newSujetDto = modelMapper.map(newSujet, SujetDto.class);
-    logger.info("sujet found successfully");
+        Sujet sujetEntity = new Sujet();
+        sujetEntity = modelMapper.map(sujetDTO, Sujet.class);
+        sujetEntity.setEncadrant(enseignant);
+        sujetEntity.setIdSujet(util.generateUserId(32));
+        sujetEntity.setLocked(false);
 
-    return newSujetDto;
+        Sujet newSujet = sujetRepository.save(sujetEntity);
+
+        SujetDto newSujetDto = new SujetDto();
+        newSujetDto = modelMapper.map(newSujet, SujetDto.class);
+        logger.info("sujet found successfully");
+
+        return newSujetDto;
     }
 
     @Override
     public SujetDto getSujet(String nomSujet) {
-    Sujet sujetEntity = sujetRepository.findByNomSujet(nomSujet);
-    if (sujetEntity == null) throw new RuntimeException(nomSujet);
+        Sujet sujetEntity = sujetRepository.findByNomSujet(nomSujet);
+        if (sujetEntity == null) throw new RuntimeException(nomSujet);
 
-    SujetDto sujetDto = new SujetDto();
-    sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
-    logger.info("sujet found successfully");
+        SujetDto sujetDto = new SujetDto();
+        sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+        logger.info("sujet found successfully");
 
-    return sujetDto;
+        return sujetDto;
+    }
+
+    @Override
+    public SujetDto getSujetByIdSujet(String filiere) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(filiere);
+        if (sujetEntity == null) throw new RuntimeException(filiere);
+
+        SujetDto sujetDto = new SujetDto();
+        sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+        logger.info("sujet found successfully");
+        return sujetDto;
     }
 
     @Override
@@ -72,11 +113,25 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public SujetDto updateSujet(String id, SujetDto sujetDTO) {
-        Sujet sujetEntity = sujetRepository.findById(id);
-        if (sujetEntity == null) throw new RuntimeException(id);
+    public SujetDto updateSujet(String mailEnseignant,String id, SujetDto sujetDTO) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(id);
+        if (sujetEntity == null) {
+            logger.info("sujet not found");
+            throw new RuntimeException(id);
+        }
+        Enseignant enseignant = enseignantRepository.findByEmail(mailEnseignant);
+        if (enseignant == null) {
+            logger.info("enseignant not found");
+            throw new RuntimeException("enseignant not found");
+        }
+
+        if (!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)){
+            logger.info("you are not the owner of this sujet");
+            throw new RuntimeException("you are not the owner of this sujet");
+        }
 
         sujetEntity.setNomSujet(sujetDTO.getNomSujet());
+
 
         Sujet updatedSujet = sujetRepository.save(sujetEntity);
 
@@ -88,8 +143,41 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public SujetDto lockSujet(String mailEnseignant, String idSujet,String idEquipe) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(idSujet);
+        if (sujetEntity == null) {
+            logger.info("sujet not found");
+            throw new RuntimeException(idSujet);
+        }
+        logger.info("sujet found successfully");
+        if(!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)){
+            logger.info("you are the owner of this sujet");
+            throw new RuntimeException("you are the owner of this sujet");
+        }
+        logger.info("you are the owner of this sujet");
+        if(!sujetEntity.getEquipe().contains(equipeRepository.findByIdEquipe(idEquipe))){
+            logger.info("this equipe is not in this sujet");
+            throw new RuntimeException("this equipe is not in this sujet");
+        }
+        logger.info("this equipe is in this sujet");
+
+        List<Equipe> equipeList = new ArrayList<>();
+        for (Equipe equipe : sujetEntity.getEquipe()) {
+            if(!equipe.getIdEquipe().equals(idEquipe)){
+                equipeRepository.delete(equipe);
+            }else
+                equipeList.add(equipe);
+        }
+        sujetEntity.setEquipe(equipeList);
+        sujetEntity.setLocked(true);
+        Sujet sujet = sujetRepository.save(sujetEntity);
+        logger.info("sujet locked successfully");
+        return modelMapper.map(sujet,SujetDto.class);
+    }
+
+    @Override
     public void deleteSujet(String id) {
-        Sujet sujetEntity = sujetRepository.findById(id);
+        Sujet sujetEntity = sujetRepository.findByIdSujet(id);
         if (sujetEntity == null) throw new RuntimeException(id);
         logger.info("sujet deleted successfully");
         sujetRepository.delete(sujetEntity);
@@ -110,6 +198,27 @@ public class SujetServiceImpl implements SujetService {
             sujetDtoList.add(sujetDto);
         }
         logger.info("sujet list found successfully");
+        return sujetDtoList;
+    }
+
+    @Override
+    public List<SujetDto> getAllSujetsByFiliere(String idFiliere, int page, int limit) {
+        List<SujetDto> sujetDtoList = new ArrayList<>();
+        Page<Sujet> SujetPages = sujetRepository.findAll(PageRequest.of(page,limit));
+        List<Sujet> sujetList = SujetPages.getContent();
+        Filiere filiere = filiereRepository.findByIdFiliere(idFiliere);
+        if (filiere == null) {
+            logger.info("filiere not found");
+            throw new RuntimeException(idFiliere);
+        }
+        for (Sujet sujetEntity : sujetList) {
+            if(sujetEntity.getEncadrant().getFiliere().getNomFiliere().equals(filiere.getNomFiliere())){
+                SujetDto sujetDto = new SujetDto();
+                sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+                sujetDtoList.add(sujetDto);
+            }
+        }
+        logger.info("sujet list found successfully.");
         return sujetDtoList;
     }
 }

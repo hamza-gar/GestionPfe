@@ -203,7 +203,7 @@ public class EtudiantServiceImpl implements EtudiantService {
             logger.info("sujet not found with id :" + idSujet);
             throw new UsernameNotFoundException(idSujet);
         }
-        List<Equipe> equipes = sujet.getEquipe();
+        List<Equipe> equipes = etudiant.getEquipe();
         logger.info("Retrieving equipes of sujet : " + idSujet);
         for (Equipe equipe : equipes) {
             logger.info("Equipe found : " + equipe.getIdEquipe());
