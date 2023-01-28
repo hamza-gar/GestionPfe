@@ -3,10 +3,7 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
-import com.example.gestionpfe.Entities.Enseignant;
-import com.example.gestionpfe.Entities.Equipe;
-import com.example.gestionpfe.Entities.Filiere;
-import com.example.gestionpfe.Entities.Sujet;
+import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.EquipeRepository;
@@ -14,6 +11,7 @@ import com.example.gestionpfe.Repositories.FiliereRepository;
 import com.example.gestionpfe.Repositories.SujetRepository;
 import com.example.gestionpfe.Responses.FiliereResponse;
 import com.example.gestionpfe.Services.EnseignantService;
+import com.example.gestionpfe.Services.EquipeService;
 import com.example.gestionpfe.Services.SujetService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -46,6 +44,9 @@ public class SujetServiceImpl implements SujetService {
 
     @Autowired
     EquipeRepository equipeRepository;
+
+    @Autowired
+    EquipeService equipeService;
 
     @Override
     public SujetDto addSujet(SujetDto sujetDTO, String username) {
@@ -168,6 +169,15 @@ public class SujetServiceImpl implements SujetService {
             }else
                 equipeList.add(equipe);
         }
+
+        for(Etudiant etudiant : equipeList.get(0).getEtudiant()){
+            for(Equipe equipe:etudiant.getEquipe()){
+                if(!equipe.getIdEquipe().equals(idEquipe)){
+                    equipeService.removeEtudiant(equipe.getIdEquipe(),etudiant.getIdEtudiant());
+                }
+            }
+        }
+
         sujetEntity.setEquipe(equipeList);
         sujetEntity.setLocked(true);
         Sujet sujet = sujetRepository.save(sujetEntity);

@@ -10,6 +10,7 @@ public interface EquipeService {
     EquipeDto getEquipeByIdEquipe(String idEquipe);
     EquipeDto getEquipeById(String id);
     EquipeDto updateEquipe(EquipeDto equipeDto);
+    EquipeDto removeEtudiant(String idEquipe,String idEtudiant);
     EquipeDto joinEquipe(String username,EquipeDto equipeDto);
     void deleteEquipe(String id);
     List<EquipeDto> getAllEquipes(int page, int limit);

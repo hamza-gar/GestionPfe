@@ -83,10 +83,8 @@ public class EquipeController {
     @PostAuthorize("hasAuthority('ADD_ETUDIANT_TO_EQUIPE_AUTHORITY')")
     @PutMapping(path = "/join")
     public ResponseEntity<EquipeResponse> joinEquipe(@RequestBody EquipeRequest equipeRequest) {
-        System.out.println("joinEquipe");
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
-        System.out.println("username: " + username);
         EquipeDto equipeDto = new EquipeDto();
         equipeDto.setIdEquipe(equipeRequest.getIdEquipe());
 
@@ -108,33 +106,13 @@ public class EquipeController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<EquipeResponse> removeSelfFromEquipe(@PathVariable String id) {
 
-        EquipeDto equipeDto = equipeService.getEquipeByIdEquipe(id);
-        if (equipeDto == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        List<Etudiant> etudiants = equipeDto.getEtudiant();
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
-        if (etudiants.size() != 0) {
-            logger.info("etudiants :" + etudiants.size());
-            for (int index = 0; index < etudiants.size(); index++) {
-                if (etudiants.get(index).getEmail().equals(username)) {
-                    etudiants.remove(index);
-                }
-            }
-        }
-        logger.info("etudiants :" + etudiants.size());
-        equipeDto.setEtudiant(null);
-        equipeDto.setEtudiant(etudiants);
-        logger.info("etudiants :" + equipeDto.getEtudiant().size());
-        if (equipeDto.getEtudiant().size() == 0) {
-            equipeService.deleteEquipe(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        equipeService.updateEquipe(equipeDto);
-        EquipeResponse equipeResponse = new EquipeResponse();
-        equipeResponse = modelMapper.map(equipeDto, EquipeResponse.class);
-        return new ResponseEntity<EquipeResponse>(equipeResponse, HttpStatus.OK);
+
+        EquipeDto equipeDto = equipeService.removeEtudiant(username, id);
+
+
+        return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
     }
 
 

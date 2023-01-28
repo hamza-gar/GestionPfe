@@ -165,6 +165,35 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public EquipeDto removeEtudiant(String idEquipe, String idEtudiant) {
+        Equipe equipeEntity = equipeRepository.findByIdEquipe(idEquipe);
+        if (equipeEntity == null) {
+            logger.info("equipe not found");
+            throw new RuntimeException("equipe with id : " + idEquipe + " not found !!!");
+        }
+        logger.info("equipe found successfully");
+        idEtudiant = idEtudiant.contains("@") ? etudiantRepository.findByEmail(idEtudiant).getIdEtudiant() : idEtudiant;
+        Etudiant etudiant = etudiantRepository.findByIdEtudiant(idEtudiant);
+        if (etudiant == null) {
+            logger.info("etudiant not found");
+            throw new RuntimeException("etudiant with id : " + idEtudiant + " not found !!!");
+        }
+        List<Etudiant> etudiants = new ArrayList<>();
+        for (Etudiant etu : equipeEntity.getEtudiant()) {
+            if (!etu.getIdEtudiant().equals(idEtudiant)) {
+                etudiants.add(etu);
+            }
+        }
+        if (etudiants.size() == 0) {
+            equipeRepository.delete(equipeEntity);
+            return null;
+        }
+        equipeEntity.setEtudiant(etudiants);
+        Equipe equipeSaved = equipeRepository.save(equipeEntity);
+        return modelMapper.map(equipeSaved, EquipeDto.class);
+    }
+
+    @Override
     public EquipeDto joinEquipe(String username, EquipeDto equipeDto) {
         Etudiant etudiant = etudiantRepository.findByEmail(username);
         if (etudiant == null) {
@@ -195,8 +224,8 @@ public class EquipeServiceImpl implements EquipeService {
         logger.info("l'etudiant n'est pas deja dans 3 equipes pour ce meme encadrant.");
 
         List<Etudiant> etudiants = equipeEntity.getEtudiant();
-        for (Etudiant etu:etudiants){
-            if (etu.getIdEtudiant().equals(etudiant.getIdEtudiant())){
+        for (Etudiant etu : etudiants) {
+            if (etu.getIdEtudiant().equals(etudiant.getIdEtudiant())) {
                 logger.info("etudiant already in equipe");
                 throw new RuntimeException("etudiant already in equipe");
             }

@@ -1,11 +1,8 @@
 package com.example.gestionpfe.Controllers;
 
 
-import com.example.gestionpfe.Dto.EquipeDto;
 import com.example.gestionpfe.Dto.SujetDto;
-import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.SujetRequest;
-import com.example.gestionpfe.Responses.EquipeResponse;
 import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.SujetService;
@@ -22,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sujets")
-public class SujetControllers {
+public class SujetController {
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
