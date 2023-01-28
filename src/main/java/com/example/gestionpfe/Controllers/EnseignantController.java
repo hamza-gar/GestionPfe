@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class EnseignantController {
 
     @Autowired
     SujetService sujetService;
+
+    @Autowired
+    controllerVerification controllerVeri;
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDENSEIGNANT_AUTHORITY')")
     @GetMapping(path="/{id}")
@@ -50,12 +54,12 @@ public class EnseignantController {
     }
 
     @GetMapping(path = "/verification/{token}")
-    public ResponseEntity<EnseignantResponse> verifyEnseignant(@PathVariable String token) {
+    public void verifyEnseignant(@PathVariable String token, HttpServletResponse response) {
         EnseignantDto enseignantDto = enseignantService.verifyEnseignant(token);
         EnseignantResponse enseignantResponse = new EnseignantResponse();
         enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
 
-        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
+        controllerVeri.redirectToAngularPage(response);
     }
 
     @PostMapping

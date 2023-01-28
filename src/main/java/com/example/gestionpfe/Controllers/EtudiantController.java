@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class EtudiantController {
 
     @Autowired
     EtudiantService etudiantService;
+
+    @Autowired
+    controllerVerification controllerVeri;
 
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDETUDIANT_AUTHORITY')")
@@ -38,12 +42,12 @@ public class EtudiantController {
     }
 
     @GetMapping(path = "/verification/{token}")
-    public ResponseEntity<EtudiantResponse> verifyEtudiant(@PathVariable String token) {
+    public void verifyEtudiant(@PathVariable String token , HttpServletResponse response) {
         EtudiantDto etudiantDto = etudiantService.verifyEtudiant(token);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantDto, EtudiantResponse.class);
 
-        return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
+         controllerVeri.redirectToAngularPage(response);
     }
     @PreAuthorize("hasAuthority('GET_ALL_ETUDIANT_AUTHORITY')")
     @GetMapping
@@ -96,7 +100,6 @@ public class EtudiantController {
 
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
-
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
     @PreAuthorize("hasAuthority('DELETE_ETUDIANT_AUTHORITY')")
