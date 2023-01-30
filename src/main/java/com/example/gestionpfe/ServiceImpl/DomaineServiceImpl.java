@@ -84,8 +84,29 @@ public class DomaineServiceImpl implements DomaineService {
         if(DomaineEntity == null)throw new UsernameNotFoundException(id);
 
         /*TODO: optional fields.*/
+
+//        String nomDomaine1=domaineRepository.findById(id).getNomDomaine();
+//        String etablissement1=domaineRepository.findById(id).getEtablissement();
+//        Boolean etudiant1=domaineRepository.findById(id).getEtudiant();
+//        if(domainDto.getNomDomaine()==null) {
+//            DomaineEntity.setNomDomaine(nomDomaine1);
+//        }else{
+//            DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
+//        }
+//        if(domainDto.getEtablissement()==null) {
+//            DomaineEntity.setEtablissement(etablissement1);
+//        }else{
+//            DomaineEntity.setEtablissement(domainDto.getEtablissement());
+//        }
+//
+//        if(domainDto.getEtudiant()==null) {
+//            DomaineEntity.setEtudiant(etudiant1);
+//        }else{
+//            DomaineEntity.setEtudiant(domainDto.getEtudiant());
+//        }
         DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
         DomaineEntity.setEtablissement(domainDto.getEtablissement());
+        DomaineEntity.setEtudiant(domainDto.getEtudiant());
 
         Domaine domaineUpdated = domaineRepository.save(DomaineEntity);
 

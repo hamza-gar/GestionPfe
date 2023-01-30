@@ -129,10 +129,32 @@ public class EnseignantServiceImpl implements EnseignantService {
 
         if(enseignantEntity == null)throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
-        enseignantEntity.setNom(enseignantDto.getNom());
-        enseignantEntity.setPrenom(enseignantDto.getPrenom());
-        enseignantEntity.setCin(enseignantDto.getCin());
+        String Nom = enseignantRepository.findByIdEnseignant(id).getNom();
+        String Prenom = enseignantRepository.findByIdEnseignant(id).getPrenom();
+        String Cin = enseignantRepository.findByIdEnseignant(id).getCin();
+        String Email =  enseignantRepository.findByIdEnseignant(id).getEmail();
 
+        if(enseignantDto.getNom()==null){
+            enseignantEntity.setNom(Nom);
+        }else{
+            enseignantEntity.setNom(enseignantDto.getNom());
+        }
+
+        if(enseignantDto.getPrenom()==null){
+            enseignantEntity.setPrenom(Prenom);
+        }else{
+            enseignantEntity.setPrenom(enseignantDto.getPrenom());
+        }
+        if(enseignantDto.getCin()==null){
+            enseignantEntity.setCin(Cin);
+        }else{
+            enseignantEntity.setCin(enseignantDto.getCin());
+        }
+        if(enseignantDto.getEmail()==null){
+            enseignantEntity.setEmail(Email);
+        }else{
+            enseignantEntity.setEmail(enseignantDto.getEmail());
+        }
 
         Enseignant enseignantUpdated = enseignantRepository.save(enseignantEntity);
 

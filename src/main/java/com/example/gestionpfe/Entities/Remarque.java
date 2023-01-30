@@ -14,8 +14,12 @@ public class Remarque {
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
 
+    @Column(nullable = false)
+    private String idRemarque;
+
     @Column(nullable = false,length = 1000)
     private String remarque;
+
     @Column(nullable = false)
     private Float note;
 

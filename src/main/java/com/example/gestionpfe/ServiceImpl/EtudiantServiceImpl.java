@@ -126,11 +126,43 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
-        etudiantEntity.setNom(etudiantdto.getNom());
-        etudiantEntity.setPrenom(etudiantdto.getPrenom());
-        etudiantEntity.setCin(etudiantdto.getCin());
-        etudiantEntity.setCne(etudiantdto.getCne());
-        etudiantEntity.setApogee(etudiantdto.getApogee());
+        String Nom = etudianRepository.findByIdEtudiant(id).getNom();
+        String Prenom = etudianRepository.findByIdEtudiant(id).getPrenom();
+        String Cin = etudianRepository.findByIdEtudiant(id).getCin();
+        String Cne = etudianRepository.findByIdEtudiant(id).getCne();
+        Long Apogee = etudianRepository.findByIdEtudiant(id).getApogee();
+        String Email = etudianRepository.findByIdEtudiant(id).getEmail();
+
+        if(etudiantdto.getNom() == null){
+            etudiantEntity.setNom(Nom);
+        }else{
+            etudiantEntity.setNom(etudiantdto.getNom());
+        }
+        if(etudiantdto.getPrenom() == null){
+            etudiantEntity.setPrenom(Prenom);
+        }else{
+            etudiantEntity.setPrenom(etudiantdto.getPrenom());
+        }
+        if(etudiantdto.getCin() == null){
+            etudiantEntity.setCin(Cin);
+        }else{
+            etudiantEntity.setCin(etudiantdto.getCin());
+        }
+        if(etudiantdto.getCne() == null){
+            etudiantEntity.setCne(Cne);
+        }else{
+            etudiantEntity.setCne(etudiantdto.getCne());
+        }
+        if(etudiantdto.getApogee() == null){
+            etudiantEntity.setApogee(Apogee);
+        }else{
+            etudiantEntity.setApogee(etudiantdto.getApogee());
+        }
+        if(etudiantdto.getEmail() == null){
+            etudiantEntity.setEmail(Email);
+        }else{
+            etudiantEntity.setEmail(etudiantdto.getEmail());
+        }
 
         Etudiant etudiantUpdated = etudianRepository.save(etudiantEntity);
 
