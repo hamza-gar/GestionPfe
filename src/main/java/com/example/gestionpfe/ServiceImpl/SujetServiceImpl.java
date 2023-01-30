@@ -186,12 +186,33 @@ public class SujetServiceImpl implements SujetService {
                 }
             }
         }
-
+        sujetEntity.setDone(false);
         sujetEntity.setEquipe(equipeList);
         sujetEntity.setLocked(true);
         Sujet sujet = sujetRepository.save(sujetEntity);
         logger.info("sujet locked successfully");
         return modelMapper.map(sujet, SujetDto.class);
+    }
+
+    @Override
+    public SujetDto validateSujet(String username, SujetDto sujetDto,Boolean done) {
+        Sujet sujetEntity = sujetRepository.findByIdSujet(sujetDto.getIdSujet());
+        if (sujetEntity == null) {
+            logger.warn("sujet not found");
+            throw new RuntimeException(sujetDto.getIdSujet());
+        }
+        logger.info("sujet found successfully");
+        if (!sujetEntity.getEncadrant().getEmail().equals(username)) {
+            logger.warn("you are not the owner of this sujet");
+            throw new RuntimeException("you are not the owner of this sujet");
+        }
+        logger.info("you are the owner of this sujet");
+        /* TODO: Notify the students that their sujet is validated */
+        sujetEntity.setDone(done);
+        Sujet response = sujetRepository.save(sujetEntity);
+        logger.info("sujet validated successfully");
+
+        return modelMapper.map(response, SujetDto.class);
     }
 
     @Override

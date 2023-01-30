@@ -30,6 +30,9 @@ public class Sujet {
     @Column(nullable = false)
     private int tailleEquipe;
 
+    @Column
+    private Boolean done;
+
     @OneToMany(mappedBy = "sujet", cascade = {CascadeType.REMOVE})
     private List<Equipe> equipe;
 

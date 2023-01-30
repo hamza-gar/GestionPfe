@@ -95,6 +95,20 @@ public class SujetController {
         return new ResponseEntity<SujetResponse>(modelMapper.map(sujetDto,SujetResponse.class), HttpStatus.OK);
     }
 
+    @PutMapping(path="/validate")
+    public ResponseEntity<SujetResponse> validateSujet(@RequestBody SujetRequest sujetRequest){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String mail = principal.toString();
+
+        SujetDto sujetDto = new SujetDto();
+        sujetDto.setIdSujet(sujetRequest.getIdSujet());
+        SujetDto response = sujetService.validateSujet(mail,sujetDto,sujetRequest.getDone());
+
+
+        return new ResponseEntity<SujetResponse>(modelMapper.map(response,SujetResponse.class), HttpStatus.OK);
+    }
+
+
     @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")
     @PutMapping(path="/{id}")
     public ResponseEntity<SujetResponse> updateSujet(@PathVariable String id,@RequestBody SujetRequest sujetRequest){

@@ -14,6 +14,7 @@ public class Archive {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
+
     @Column(nullable = false)
     private Float noteFinal;
 
