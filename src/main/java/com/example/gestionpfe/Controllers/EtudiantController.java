@@ -3,8 +3,10 @@ package com.example.gestionpfe.Controllers;
 import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.Etudiant;
+import com.example.gestionpfe.Exceptions.exception;
 import com.example.gestionpfe.Requests.EtudiantRequest;
 import com.example.gestionpfe.Responses.DomaineResponse;
+import com.example.gestionpfe.Responses.ErrorMessages;
 import com.example.gestionpfe.Responses.EtudiantResponse;
 import com.example.gestionpfe.Services.EtudiantService;
 import org.modelmapper.ModelMapper;
@@ -66,6 +68,7 @@ public class EtudiantController {
 
     @PostMapping
     public ResponseEntity<EtudiantResponse> addEtudiant(@RequestBody EtudiantRequest etudiantrequest) {
+
         EtudiantDto etudiantdto = new EtudiantDto();
         etudiantdto = modelMapper.map(etudiantrequest, EtudiantDto.class);
 
