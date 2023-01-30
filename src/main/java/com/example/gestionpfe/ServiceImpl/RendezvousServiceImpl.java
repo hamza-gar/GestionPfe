@@ -5,8 +5,6 @@ import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Equipe;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Rendezvous;
-import com.example.gestionpfe.InitialUsersSetup;
-import com.example.gestionpfe.Repositories.AdminRepository;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.RendezvousRepository;

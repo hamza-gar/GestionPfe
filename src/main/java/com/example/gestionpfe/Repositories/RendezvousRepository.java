@@ -9,6 +9,5 @@ import java.util.Date;
 @Repository
 public interface RendezvousRepository extends PagingAndSortingRepository<Rendezvous,Long> {
 Rendezvous findByIdRendezvous(String idRendezvous);
-// date java or date sql ???
 Rendezvous findByDateRendezvous(Date dateRendezvous);
 }

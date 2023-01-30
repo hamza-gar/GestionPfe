@@ -37,4 +37,6 @@ public class Sujet {
     @JoinColumn(name = "encadrant_id", referencedColumnName = "id",nullable = false)
     private Enseignant encadrant;
 
+    @OneToOne(mappedBy = "sujet", cascade = {CascadeType.ALL})
+    private Soutenance soutenance;
 }

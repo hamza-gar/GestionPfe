@@ -51,4 +51,7 @@ public class Enseignant implements Serializable {
 
     @OneToMany(mappedBy = "encadrant")
     private List<Rendezvous> rendezvous;
+
+
+
 }
