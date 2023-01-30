@@ -26,7 +26,8 @@ public class Scheduler {
      * */
 
     // 0 0 6 * * * : every day at 6:00 AM
-    @Scheduled(cron = "0 0 6 * * *")
+    //cron = "0 0 6 * * *"
+    @Scheduled(fixedRate = 10000)
     public void runTask() {
         List<Etudiant> etudiants = (List<Etudiant>) etudiantRepository.findAll();
 

@@ -23,10 +23,13 @@ public class EmailSender {
     String htmlFooter = htmlMessageSender.htmlFooter;
     String Header = htmlMessageSender.Header;
     String Body = htmlMessageSender.validationFooter;
+    String NotificationBody = htmlMessageSender.BodyMessage;
+    String NotificationBodyPart2 = htmlMessageSender.BodyMessagePart2;
+    String NotificationBodyPart3 = htmlMessageSender.BodyMessagePart3;
+    String VoteHeader  = htmlMessageSender.VoteHeader;
+    String RefuseRendesVous = htmlMessageSender.RefuseRendesVous;
 
     public void sendVerificationMail(String toEmail, String token,String type) {
-
-
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -41,13 +44,14 @@ public class EmailSender {
         logger.info("Mail send ....");
     }
 
+
     public void notifyYOUAREINATEAM(String toEmail) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(toEmail);
-            helper.setSubject("Gestion PFE : Verification");
-            helper.setText("Vous êtes dans une équipe");
+            helper.setSubject("Gestion PFE : Nouvelle notification");
+            helper.setText(Header + NotificationBody +NotificationBodyPart2+NotificationBodyPart3+htmlFooter, true);
             mailSender.send(message);
         }catch (Exception e){
             e.printStackTrace();
@@ -55,5 +59,21 @@ public class EmailSender {
 
         logger.info("Mail send ....");
     }
+
+    public void RendesVous(String toEmail) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Gestion PFE : Nouvelle notification");
+            helper.setText(Header+VoteHeader + "Date"+RefuseRendesVous+htmlFooter, true);
+            mailSender.send(message);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        logger.info("Mail send ....");
+    }
+
 
 }

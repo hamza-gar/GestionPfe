@@ -274,7 +274,7 @@ public class InitialUsersSetup {
         logger.info("Filiere Informatique created.");
 
         logger.info("Creating Etudiants...");
-        Etudiant etudiant1 = createEtudiant("aba@etu.com", etudiantRole, filiere);
+        Etudiant etudiant1 = createEtudiant("hamza.garmouch@etu.uae.ac.ma", etudiantRole, filiere);
         Etudiant etudiant2 = createEtudiant("aba1@etu.com", etudiantRole, filiere);
         Etudiant etudiant3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
         Etudiant etudiant4 = createEtudiant("aba3@etu.com", etudiantRole, filiere);

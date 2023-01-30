@@ -1,6 +1,8 @@
 package com.example.gestionpfe.Shared;
 
 public class HtmlMessageSender {
+    // email de verification email
+    /***********************************************************************************************************************************************************************************************************************************************************************/
     static String Header = "<!DOCTYPE html>\n" +
             "<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
             "<head>\n" +
@@ -89,5 +91,56 @@ public class HtmlMessageSender {
             "  </table>\n" +
             "</body>\n" +
             "</html>";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    //Email notification chaque jour à 6h du matin
+    static String BodyMessage =
+            "          <tr>\n" +
+                    "            <td style=\"padding:36px 30px 42px 30px;\">\n" +
+                    "              <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+                    "                <tr>\n" +
+                    "                  <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+                    "                    <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Bienvenue dans notre service !</h1>\n" +
+                    "                    <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" ;
+    static String BodyMessagePart2 =
+                    " </p>\n" +
+                    "                    <p style=\"margin-left:50%;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">"+
+                    "</p>\n" +
+                    "</td>\n" +
+                    "</tr>\n" +
+                    "            \n" +
+                    "<tr>\n" +"<td>\n"+"<p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +"\n" ;
+    static String BodyMessagePart3 =
+                    "</p>"+"<p>"+"Cordialement\n"+"</p>"+"<p>"+"L'équipe\n"+"</p>"+"</td>"+"</tr>\n" +
+                    "              </table>\n" +
+                    "            </td>\n" +
+                    "          </tr>\n";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+
+    static String VoteHeader =
+            "          <tr>\n" +
+                    "            <td style=\"padding:36px 30px 42px 30px;\">\n" +
+                    "              <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+                    "                <tr>\n" +
+                    "                  <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+                    "                    <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendes Vous </h1>\n" +
+                    "                    <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+                    "J'ai choisi cette date pour notre prochaine réunion, est-ce que ça vous convient ?<b>\n" ;
+
+
+            static String RefuseRendesVous="</b></p>\n" +
+
+            "<tr>\n" +"<td>\n"+"<p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +"\n" +
+            "si cela est possible pour vous, nous allons le faire, sinon nous choisirons une autre date.\n" +
+            "\n" +
+            "</p>"+"<p>"+"Cordialement\n"+"</p>"+"<p>"+"L'équipe\n"+"</p>"+"</td>"+"</tr>\n" +
+            "              </table>\n" +
+            "            </td>\n" +
+            "          </tr>\n" ;
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
 
 }
