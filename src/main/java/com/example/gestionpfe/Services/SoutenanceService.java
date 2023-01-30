@@ -5,7 +5,7 @@ import com.example.gestionpfe.Dto.SoutenanceDto;
 import java.util.List;
 
 public interface SoutenanceService {
-    SoutenanceDto addSoutenance(String username);
+    SoutenanceDto addSoutenance(String username, SoutenanceDto soutenanceDto, String idSujet);
     SoutenanceDto getSoutenanceByIdSoutenance(String username,String id);
     SoutenanceDto updateSoutenance(String id, SoutenanceDto soutenanceDto);
     void deleteSoutenance(String id);

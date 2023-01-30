@@ -5,6 +5,7 @@ import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.SoutenanceRepository;
+import com.example.gestionpfe.Repositories.SujetRepository;
 import com.example.gestionpfe.Services.SoutenanceService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -40,40 +41,63 @@ public class SoutenanceServiceImpl implements SoutenanceService {
     @Autowired
     EtudiantRepository etudiantRepository;
 
+    @Autowired
+    SujetRepository sujetRepository;
 
     @Override
-    public SoutenanceDto addSoutenance(String username) {
-        Etudiant etudiant = etudiantRepository.findByEmail(username);
-        if (etudiant == null) {
-            logger.info("Etudiant not found");
-            throw new RuntimeException("Etudiant not found");
-        }
-        List<Equipe> equipes = etudiant.getEquipe();
-        if(equipes.size() == 0){
-            logger.info("This etudiant doesnt belong to any team.");
-            throw new RuntimeException("This etudiant doesnt belong to any team.");
-        }
-        if(equipes.size() != 1){
-            logger.info("This etudiant belongs to more than one team.");
-            throw new RuntimeException("This etudiant belongs to more than one team.");
+    public SoutenanceDto addSoutenance(String username, SoutenanceDto soutenanceDto, String idSujet) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
         }
 
-        Equipe equipe = equipes.get(0);
-        if (equipe.getSujet().getLocked() == false) {
-            logger.info("This team doesnt have a subject yet.");
-            throw new RuntimeException("This team doesnt have a subject yet.");
+        Sujet sujet = sujetRepository.findByIdSujet(idSujet);
+        if (sujet == null) {
+            logger.warn("Sujet not found");
+            throw new RuntimeException("Sujet not found");
         }
-        if (equipe.getSujet().getSoutenance() != null) {
-            logger.info("This team already has a soutenance.");
-            throw new RuntimeException("This team already has a soutenance.");
+
+        if(!sujet.getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
+            logger.warn("Enseignant is not the owner of the sujet");
+            throw new RuntimeException("Enseignant is not the owner of the sujet");
         }
+
+        if(!sujet.getLocked()){
+            logger.warn("Sujet is not locked");
+            throw new RuntimeException("Sujet is not locked");
+        }
+
+        if(!sujet.getDone()){
+            logger.warn("Sujet is not done");
+            throw new RuntimeException("Sujet is not done");
+        }
+
+        if(sujet.getEquipe().size() != 1){
+            logger.warn("Sujet has more than one team");
+            throw new RuntimeException("Sujet has more than one team");
+        }
+
+        if(sujet.getEquipe().get(0).getDriveLink() == null || sujet.getEquipe().get(0).getDriveLink().isEmpty()){
+            logger.warn("Sujet has no drive link");
+            throw new RuntimeException("Sujet has no drive link");
+        }
+
+        if (sujet.getSoutenance() != null) {
+            logger.warn("Sujet has already a soutenance");
+            throw new RuntimeException("Sujet has already a soutenance");
+        }
+
         Soutenance soutenance = new Soutenance();
-        soutenance.setIdSoutenance(util.generateUserId(30));
-        soutenance.setDateSoutenance(null);
+        soutenance.setIdSoutenance(util.generateUserId(32));
+        soutenance.setSujet(sujet);
+        soutenance.setDateSoutenance(soutenanceDto.getDateSoutenance());
+
         Soutenance soutenanceSaved = soutenanceRepository.save(soutenance);
+
         logger.info("Soutenance saved successfully");
-        SoutenanceDto soutenanceDto = modelMapper.map(soutenanceSaved, SoutenanceDto.class);
-        return soutenanceDto;
+
+        return modelMapper.map(soutenanceSaved, SoutenanceDto.class);
     }
 
     @Override

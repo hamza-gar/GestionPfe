@@ -2,6 +2,7 @@ package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.SoutenanceDto;
 import com.example.gestionpfe.Entities.Soutenance;
+import com.example.gestionpfe.Requests.SoutenanceRequest;
 import com.example.gestionpfe.Responses.SoutenanceResponse;
 import com.example.gestionpfe.Services.SoutenanceService;
 import org.modelmapper.ModelMapper;
@@ -21,7 +22,7 @@ public class SoutenanceController {
     ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    private SoutenanceService soutenanceService;
+    SoutenanceService soutenanceService;
 
     @GetMapping(path="/{id}")
     public ResponseEntity<SoutenanceResponse> getSoutenanceById(@PathVariable String id){
@@ -33,6 +34,7 @@ public class SoutenanceController {
         soutenanceResponse = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
         return ResponseEntity.ok(soutenanceResponse);
     }
+
     @GetMapping
     public ResponseEntity<List<SoutenanceResponse>> getAllSoutenances(@RequestParam(value= "page") int page, @RequestParam(value = "limit") int limit){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -50,17 +52,20 @@ public class SoutenanceController {
         }
         return ResponseEntity.ok(soutenanceResponse);
     }
+
     @PostMapping
-    public ResponseEntity<SoutenanceResponse> addSoutenance(){
-        SoutenanceDto soutenance = new SoutenanceDto();
+    public ResponseEntity<SoutenanceResponse> addSoutenance(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "idSujet") String idSujet){
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
-
-        SoutenanceDto soutenanceDto = soutenanceService.addSoutenance(username);
+        SoutenanceDto soutenance = new SoutenanceDto();
+        soutenance.setDateSoutenance(soutenanceRequest.getDateSoutenance());
+        SoutenanceDto soutenanceDto = soutenanceService.addSoutenance(username,soutenance,idSujet);
         SoutenanceResponse soutenanceResponse = new SoutenanceResponse();
         soutenanceResponse = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
         return ResponseEntity.ok(soutenanceResponse);
     }
+
     @PutMapping(path="/{id}")
     public ResponseEntity<SoutenanceResponse> updateSoutenance(@PathVariable String id, @RequestBody Soutenance soutenance){
         SoutenanceDto soutenanceDto = new SoutenanceDto();
@@ -70,6 +75,7 @@ public class SoutenanceController {
         soutenanceResponse = modelMapper.map(soutenanceDto1, SoutenanceResponse.class);
         return ResponseEntity.ok(soutenanceResponse);
     }
+
     @DeleteMapping(path="/{id}")
     public ResponseEntity<Object> deleteSoutenance(@PathVariable String id){
         soutenanceService.deleteSoutenance(id);
