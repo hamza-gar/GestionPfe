@@ -12,6 +12,10 @@ public interface EquipeService {
     EquipeDto updateEquipe(EquipeDto equipeDto);
     EquipeDto removeEtudiant(String idEquipe,String idEtudiant);
     EquipeDto joinEquipe(String username,EquipeDto equipeDto);
+    EquipeDto addDriveLink(String username,EquipeDto equipeDto);
+    List<String> getEmailsOfEquipe(String username,EquipeDto equipeDto);
     void deleteEquipe(String id);
-    List<EquipeDto> getAllEquipes(int page, int limit);
+    List<EquipeDto> getAllEquipes(String username,int page, int limit);
+    List<EquipeDto> getGroupesOfSujets(String username,String idSujet,int page, int limit);
+    List<EquipeDto> getLockedEquipes(String username,int page, int limit);
 }

@@ -2,6 +2,7 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.RendezvousDto;
 import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Equipe;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Rendezvous;
 import com.example.gestionpfe.InitialUsersSetup;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -45,22 +47,49 @@ public class RendezvousServiceImpl implements RendezvousService {
     EtudiantRepository etudiantRepository;
 
     @Override
-    public RendezvousDto addRendezvous(RendezvousDto rendezvousDto) {
-        Rendezvous checkRendezvous = rendezvousRepository.findByIdRendezvous(rendezvousDto.getIdRendezvous());
-        if (checkRendezvous != null) throw new RuntimeException("Rendezvous deja exist !!!");
-        Rendezvous rendezvousEntity = new Rendezvous();
-        rendezvousEntity = modelMapper.map(rendezvousDto, Rendezvous.class);
-        logger.info("RendezvousEntity mapping: " + rendezvousEntity.toString());
+    public RendezvousDto addRendezvous(String username) {
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("Etudiant not found");
+            throw new RuntimeException("Etudiant not found");
+        }
+        List<Equipe> equipes = etudiant.getEquipe();
+        if(equipes.size() == 0){
+            logger.info("This etudiant doesnt belong to any team.");
+            throw new RuntimeException("This etudiant doesnt belong to any team.");
+        }
+        if(equipes.size() != 1){
+            logger.info("This etudiant belongs to more than one team.");
+            throw new RuntimeException("This etudiant belongs to more than one team.");
+        }
 
+        Equipe equipe = equipes.get(0);
+        if (equipe.getSujet().getLocked() == false) {
+            logger.info("This team doesnt have a subject yet.");
+            throw new RuntimeException("This team doesnt have a subject yet.");
+        }
+        if (equipe.getRendezvous() != null) {
+            logger.info("This team already has a rendezvous.");
+            throw new RuntimeException("This team already has a rendezvous.");
+        }
+
+        Rendezvous rendezvousEntity = new Rendezvous();
         rendezvousEntity.setIdRendezvous(util.generateUserId(32));
+        rendezvousEntity.setVote(0);
+        rendezvousEntity.setEquipe(equipe);
+        rendezvousEntity.setFixed(false);
+        rendezvousEntity.setFlags("");
+        logger.info("Equipe added successfully.");
+        rendezvousEntity.setEncadrant(equipe.getSujet().getEncadrant());
+        logger.info("Encadrant added successfully."+equipe.getSujet().getEncadrant().getIdEnseignant()+" "+equipe.getSujet().getEncadrant().getId());
+        rendezvousEntity.setDateRendezvous(null);
+
 
         Rendezvous newRendezvous = rendezvousRepository.save(rendezvousEntity);
 
-        RendezvousDto newRendezvousDto = new RendezvousDto();
-        newRendezvousDto = modelMapper.map(newRendezvous, RendezvousDto.class);
-        logger.info("Rendezvous found successfully");
+        logger.info("Rendezvous added successfully.");
 
-        return newRendezvousDto;
+        return modelMapper.map(newRendezvous, RendezvousDto.class);
     }
 
     @Override
@@ -95,18 +124,98 @@ public class RendezvousServiceImpl implements RendezvousService {
     }
 
     @Override
-    public RendezvousDto updateRendezvous(String id, RendezvousDto rendezvous) {
-        Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(id);
-        if (rendezvousEntity == null) throw new RuntimeException("Rendezvous not found !!!");
+    public RendezvousDto fixRendezVous(String username, RendezvousDto rendezvousDto) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(rendezvousDto.getIdRendezvous());
+        if (rendezvousEntity == null) {
+            logger.info("Rendezvous not found");
+            throw new RuntimeException("Rendezvous not found !!!");
+        }
+        if (rendezvousEntity.getEncadrant().getIdEnseignant() != enseignant.getIdEnseignant()) {
+            logger.info("You are not the encadrant of this team");
+            throw new RuntimeException("You are not the encadrant of this team");
+        }
+        if (rendezvousEntity.getDateRendezvous() != null) {
+            logger.info("This rendezvous's Date is already fixed");
+            throw new RuntimeException("This rendezvous's Date is already fixed");
+        }
+        if (rendezvousDto.getDateRendezvous() == null) {
+            logger.info("You must specify a date");
+            throw new RuntimeException("You must specify a date");
+        }
+        if(rendezvousDto.getDateRendezvous().before(new Date())){
+            logger.info("You must specify a date in the future");
+            throw new RuntimeException("You must specify a date in the future");
+        }
+        rendezvousEntity.setDateRendezvous(rendezvousDto.getDateRendezvous());
 
-        rendezvousEntity.setDateRendezvous(rendezvous.getDateRendezvous());
+        Rendezvous rendezvous = rendezvousRepository.save(rendezvousEntity);
 
-        Rendezvous updatedRendezvous = rendezvousRepository.save(rendezvousEntity);
-
-        RendezvousDto updatedRendezvousDto = new RendezvousDto();
-        updatedRendezvousDto = modelMapper.map(updatedRendezvous, RendezvousDto.class);
         logger.info("Rendezvous updated successfully");
-        return updatedRendezvousDto;
+
+        return modelMapper.map(rendezvous, RendezvousDto.class);
+    }
+
+    @Override
+    public RendezvousDto voteRendezvous(String username,RendezvousDto rendezvousDto){
+        if (rendezvousDto.getIdRendezvous() == null) {
+            logger.info("You must specify a rendezvous");
+            throw new RuntimeException("You must specify a rendezvous");
+        }
+        Rendezvous rendezvousEntity = rendezvousRepository.findByIdRendezvous(rendezvousDto.getIdRendezvous());
+        if (rendezvousEntity == null) {
+            logger.info("Rendezvous not found");
+            throw new RuntimeException("Rendezvous not found !!!");
+        }
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("Etudiant not found");
+            throw new RuntimeException("Etudiant not found");
+        }
+        if(rendezvousEntity.getEquipe().getIdEquipe() != etudiant.getEquipe().get(0).getIdEquipe()){
+            logger.info("You are not in this team");
+            throw new RuntimeException("You are not in this team");
+        }
+        if(rendezvousEntity.getDateRendezvous() == null){
+            logger.info("You cant vote for a rendezvous without a date");
+            throw new RuntimeException("You cant vote for a rendezvous without a date");
+        }
+        if(Arrays.stream(rendezvousEntity.getFlags().split(",")).anyMatch(etudiant.getIdEtudiant()::equals)){
+            logger.info("You already voted for this rendezvous");
+            throw new RuntimeException("You already voted for this rendezvous");
+        }
+        if(rendezvousDto.getVote() == 0){
+            logger.info("You must specify a vote");
+            throw new RuntimeException("You must specify a vote");
+        }
+        if (rendezvousEntity.getDateRendezvous().before(new Date())){
+            logger.info("You cant vote for a rendezvous in the past");
+            throw new RuntimeException("You cant vote for a rendezvous in the past");
+        }
+        rendezvousEntity.setVote(rendezvousEntity.getVote()+rendezvousDto.getVote());
+        if(rendezvousEntity.getFlags().equals("")){
+            rendezvousEntity.setFlags(etudiant.getIdEtudiant());
+        }else{
+            rendezvousEntity.setFlags(rendezvousEntity.getFlags()+","+etudiant.getIdEtudiant());
+        }
+        if(rendezvousEntity.getFlags().split(",").length == rendezvousEntity.getEquipe().getTailleEquipe()){
+            if(rendezvousEntity.getVote() > 0){
+                /* TODO: NOTIFY THE TEAM THAT THE RENDEZVOUS IS FIXED */
+                rendezvousEntity.setFixed(true);
+            }else {
+                /* TODO: NOTIFY THE TEAM THAT THE RENDEZVOUS IS CANCELED */
+                rendezvousEntity.setVote(0);
+                rendezvousEntity.setFlags("");
+                rendezvousEntity.setDateRendezvous(null);
+                rendezvousEntity.setFixed(false);
+            }
+        }
+        Rendezvous rendezvous = rendezvousRepository.save(rendezvousEntity);
+        return modelMapper.map(rendezvous, RendezvousDto.class);
     }
 
     @Override

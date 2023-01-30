@@ -102,19 +102,19 @@ public class SujetServiceImpl implements SujetService {
 
     @Override
     public SujetDto getSujetById(String id) {
-    Sujet sujetEntity = sujetRepository.findByIdSujet(id);
+        Sujet sujetEntity = sujetRepository.findByIdSujet(id);
 
-    if (sujetEntity == null) throw new RuntimeException(id);
+        if (sujetEntity == null) throw new RuntimeException(id);
 
-    SujetDto sujetDto = new SujetDto();
-    sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
-    logger.info("sujet found successfully");
+        SujetDto sujetDto = new SujetDto();
+        sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+        logger.info("sujet found successfully");
 
-    return sujetDto;
+        return sujetDto;
     }
 
     @Override
-    public SujetDto updateSujet(String mailEnseignant,String id, SujetDto sujetDTO) {
+    public SujetDto updateSujet(String mailEnseignant, String id, SujetDto sujetDTO) {
         Sujet sujetEntity = sujetRepository.findByIdSujet(id);
         if (sujetEntity == null) {
             logger.info("sujet not found");
@@ -126,7 +126,7 @@ public class SujetServiceImpl implements SujetService {
             throw new RuntimeException("enseignant not found");
         }
 
-        if (!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)){
+        if (!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)) {
             logger.info("you are not the owner of this sujet");
             throw new RuntimeException("you are not the owner of this sujet");
         }
@@ -144,36 +144,45 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public SujetDto lockSujet(String mailEnseignant, String idSujet,String idEquipe) {
+    public SujetDto lockSujet(String mailEnseignant, String idSujet, String idEquipe) {
         Sujet sujetEntity = sujetRepository.findByIdSujet(idSujet);
         if (sujetEntity == null) {
             logger.info("sujet not found");
             throw new RuntimeException(idSujet);
         }
         logger.info("sujet found successfully");
-        if(!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)){
+        if (!sujetEntity.getEncadrant().getEmail().equals(mailEnseignant)) {
             logger.info("you are the owner of this sujet");
             throw new RuntimeException("you are the owner of this sujet");
         }
         logger.info("you are the owner of this sujet");
-        if(!sujetEntity.getEquipe().contains(equipeRepository.findByIdEquipe(idEquipe))){
+        if (!sujetEntity.getEquipe().contains(equipeRepository.findByIdEquipe(idEquipe))) {
             logger.info("this equipe is not in this sujet");
             throw new RuntimeException("this equipe is not in this sujet");
         }
         logger.info("this equipe is in this sujet");
-
+        List<Equipe> toDelete = new ArrayList<>();
         List<Equipe> equipeList = new ArrayList<>();
         for (Equipe equipe : sujetEntity.getEquipe()) {
-            if(!equipe.getIdEquipe().equals(idEquipe)){
-                equipeRepository.delete(equipe);
-            }else
-                equipeList.add(equipe);
+            if (!equipe.getIdEquipe().equals(idEquipe)) {
+                toDelete.add(equipe);
+            } else {
+                if (equipe.getTailleEquipe() == equipe.getEtudiant().size()) {
+                    equipeList.add(equipe);
+                }else{
+                    logger.info("this equipe is not full");
+                    throw new RuntimeException("this equipe is not full");
+                }
+            }
         }
 
-        for(Etudiant etudiant : equipeList.get(0).getEtudiant()){
-            for(Equipe equipe:etudiant.getEquipe()){
-                if(!equipe.getIdEquipe().equals(idEquipe)){
-                    equipeService.removeEtudiant(equipe.getIdEquipe(),etudiant.getIdEtudiant());
+        equipeRepository.deleteAll(toDelete);
+
+
+        for (Etudiant etudiant : equipeList.get(0).getEtudiant()) {
+            for (Equipe equipe : etudiant.getEquipe()) {
+                if (!equipe.getIdEquipe().equals(idEquipe)) {
+                    equipeService.removeEtudiant(equipe.getIdEquipe(), etudiant.getIdEtudiant());
                 }
             }
         }
@@ -182,7 +191,7 @@ public class SujetServiceImpl implements SujetService {
         sujetEntity.setLocked(true);
         Sujet sujet = sujetRepository.save(sujetEntity);
         logger.info("sujet locked successfully");
-        return modelMapper.map(sujet,SujetDto.class);
+        return modelMapper.map(sujet, SujetDto.class);
     }
 
     @Override
@@ -194,19 +203,35 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public List<SujetDto> getAllSujets(int page, int limit) {
+    public List<SujetDto> getAllSujets(String username,int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+
+
         List<SujetDto> sujetDtoList = new ArrayList<>();
 
-        Pageable pageableRequest =  PageRequest.of(page,limit);
+        Pageable pageableRequest = PageRequest.of(page, limit);
 
         Page<Sujet> SujetPages = sujetRepository.findAll(pageableRequest);
         List<Sujet> sujetList = SujetPages.getContent();
-
-        for (Sujet sujetEntity : sujetList) {
-            SujetDto sujetDto = new SujetDto();
-            sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
-            sujetDtoList.add(sujetDto);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            for (Sujet sujetEntity : sujetList) {
+                if (!sujetEntity.getLocked()){
+                    SujetDto sujetDto = new SujetDto();
+                    sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+                    sujetDtoList.add(sujetDto);
+                }
+            }
+        }else{
+            logger.info("enseignant found successfully");
+            for (Sujet sujetEntity : sujetList) {
+                SujetDto sujetDto = new SujetDto();
+                sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+                sujetDtoList.add(sujetDto);
+            }
         }
+
+
         logger.info("sujet list found successfully");
         return sujetDtoList;
     }
@@ -214,7 +239,7 @@ public class SujetServiceImpl implements SujetService {
     @Override
     public List<SujetDto> getAllSujetsByFiliere(String idFiliere, int page, int limit) {
         List<SujetDto> sujetDtoList = new ArrayList<>();
-        Page<Sujet> SujetPages = sujetRepository.findAll(PageRequest.of(page,limit));
+        Page<Sujet> SujetPages = sujetRepository.findAll(PageRequest.of(page, limit));
         List<Sujet> sujetList = SujetPages.getContent();
         Filiere filiere = filiereRepository.findByIdFiliere(idFiliere);
         if (filiere == null) {
@@ -222,7 +247,7 @@ public class SujetServiceImpl implements SujetService {
             throw new RuntimeException(idFiliere);
         }
         for (Sujet sujetEntity : sujetList) {
-            if(sujetEntity.getEncadrant().getFiliere().getNomFiliere().equals(filiere.getNomFiliere())){
+            if (sujetEntity.getEncadrant().getFiliere().getNomFiliere().equals(filiere.getNomFiliere())) {
                 SujetDto sujetDto = new SujetDto();
                 sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
                 sujetDtoList.add(sujetDto);

@@ -28,7 +28,7 @@ public class SujetController {
     @Autowired
     EnseignantService enseignantService;
 
-    @PreAuthorize("hasAuthority('GET_BY_IDSUJET_AUTHORITY')")
+
     @GetMapping(path="/{id}")
     public ResponseEntity<SujetResponse> getSujet(@PathVariable String id){
         SujetDto sujetDto = sujetService.getSujetById(id);
@@ -37,11 +37,14 @@ public class SujetController {
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_SUJETS_AUTHORITY')")
+
     @GetMapping
     public ResponseEntity<List<SujetResponse>> getAllSujets(@RequestParam(value = "page") int page, @RequestParam(value="limit" ) int limit){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
         List<SujetResponse> sujetResponse = new ArrayList<>();
-        List<SujetDto> sujets = sujetService.getAllSujets(page,limit);
+        List<SujetDto> sujets = sujetService.getAllSujets(username,page,limit);
 
         for(SujetDto sujetDto:sujets){
             SujetResponse sujet = new SujetResponse();
@@ -52,7 +55,6 @@ public class SujetController {
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_SUJETS_AUTHORITY')")
     @GetMapping(path="/filiere")
     public ResponseEntity<List<SujetResponse>> getAllSujetsByFiliere(@RequestParam(value = "page") int page, @RequestParam(value="limit" ) int limit,@RequestParam(value = "filiere") String idFiliere){
         List<SujetResponse> sujetResponse = new ArrayList<>();

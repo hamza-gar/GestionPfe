@@ -1,11 +1,13 @@
 package com.example.gestionpfe.Dto;
 
+import com.example.gestionpfe.Entities.Equipe;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +26,6 @@ public class EtudiantDto implements Serializable {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus;
+
 
 }

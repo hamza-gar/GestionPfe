@@ -176,7 +176,13 @@ public class InitialUsersSetup {
 
         Authority GET_ALL_EQUIPES_AUTHORITY = createAuthority("GET_ALL_EQUIPES_AUTHORITY");
         enseignantAuthorities.add(GET_ALL_EQUIPES_AUTHORITY);
-        etudiantAuthorities.add(GET_ALL_EQUIPES_AUTHORITY);
+
+        Authority GET_EQUIPES_OF_SUJETS_AUTHORITY = createAuthority("GET_EQUIPES_OF_SUJETS_AUTHORITY");
+        enseignantAuthorities.add(GET_EQUIPES_OF_SUJETS_AUTHORITY);
+        etudiantAuthorities.add(GET_EQUIPES_OF_SUJETS_AUTHORITY);
+
+        Authority GET_LOCKED_EQUIPES_AUTHORITY = createAuthority("GET_LOCKED_EQUIPES_AUTHORITY");
+        enseignantAuthorities.add(GET_LOCKED_EQUIPES_AUTHORITY);
 
         Authority ADD_EQUIPE_AUTHORITY = createAuthority("ADD_EQUIPE_AUTHORITY");
         etudiantAuthorities.add(ADD_EQUIPE_AUTHORITY);
@@ -188,10 +194,14 @@ public class InitialUsersSetup {
 //        etudiantAuthorities.add(DELETE_ETUDIANT_FROM_EQUIPE_AUTHORITY);
 
         Authority DELETE_EQUIPE_AUTHORITY = createAuthority("DELETE_EQUIPE_AUTHORITY");
-        sAdminAuthorities.add(DELETE_EQUIPE_AUTHORITY);
-        adminAuthorities.add(DELETE_EQUIPE_AUTHORITY);
         enseignantAuthorities.add(DELETE_EQUIPE_AUTHORITY);
 
+
+        Authority ADD_GDRIVELINK_AUTHORITY = createAuthority("ADD_GDRIVELINK_AUTHORITY");
+        etudiantAuthorities.add(ADD_GDRIVELINK_AUTHORITY);
+
+        Authority GET_EMAILS_OFMEMBERS_AUTHORITY = createAuthority("GET_EMAILS_OFMEMBERS_AUTHORITY");
+        etudiantAuthorities.add(GET_EMAILS_OFMEMBERS_AUTHORITY);
 
         Authority DELETE_SELF_FROM_EQUIPE_AUTHORITY = createAuthority("DELETE_SELF_FROM_EQUIPE_AUTHORITY");
         etudiantAuthorities.add(DELETE_SELF_FROM_EQUIPE_AUTHORITY);
@@ -220,7 +230,14 @@ public class InitialUsersSetup {
         sAdminAuthorities.add(DELETE_FILIERE_AUTHORITY);
         adminAuthorities.add(DELETE_FILIERE_AUTHORITY);
 
+        Authority TAKE_RENDEZVOUS_AUTHORITY = createAuthority("TAKE_RENDEZVOUS_AUTHORITY");
+        etudiantAuthorities.add(TAKE_RENDEZVOUS_AUTHORITY);
 
+        Authority FIX_RENDEZVOUS_AUTHORITY = createAuthority("FIX_RENDEZVOUS_AUTHORITY");
+        enseignantAuthorities.add(FIX_RENDEZVOUS_AUTHORITY);
+
+        Authority VOTE_RENDEZVOUS_AUTHORITY = createAuthority("VOTE_RENDEZVOUS_AUTHORITY");
+        etudiantAuthorities.add(VOTE_RENDEZVOUS_AUTHORITY);
 
         logger.info("All Authorities created.");
 
@@ -267,12 +284,12 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating subjects...");
-        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 3, enseignant);
+        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 2, enseignant);
         logger.info("Subject created.");
 
         logger.info("Creating groupes...");
-        Equipe groupe = createEquipe(3,sujet);
-        Equipe groupe2 = createEquipe(3,sujet);
+        Equipe groupe = createEquipe(2,sujet);
+        Equipe groupe2 = createEquipe(2,sujet);
 
         logger.info("Group created.");
 
@@ -319,6 +336,7 @@ public class InitialUsersSetup {
             sujet.setDescriptionSujet(s1);
             sujet.setTailleEquipe(tailleEquipe);
             sujet.setEncadrant(encadrant);
+            sujet.setLocked(true);
             sujet = sujetRepository.save(sujet);
         }
         return sujet;

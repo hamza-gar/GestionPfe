@@ -1,28 +1,28 @@
 package com.example.gestionpfe.Shared;
 
-import org.aspectj.weaver.patterns.IToken;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 @Component
 public class EmailSender {
+    Logger logger = org.slf4j.LoggerFactory.getLogger(EmailSender.class);
+
     @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     private JavaMailSender mailSender;
 
     private static String type;
 
-    HtmlMessageSender htmlMessageSender = new HtmlMessageSender();
-    String htmlHeader = htmlMessageSender.htmlHeader;
+    static HtmlMessageSender htmlMessageSender = new HtmlMessageSender();
+    String htmlHeader = htmlMessageSender.validationHeader;
     String htmlFooter = htmlMessageSender.htmlFooter;
     String Header = htmlMessageSender.Header;
-    String Body = htmlMessageSender.htmlBody;
+    String Body = htmlMessageSender.validationFooter;
 
     public void sendVerificationMail(String toEmail, String token,String type) {
 
@@ -38,6 +38,22 @@ public class EmailSender {
             e.printStackTrace();
         }
 
-        System.out.println("Mail send ....");
+        logger.info("Mail send ....");
     }
+
+    public void notifyYOUAREINATEAM(String toEmail) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Gestion PFE : Verification");
+            helper.setText("Vous êtes dans une équipe");
+            mailSender.send(message);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        logger.info("Mail send ....");
+    }
+
 }

@@ -7,10 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 public interface RendezvousService {
-    RendezvousDto addRendezvous(RendezvousDto rendezvousDto);
+    RendezvousDto addRendezvous(String username);
     RendezvousDto getRendezvousByDate(Date dateRendezvous);
     RendezvousDto getRendezvousByIdRendezvous(String username,String id);
-    RendezvousDto updateRendezvous(String id,RendezvousDto rendezvous);
+    RendezvousDto fixRendezVous(String id,RendezvousDto rendezvous);
+    RendezvousDto voteRendezvous(String username,RendezvousDto rendezvousDto);
     void deleteRendezvous(String id);
     List<RendezvousDto> getAllRendezvous(String username,int page, int limit);
 }

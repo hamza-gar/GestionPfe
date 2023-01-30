@@ -25,6 +25,9 @@ public class Equipe {
     private Boolean isPrivate;
 
     @Column
+    private String driveLink;
+
+    @Column
     private String cryptedPassword;
 
     @ManyToMany()

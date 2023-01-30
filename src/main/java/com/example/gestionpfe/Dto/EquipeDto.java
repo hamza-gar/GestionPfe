@@ -18,6 +18,7 @@ public class EquipeDto {
     private String idEquipe;
     private int tailleEquipe;
     private Boolean isPrivate;
+    private String driveLink;
     private String cryptedPassword;
     private List<Etudiant> etudiant;
     private Sujet sujet;

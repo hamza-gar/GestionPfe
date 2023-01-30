@@ -3,6 +3,7 @@ package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.RendezvousDto;
 import com.example.gestionpfe.Entities.Rendezvous;
+import com.example.gestionpfe.Requests.RendezvousRequest;
 import com.example.gestionpfe.Responses.RendezvousResponse;
 import com.example.gestionpfe.Services.RendezvousService;
 import org.modelmapper.ModelMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class RendezvousController {
 
     @PreAuthorize("hasAuthority('GET_BY_IDRENDEZVOUS_AUTHORITY')")
     @GetMapping(path = "/{id}")
-    public ResponseEntity<RendezvousResponse>getRendezvousByIdRendezvous(@PathVariable String id){
+    public ResponseEntity<RendezvousResponse> getRendezvousByIdRendezvous(@PathVariable String id){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
         RendezvousDto rendezvousDto = rendezvousService.getRendezvousByIdRendezvous(username,id);
@@ -38,7 +40,7 @@ public class RendezvousController {
 
     @PreAuthorize("hasAuthority('GET_ALL_RENDEZVOUS_AUTHORITY')")
     @GetMapping
-    public ResponseEntity<List<RendezvousResponse>>   getAllRendezvous(@RequestParam(value= "page") int page, @RequestParam(value = "limit") int limit){
+    public ResponseEntity<List<RendezvousResponse>> getAllRendezvous(@RequestParam(value= "page") int page, @RequestParam(value = "limit") int limit){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
 
@@ -57,32 +59,49 @@ public class RendezvousController {
 
 
 
-    // @PreAuthorize("hasAuthority('ADD_RENDEZVOUS_AUTHORITY')")
+    @PreAuthorize("hasAuthority('TAKE_RENDEZVOUS_AUTHORITY')")
     @PostMapping
-    public ResponseEntity<RendezvousResponse> addRendezvous(@RequestBody Rendezvous rendezvous){
-       RendezvousDto rendezvousDto = new RendezvousDto();
-         rendezvousDto = modelMapper.map(rendezvous, RendezvousDto.class);
+    public ResponseEntity<RendezvousResponse> priseDeRendezvous(){
+        RendezvousDto rendezvousDto = new RendezvousDto();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
 
-        RendezvousDto rendezvousDto1 = rendezvousService.addRendezvous(rendezvousDto);
+        RendezvousDto rendezvousDto1 = rendezvousService.addRendezvous(username);
         RendezvousResponse rendezvousResponse = new RendezvousResponse();
         rendezvousResponse = modelMapper.map(rendezvousDto1, RendezvousResponse.class);
         return ResponseEntity.ok(rendezvousResponse);
     }
 
-    // @PreAuthorize("hasAuthority('UPDATE_RENDEZVOUS_AUTHORITY')")
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<RendezvousResponse> updateRendezvous(@PathVariable String id, @RequestBody Rendezvous rendezvous){
+    @PreAuthorize("hasAuthority('FIX_RENDEZVOUS_AUTHORITY')")
+    @PutMapping(path="/fix")
+    public ResponseEntity<RendezvousResponse> fixRendezvous(@RequestBody RendezvousRequest rendezvousRequest){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
         RendezvousDto rendezvousDto = new RendezvousDto();
+        rendezvousDto.setIdRendezvous(rendezvousRequest.getIdRendezvous());
+        rendezvousDto.setDateRendezvous(rendezvousRequest.getDateRendezvous());
 
-        if(rendezvousDto==null) throw new RuntimeException("rendezvous not found");
-
-        rendezvousDto = modelMapper.map(rendezvous, RendezvousDto.class);
-
-        RendezvousDto rendezvousDto1 = rendezvousService.updateRendezvous(id,rendezvousDto);
+        RendezvousDto rendezvousDto1 = rendezvousService.fixRendezVous(username,rendezvousDto);
         RendezvousResponse rendezvousResponse = new RendezvousResponse();
 
         rendezvousResponse = modelMapper.map(rendezvousDto1, RendezvousResponse.class);
         return ResponseEntity.ok(rendezvousResponse);
+    }
+
+    @PreAuthorize("hasAuthority('VOTE_RENDEZVOUS_AUTHORITY')")
+    @PutMapping(path="/vote")
+    public ResponseEntity<RendezvousResponse> voteRendezvous(@RequestBody RendezvousRequest rendezvousRequest){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        RendezvousDto rendezvousDto = new RendezvousDto();
+        rendezvousDto.setIdRendezvous(rendezvousRequest.getIdRendezvous());
+        rendezvousDto.setVote(rendezvousRequest.getVote());
+
+        RendezvousDto rendezvousDto1 = rendezvousService.voteRendezvous(username,rendezvousDto);
+
+        return ResponseEntity.ok(modelMapper.map(rendezvousDto1, RendezvousResponse.class));
     }
 
     // @PreAuthorize("hasAuthority('DELETE_RENDEZVOUS_AUTHORITY')")

@@ -12,5 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RendezvousRequest {
+    private String idRendezvous;
     private Date dateRendezvous;
+    private int vote;
+    private Boolean fixed;
 }

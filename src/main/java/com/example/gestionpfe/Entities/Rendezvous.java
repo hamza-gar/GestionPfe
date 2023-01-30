@@ -18,15 +18,24 @@ public class Rendezvous {
     @Column(nullable = false)
     private String idRendezvous;
 
-    @Column(nullable = false)
+    @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateRendezvous;
+
+    @Column(nullable = false)
+    private int vote;
+
+    @Column(nullable = false)
+    private Boolean fixed;
+
+    @Column
+    private String flags;
 
     @OneToOne
     @JoinColumn(name = "equipe_id")
     private Equipe equipe;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "enseignant_id")
     private Enseignant encadrant;
 

@@ -1,14 +1,10 @@
 package com.example.gestionpfe.ServiceImpl;
 
-import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EquipeDto;
-import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Dto.SujetDto;
-import com.example.gestionpfe.Entities.Domaine;
-import com.example.gestionpfe.Entities.Equipe;
-import com.example.gestionpfe.Entities.Etudiant;
-import com.example.gestionpfe.Entities.Sujet;
-import com.example.gestionpfe.InitialUsersSetup;
+import com.example.gestionpfe.Entities.*;
+
+import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.EquipeRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.SujetRepository;
@@ -22,13 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -38,6 +36,10 @@ public class EquipeServiceImpl implements EquipeService {
 
     @Autowired
     private EquipeRepository equipeRepository;
+
+    @Autowired
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+    private RestTemplate restTemplate;
 
     @Autowired
     Utils util;
@@ -53,6 +55,9 @@ public class EquipeServiceImpl implements EquipeService {
 
     @Autowired
     SujetRepository sujetRepository;
+
+    @Autowired
+    EnseignantRepository enseignantRepository;
 
 
     @Override
@@ -223,6 +228,17 @@ public class EquipeServiceImpl implements EquipeService {
         }
         logger.info("l'etudiant n'est pas deja dans 3 equipes pour ce meme encadrant.");
 
+        if (equipeEntity.getIsPrivate()) {
+            if(equipeDto.getCryptedPassword() == null){
+                logger.info("equipe is private, password is required");
+                throw new RuntimeException("equipe is private, password is required");
+            }
+            if (!equipeDto.getCryptedPassword().equals(equipeEntity.getCryptedPassword())) {
+                logger.info("password is incorrect");
+                throw new RuntimeException("password is incorrect");
+            }
+        }
+
         List<Etudiant> etudiants = equipeEntity.getEtudiant();
         for (Etudiant etu : etudiants) {
             if (etu.getIdEtudiant().equals(etudiant.getIdEtudiant())) {
@@ -252,17 +268,162 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<EquipeDto> getAllEquipes(int page, int limit) {
+    public List<EquipeDto> getAllEquipes(String username,int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("enseignant not found");
+            throw new RuntimeException("enseignant not found !!!");
+        }
+
         List<EquipeDto> equipeDto = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
+
         Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
         List<Equipe> equipeList = equipePage.getContent();
         for (Equipe equipe : equipeList) {
-            EquipeDto equipeDto1 = new EquipeDto();
-            equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
-            equipeDto.add(equipeDto1);
+
+            if(equipe.getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
+                EquipeDto equipeDto1 = new EquipeDto();
+                equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+                equipeDto.add(equipeDto1);
+            }
         }
         return equipeDto;
+    }
+
+    @Override
+    public List<EquipeDto> getGroupesOfSujets(String username,String idSujet, int page, int limit) {
+        Boolean isEtudiant;
+        if (enseignantRepository.findByEmail(username) == null) {
+            if (etudiantRepository.findByEmail(username) == null) {
+                logger.info("No user found !!!");
+                throw new RuntimeException("No user found !!!");
+            }else {
+                logger.info("etudiant found");
+                isEtudiant = true;
+            }
+        }else {
+            logger.info("enseignant found");
+            isEtudiant = false;
+        }
+
+        Sujet sujet = sujetRepository.findByIdSujet(idSujet);
+        if (sujet == null) {
+            logger.info("sujet not found");
+            throw new RuntimeException("sujet not found !!!");
+        }
+        List<EquipeDto> equipeDto = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
+        List<Equipe> equipeList = equipePage.getContent();
+        for (Equipe equipe : equipeList) {
+            if(equipe.getSujet().getIdSujet().equals(idSujet)){
+                if(isEtudiant) {
+                    EquipeDto equipeDto1 = new EquipeDto();
+                    equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+                    equipeDto.add(equipeDto1);
+                }else if(equipe.getEtudiant().size() == equipe.getTailleEquipe()){
+                    EquipeDto equipeDto1 = new EquipeDto();
+                    equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+                    equipeDto.add(equipeDto1);
+                }
+            }
+        }
+        return equipeDto;
+    }
+
+    @Override
+    public List<EquipeDto> getLockedEquipes(String username, int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("enseignant not found");
+            throw new RuntimeException("enseignant not found !!!");
+        }
+
+        List<EquipeDto> equipeDto = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+
+        Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
+        List<Equipe> equipeList = equipePage.getContent();
+        for (Equipe equipe : equipeList) {
+
+            if(equipe.getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant()) && equipe.getSujet().getLocked()){
+                EquipeDto equipeDto1 = new EquipeDto();
+                equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+                equipeDto.add(equipeDto1);
+            }
+        }
+        return equipeDto;
+    }
+
+    @Override
+    public EquipeDto addDriveLink(String username,EquipeDto equipeDto) {
+        Equipe EquipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
+
+        if (EquipeEntity == null) {
+            logger.info("equipe not found");
+            throw new RuntimeException(equipeDto.getIdEquipe());
+        }
+
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiant not found");
+            throw new RuntimeException("etudiant not found !!!");
+        }
+
+        if(!EquipeEntity.getEtudiant().contains(etudiant)){
+            logger.info("you cant add drive link to this equipe");
+            throw new RuntimeException("you cant add drive link to this equipe");
+        }
+
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            HttpEntity<String> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> response = restTemplate.exchange(equipeDto.getDriveLink(), HttpMethod.HEAD, entity, String.class);
+        } catch (Exception e) {
+            logger.error("Error checking the link: " + e.getMessage());
+            throw new RuntimeException("Error checking the link: " + e.getMessage());
+        }
+        EquipeEntity.setDriveLink(equipeDto.getDriveLink());
+
+        Equipe equipeeUpdated = equipeRepository.save(EquipeEntity);
+
+
+        logger.info("Equipe updated successfully.");
+
+        return modelMapper.map(equipeeUpdated, EquipeDto.class);
+    }
+
+    @Override
+    public List<String> getEmailsOfEquipe(String username, EquipeDto equipeDto) {
+        Equipe EquipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
+        if (EquipeEntity == null) {
+            logger.warn("equipe not found");
+            throw new RuntimeException(equipeDto.getIdEquipe());
+        }
+
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.warn("etudiant not found");
+            throw new RuntimeException("etudiant not found !!!");
+        }
+
+        if(!EquipeEntity.getEtudiant().contains(etudiant)){
+            logger.warn("you cant get emails of this equipe");
+            throw new RuntimeException("you cant get emails of this equipe");
+        }
+
+        List<String> emails = new ArrayList<>();
+        for (Etudiant etudiant1 : EquipeEntity.getEtudiant()) {
+            if(!etudiant1.getEmail().equals(username)) {
+                emails.add(etudiant1.getEmail());
+            }
+        }
+        emails.add(EquipeEntity.getSujet().getEncadrant().getEmail());
+
+        return emails;
     }
 
 }

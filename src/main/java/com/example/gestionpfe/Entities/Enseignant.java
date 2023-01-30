@@ -38,6 +38,7 @@ public class Enseignant implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
     private Role role;
 
+    /*TODO: Add departement to request when signing in.*/
     @ManyToOne
     @JoinColumn(name = "departement_id", nullable = true)
     private Departement departement;

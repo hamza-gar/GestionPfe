@@ -12,6 +12,6 @@ public interface SujetService {
     SujetDto updateSujet(String idEnseignant,String id,SujetDto sujetDTO);
     SujetDto lockSujet(String idEnseignant,String idSujet,String idEquipe);
     void deleteSujet(String id);
-    List<SujetDto> getAllSujets(int page, int limit);
+    List<SujetDto> getAllSujets(String username,int page, int limit);
     List<SujetDto> getAllSujetsByFiliere(String filiere, int page, int limit);
 }

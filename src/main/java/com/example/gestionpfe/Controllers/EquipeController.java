@@ -48,7 +48,9 @@ public class EquipeController {
     @GetMapping
     public List<EquipeResponse> getAllEquipe(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         List<EquipeResponse> equipeResponse = new ArrayList<>();
-        List<EquipeDto> equipes = equipeService.getAllEquipes(page, limit);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+        List<EquipeDto> equipes = equipeService.getAllEquipes(username,page, limit);
 
         for (EquipeDto equipeDto : equipes) {
             EquipeResponse equipe = new EquipeResponse();
@@ -59,8 +61,41 @@ public class EquipeController {
         return equipeResponse;
     }
 
-    /*TODO:
-     *  * FIX ID -> SECURITYCONTEXT.GETPRINCIPAL.GETUSERNAME.*/
+    @PreAuthorize("hasAuthority('GET_EQUIPES_OF_SUJETS_AUTHORITY')")
+    @GetMapping(path = "/sujets/{id}")
+    public ResponseEntity<List<EquipeResponse>> getEquipesOfSujet(@PathVariable String id, @RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<EquipeResponse> equipeResponse = new ArrayList<>();
+        List<EquipeDto> equipes = equipeService.getGroupesOfSujets(username,id, page, limit);
+
+        for (EquipeDto equipeDto : equipes) {
+            EquipeResponse equipe = new EquipeResponse();
+            equipe = modelMapper.map(equipeDto, EquipeResponse.class);
+
+            equipeResponse.add(equipe);
+        }
+        return new ResponseEntity<List<EquipeResponse>>(equipeResponse, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('GET_LOCKED_EQUIPES_AUTHORITY')")
+    @GetMapping(path = "/locked")
+    public ResponseEntity<List<EquipeResponse>> getLockedEquipes(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        List<EquipeResponse> equipeResponse = new ArrayList<>();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+        List<EquipeDto> equipes = equipeService.getLockedEquipes(username, page, limit);
+
+        for (EquipeDto equipeDto : equipes) {
+            EquipeResponse equipe = new EquipeResponse();
+            equipe = modelMapper.map(equipeDto, EquipeResponse.class);
+
+            equipeResponse.add(equipe);
+        }
+        return new ResponseEntity<List<EquipeResponse>>(equipeResponse, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('ADD_EQUIPE_AUTHORITY')")
     @PostMapping
     public ResponseEntity<EquipeResponse> addEquipe(@RequestBody EquipeRequest equipeRequest) {
@@ -87,6 +122,7 @@ public class EquipeController {
         String username = principal.toString();
         EquipeDto equipeDto = new EquipeDto();
         equipeDto.setIdEquipe(equipeRequest.getIdEquipe());
+        equipeDto.setCryptedPassword(equipeRequest.getCryptedPassword() == null ? "" : equipeRequest.getCryptedPassword());
 
         EquipeDto updatedEquipe = equipeService.joinEquipe(username, equipeDto);
 
@@ -113,6 +149,34 @@ public class EquipeController {
 
 
         return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('ADD_GDRIVELINK_AUTHORITY')")
+    @PutMapping(path = "/drive-link")
+    public ResponseEntity<EquipeResponse> updateDriveLink(@RequestBody EquipeRequest equipeRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        EquipeDto equipeDto = new EquipeDto();
+        equipeDto.setIdEquipe(equipeRequest.getIdEquipe());
+        equipeDto.setDriveLink(equipeRequest.getDriveLink());
+
+        EquipeDto updatedEquipe = equipeService.addDriveLink(username, equipeDto);
+
+        return new ResponseEntity<EquipeResponse>(modelMapper.map(updatedEquipe, EquipeResponse.class), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasAuthority('GET_EMAILS_OFMEMBERS_AUTHORITY')")
+    @GetMapping(path = "/drive-link")
+    public ResponseEntity<List<String>> getMembersDriveLink(@RequestBody EquipeRequest equipeRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        EquipeDto equipeDto = new EquipeDto();
+        equipeDto.setIdEquipe(equipeRequest.getIdEquipe());
+        List<String> driveLinks = equipeService.getEmailsOfEquipe(username, equipeDto);
+
+        return new ResponseEntity<List<String>>(driveLinks, HttpStatus.OK);
     }
 
 

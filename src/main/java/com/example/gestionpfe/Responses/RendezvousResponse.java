@@ -14,4 +14,5 @@ import java.util.Date;
 public class RendezvousResponse {
     private String idRendezvous;
     private Date dateRendezvous;
+    private Boolean fixed;
 }

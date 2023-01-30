@@ -11,5 +11,4 @@ import java.util.List;
 public interface EquipeRepository extends PagingAndSortingRepository<Equipe, Long> {
     Equipe findByIdEquipe(String idEquipe);
     List<Equipe> findByEtudiant(Etudiant etudiant);
-
 }

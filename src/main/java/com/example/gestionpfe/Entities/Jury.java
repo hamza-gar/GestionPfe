@@ -16,6 +16,8 @@ public class Jury {
     @Column(nullable = false,length = 50)
     private String typeJury;
 
+
+
     /*TODO:
     *  + Add ForeignKey for "enseignant"*/
 }

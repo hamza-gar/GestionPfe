@@ -45,7 +45,7 @@ public class Etudiant implements Serializable {
     @ManyToMany(mappedBy = "etudiant")
     private List<Equipe> equipe;
 
-
+    /*TODO : Add filiere of etudiant when signing in. */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "filiere_id")
     private Filiere filiere;

@@ -31,7 +31,7 @@ public class HtmlMessageSender {
             "              <img src=\"https://upload.wikimedia.org/wikipedia/fr/thumb/7/7d/Universit%C3%A9_Abdelmalek_Essa%C3%A2di.png/1200px-Universit%C3%A9_Abdelmalek_Essa%C3%A2di.png\" alt=\"\" width=\"300\" style=\"height:auto;display:block;\" />\n" +
             "            </td>\n" +
             "          </tr>\n" ;
-    static String htmlHeader =
+    static String validationHeader =
             "          <tr>\n" +
             "            <td style=\"padding:36px 30px 42px 30px;\">\n" +
             "              <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
@@ -44,7 +44,7 @@ public class HtmlMessageSender {
             "  <a href='http://localhost:8080/";
 
 
-    static String htmlBody ="'style=\"color:#ee4c50;text-decoration:underline; background-color: #ee4c50; /* or any other color */\n" +
+    static String validationFooter ="'style=\"color:#ee4c50;text-decoration:underline; background-color: #ee4c50; /* or any other color */\n" +
             "    color: white; /* text color */\n" +
             "    padding: 10px 20px; /* button size */\n" +
             "    border-radius: 5px; /* button corners */\n" +
