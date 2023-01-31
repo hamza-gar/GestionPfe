@@ -2,11 +2,9 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.SoutenanceDto;
 import com.example.gestionpfe.Entities.*;
-import com.example.gestionpfe.Repositories.EnseignantRepository;
-import com.example.gestionpfe.Repositories.EtudiantRepository;
-import com.example.gestionpfe.Repositories.SoutenanceRepository;
-import com.example.gestionpfe.Repositories.SujetRepository;
+import com.example.gestionpfe.Repositories.*;
 import com.example.gestionpfe.Services.SoutenanceService;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -14,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.MailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +42,12 @@ public class SoutenanceServiceImpl implements SoutenanceService {
 
     @Autowired
     SujetRepository sujetRepository;
+
+    @Autowired
+    InvitationRepository invitationRepository;
+
+    @Autowired
+    EmailSender emailSender;
 
     @Override
     public SoutenanceDto addSoutenance(String username, SoutenanceDto soutenanceDto, String idSujet) {
@@ -109,6 +114,59 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         }
         SoutenanceDto soutenanceDto = modelMapper.map(soutenance, SoutenanceDto.class);
         return soutenanceDto;
+    }
+
+    @Override
+    public Boolean inviteJurys(String username, String emailJury, SoutenanceDto soutenanceDto) {
+        Soutenance soutenance = soutenanceRepository.findByIdSoutenance(soutenanceDto.getIdSoutenance());
+        if (soutenance == null) {
+            logger.info("Soutenance not found");
+            throw new RuntimeException("Soutenance not found");
+        }
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        Enseignant enseignantJury = enseignantRepository.findByEmail(emailJury);
+        if (enseignantJury == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        if(!username.equals(soutenance.getSujet().getEncadrant().getEmail())){
+            logger.warn("Enseignant is not the owner of the sujet");
+            throw new RuntimeException("Enseignant is not the owner of the sujet");
+        }
+        if(soutenance.getJurys().size() == 3){
+            logger.warn("You can't invite anymore jury for this soutenance");
+            throw new RuntimeException("You can't invite anymore jury for this soutenance");
+        }
+        if(username.equals(emailJury)){
+            logger.warn("Enseignant can't invite himself");
+            throw new RuntimeException("Enseignant can't invite himself");
+        }
+        for (Jury jury : soutenance.getJurys()) {
+            if(jury.getEnseignant().getEmail().equals(emailJury)){
+                logger.warn("Enseignant is already a jury for this soutenance");
+                throw new RuntimeException("Enseignant is already a jury for this soutenance");
+            }
+        }
+        if(invitationRepository.findByEmailInvite(emailJury) != null){
+            logger.warn("Enseignant is already invited");
+            throw new RuntimeException("Enseignant is already invited");
+        }
+
+        Invitation invitation = new Invitation();
+        invitation.setIdInvitation(util.generateUserId(32));
+        invitation.setIdSoutenance(soutenance.getIdSoutenance());
+        invitation.setEmailInvite(emailJury);
+        invitation.setPending(true);
+        invitationRepository.save(invitation);
+        logger.info("Invitation saved successfully");
+
+        emailSender.sendInvitationJury(emailJury,invitation.getIdInvitation());
+
+        return true;
     }
 
     @Override

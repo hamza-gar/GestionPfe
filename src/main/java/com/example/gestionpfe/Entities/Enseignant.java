@@ -53,5 +53,7 @@ public class Enseignant implements Serializable {
     private List<Rendezvous> rendezvous;
 
 
+    @OneToOne(mappedBy = "enseignant")
+    private Jury jury;
 
 }

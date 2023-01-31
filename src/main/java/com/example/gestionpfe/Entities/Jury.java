@@ -22,9 +22,10 @@ public class Jury {
     private String typeJury;
 
     @ManyToOne
-    @JoinColumn(name = "enseignant_id", referencedColumnName = "id",nullable = false)
+    @JoinColumn(name = "soutenance_id", referencedColumnName = "id",nullable = false)
     private Soutenance soutenance;
 
-    /*TODO:
-    *  + Add ForeignKey for "enseignant"*/
+    @OneToOne
+    @JoinColumn(name = "enseignant_id", referencedColumnName = "id",nullable = false)
+    private Enseignant enseignant;
 }
