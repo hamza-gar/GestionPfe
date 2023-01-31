@@ -22,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Invitation implements Serializable {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private String id;
+    private Long id;
 
     @Column(nullable = false)
     private String idInvitation;
