@@ -265,8 +265,11 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating Enseignants...");
-        Enseignant enseignant = createEnseignant(enseignantRole, departement);
-        logger.info("Enseignant created.");
+        Enseignant enseignant = createEnseignant("abdellah.lakhssassi@prof.com",enseignantRole, departement);
+        Enseignant enseignant2 = createEnseignant("abdellah.lakhssassi@hotmail.com",enseignantRole, departement);
+        Enseignant enseignant3 = createEnseignant("abdellah.samourail@gmail.com",enseignantRole, departement);
+        Enseignant enseignant4 = createEnseignant("hamza.garmouch@etu.uae.ac.ma",enseignantRole, departement);
+        logger.info("Enseignants created.");
 
 
         logger.info("Creating Filieres...");
@@ -288,21 +291,21 @@ public class InitialUsersSetup {
         logger.info("Subject created.");
 
         logger.info("Creating groupes...");
-        Equipe groupe = createEquipe(2,sujet);
-        Equipe groupe2 = createEquipe(2,sujet);
+        Equipe groupe = createEquipe(2,sujet,"ha");
+//        Equipe groupe2 = createEquipe(2,sujet);
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
         groupe=addEtudiantToEquipe(etudiant1, groupe);
         groupe=addEtudiantToEquipe(etudiant2, groupe);
-        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
+//        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
         logger.info("Students added to group.");
 
     }
 
     @Transactional
-    public Equipe createEquipe(int tailleEquipe,Sujet sujet) {
+    public Equipe createEquipe(int tailleEquipe,Sujet sujet,String driveLink) {
         Equipe equipe = equipeRepository.findByIdEquipe(utils.generateUserId(32));
         if (equipe == null) {
             equipe = new Equipe();
@@ -311,6 +314,8 @@ public class InitialUsersSetup {
             equipe.setIsPrivate(false);
             equipe.setCryptedPassword("123456");
             equipe.setSujet(sujet);
+            if (driveLink != null)
+                equipe.setDriveLink("https://drive.google.com/file/d/1zbRP86HsOvicB1YrzPCn2hQv_AGX5Vm3/view?usp=sharing");
             equipe = equipeRepository.save(equipe);
         }
         return equipe;
@@ -337,6 +342,7 @@ public class InitialUsersSetup {
             sujet.setTailleEquipe(tailleEquipe);
             sujet.setEncadrant(encadrant);
             sujet.setLocked(true);
+            sujet.setDone(true);
             sujet = sujetRepository.save(sujet);
         }
         return sujet;
@@ -425,7 +431,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Enseignant createEnseignant(Role enseignantRole, Departement departement) {
+    public Enseignant createEnseignant(String mail,Role enseignantRole, Departement departement) {
         Enseignant enseignant = enseignantRepository.findByEmail("abdellah.samourail@prof.com");
         if (enseignant == null) {
             enseignant = new Enseignant();
@@ -433,7 +439,7 @@ public class InitialUsersSetup {
             enseignant.setCin("kb19022");
             enseignant.setNom("lakhssassi");
             enseignant.setPrenom("Abdellah");
-            enseignant.setEmail("abdellah.samourail@prof.com");
+            enseignant.setEmail(mail);
             enseignant.setIdEnseignant(utils.generateUserId(32));
             enseignant.setEmailVerificationToken(utils.generateUserId(32));
             enseignant.setEmailVerificationStatus(true);

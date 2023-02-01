@@ -28,10 +28,12 @@ public class EmailSender {
     String NotificationBodyPart3 = htmlMessageSender.BodyMessagePart3;
     String VoteHeader = htmlMessageSender.VoteHeader;
     String invitation1 = htmlMessageSender.invitation1;
+    String invitation2 = htmlMessageSender.invitation2;
+    String invitation3 = htmlMessageSender.invitation3;
     String invitationLink = htmlMessageSender.invitationLink;
     String invitationAccept = htmlMessageSender.invitationAccept;
     String invitationRefuse = htmlMessageSender.invitationRefuse;
-    String invitation3 = htmlMessageSender.invitation3;
+    String invitation4 = htmlMessageSender.invitation4;
 
 
     public void sendVerificationMail(String toEmail, String token, String type) {
@@ -49,13 +51,13 @@ public class EmailSender {
         logger.info("Mail send ....");
     }
 
-    public void sendInvitationJury(String toEmail, String idSoutenance) {
+    public void sendInvitationJury(String toEmail, String idSoutenance, String role, String date, String nomSujet) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(toEmail);
-            helper.setSubject("Gestion PFE : Invitation Jury");
-            helper.setText(Header + invitation1 + invitationLink + idSoutenance + invitationAccept + invitationLink + idSoutenance + invitationRefuse + invitation3 + htmlFooter, true);
+            helper.setSubject("Gestion PFE : Invitation a soutenance.");
+            helper.setText(Header + invitation1 + role + String.format(invitation2, nomSujet) + date + invitation3 + invitationLink + idSoutenance + invitationAccept + invitationLink + idSoutenance + invitationRefuse + invitation4 + htmlFooter, true);
             mailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

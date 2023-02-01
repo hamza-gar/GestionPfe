@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -63,27 +64,27 @@ public class SoutenanceServiceImpl implements SoutenanceService {
             throw new RuntimeException("Sujet not found");
         }
 
-        if(!sujet.getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
+        if (!sujet.getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())) {
             logger.warn("Enseignant is not the owner of the sujet");
             throw new RuntimeException("Enseignant is not the owner of the sujet");
         }
 
-        if(!sujet.getLocked()){
+        if (!sujet.getLocked()) {
             logger.warn("Sujet is not locked");
             throw new RuntimeException("Sujet is not locked");
         }
 
-        if(!sujet.getDone()){
+        if (!sujet.getDone()) {
             logger.warn("Sujet is not done");
             throw new RuntimeException("Sujet is not done");
         }
 
-        if(sujet.getEquipe().size() != 1){
+        if (sujet.getEquipe().size() != 1) {
             logger.warn("Sujet has more than one team");
             throw new RuntimeException("Sujet has more than one team");
         }
 
-        if(sujet.getEquipe().get(0).getDriveLink() == null || sujet.getEquipe().get(0).getDriveLink().isEmpty()){
+        if (sujet.getEquipe().get(0).getDriveLink() == null || sujet.getEquipe().get(0).getDriveLink().isEmpty()) {
             logger.warn("Sujet has no drive link");
             throw new RuntimeException("Sujet has no drive link");
         }
@@ -91,6 +92,16 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         if (sujet.getSoutenance() != null) {
             logger.warn("Sujet has already a soutenance");
             throw new RuntimeException("Sujet has already a soutenance");
+        }
+
+        if (soutenanceDto.getDateSoutenance() == null) {
+            logger.warn("Soutenance date is null");
+            throw new RuntimeException("Soutenance date is null");
+        }
+
+        if (soutenanceDto.getDateSoutenance().before(new Date())) {
+            logger.warn("Soutenance date is before today");
+            throw new RuntimeException("Soutenance date is before today");
         }
 
         Soutenance soutenance = new Soutenance();
@@ -117,54 +128,63 @@ public class SoutenanceServiceImpl implements SoutenanceService {
     }
 
     @Override
-    public Boolean inviteJurys(String username, String emailJury, SoutenanceDto soutenanceDto) {
+    public Boolean inviteJurys(String username, String roleJury, String emailJury, SoutenanceDto soutenanceDto) {
         Soutenance soutenance = soutenanceRepository.findByIdSoutenance(soutenanceDto.getIdSoutenance());
         if (soutenance == null) {
             logger.info("Soutenance not found");
             throw new RuntimeException("Soutenance not found");
         }
+        logger.info("Soutenance found successfully");
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {
             logger.warn("Enseignant not found");
             throw new RuntimeException("Enseignant not found");
         }
+        logger.info("Enseignant found successfully : " + username);
         Enseignant enseignantJury = enseignantRepository.findByEmail(emailJury);
         if (enseignantJury == null) {
             logger.warn("Enseignant not found");
             throw new RuntimeException("Enseignant not found");
         }
-        if(!username.equals(soutenance.getSujet().getEncadrant().getEmail())){
+        logger.info("Jury found successfully : " + emailJury);
+        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail())) {
             logger.warn("Enseignant is not the owner of the sujet");
             throw new RuntimeException("Enseignant is not the owner of the sujet");
         }
-        if(soutenance.getJurys().size() == 3){
+
+        if (soutenance.getJurys().size() == 3) {
             logger.warn("You can't invite anymore jury for this soutenance");
             throw new RuntimeException("You can't invite anymore jury for this soutenance");
         }
-        if(username.equals(emailJury)){
+
+        if (username.equals(emailJury)) {
             logger.warn("Enseignant can't invite himself");
             throw new RuntimeException("Enseignant can't invite himself");
         }
         for (Jury jury : soutenance.getJurys()) {
-            if(jury.getEnseignant().getEmail().equals(emailJury)){
+            if (jury.getEnseignant().getEmail().equals(emailJury)) {
                 logger.warn("Enseignant is already a jury for this soutenance");
                 throw new RuntimeException("Enseignant is already a jury for this soutenance");
             }
         }
-        if(invitationRepository.findByEmailInvite(emailJury) != null){
+        if (invitationRepository.findByEmailInvite(emailJury) != null) {
             logger.warn("Enseignant is already invited");
             throw new RuntimeException("Enseignant is already invited");
+        }
+        if (soutenance.getDateSoutenance() == null) {
+            logger.warn("Soutenance has no date, you must specify a date before inviting a jury member");
+            throw new RuntimeException("Soutenance has no date, you must specify a date before inviting a jury member");
         }
 
         Invitation invitation = new Invitation();
         invitation.setIdInvitation(util.generateUserId(32));
         invitation.setIdSoutenance(soutenance.getIdSoutenance());
         invitation.setEmailInvite(emailJury);
-        invitation.setPending(true);
+        invitation.setRole(roleJury);
         invitationRepository.save(invitation);
         logger.info("Invitation saved successfully");
 
-        emailSender.sendInvitationJury(emailJury,invitation.getIdInvitation());
+        emailSender.sendInvitationJury(emailJury, invitation.getIdInvitation(), roleJury, soutenance.getDateSoutenance().toString(), soutenance.getSujet().getNomSujet());
 
         return true;
     }

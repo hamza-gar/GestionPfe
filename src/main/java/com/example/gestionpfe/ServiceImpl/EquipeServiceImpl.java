@@ -382,14 +382,21 @@ public class EquipeServiceImpl implements EquipeService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<String> response = restTemplate.exchange(equipeDto.getDriveLink(), HttpMethod.HEAD, entity, String.class);
+            if (response.getStatusCode().is2xxSuccessful() && response.getHeaders().getLocation().toString().contains("drive.google.com/file")) {
+                logger.info("Link is working");
+
+            } else {
+                logger.warn("Link is not working, Make sure the link is correct and that the file is public.");
+                throw new RuntimeException("Link is not working, Make sure the link is correct and that the file is public.");
+            }
         } catch (Exception e) {
             logger.error("Error checking the link: " + e.getMessage());
-            throw new RuntimeException("Error checking the link: " + e.getMessage());
+            throw new RuntimeException("Error checking the link: " + e.getMessage()+". Make sure the link is correct and that the file is public.");
         }
+
         EquipeEntity.setDriveLink(equipeDto.getDriveLink());
 
         Equipe equipeeUpdated = equipeRepository.save(EquipeEntity);
-
 
         logger.info("Equipe updated successfully.");
 
@@ -424,6 +431,37 @@ public class EquipeServiceImpl implements EquipeService {
         emails.add(EquipeEntity.getSujet().getEncadrant().getEmail());
 
         return emails;
+    }
+
+    @Override
+    public Boolean shareDriveLink(String username,EquipeDto equipeDto){
+        Equipe equipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
+        if (equipeEntity == null) {
+            logger.warn("equipe not found");
+            throw new RuntimeException(equipeDto.getIdEquipe());
+        }
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            throw new RuntimeException("enseignant not found !!!");
+        }
+        if (!equipeEntity.getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())) {
+            logger.warn("you cant share drive link of this equipe");
+            throw new RuntimeException("you cant share drive link of this equipe");
+        }
+        if(equipeEntity.getDriveLink() == null){
+            logger.warn("there is no drive link to share");
+            throw new RuntimeException("there is no drive link to share");
+        }
+        if(equipeEntity.getSujet().getSoutenance().getJurys().size() != 3){
+            logger.warn("you cant share drive link before adding 3 jurys");
+            throw new RuntimeException("you cant share drive link before adding 3 jurys");
+        }
+
+        for (Jury jury: equipeEntity.getSujet().getSoutenance().getJurys()){
+
+        }
+        return true;
     }
 
 }

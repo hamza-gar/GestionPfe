@@ -179,5 +179,16 @@ public class EquipeController {
         return new ResponseEntity<List<String>>(driveLinks, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/share-drive")
+    public ResponseEntity<Boolean> shareDrive(@RequestBody EquipeRequest equipeRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        EquipeDto equipeDto = new EquipeDto();
+        equipeDto.setIdEquipe(equipeRequest.getIdEquipe());
+
+
+        return new ResponseEntity<Boolean>(equipeService.shareDriveLink(username, equipeDto), HttpStatus.OK);
+    }
 
 }

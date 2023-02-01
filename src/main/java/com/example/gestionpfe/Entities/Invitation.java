@@ -22,7 +22,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 public class Invitation implements Serializable {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String idInvitation;
@@ -31,11 +31,9 @@ public class Invitation implements Serializable {
     private String emailInvite;
 
     @Column(nullable = false)
-    private String idSoutenance;
+    private String role;
 
     @Column(nullable = false)
-    private Boolean pending;
+    private String idSoutenance;
 
-    @Column
-    private Boolean accepted;
 }
