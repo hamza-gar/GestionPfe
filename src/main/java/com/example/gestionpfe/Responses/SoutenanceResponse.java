@@ -1,9 +1,13 @@
 package com.example.gestionpfe.Responses;
 
+import com.example.gestionpfe.Entities.Jury;
+import com.example.gestionpfe.Entities.Sujet;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -12,4 +16,6 @@ import lombok.Setter;
 public class SoutenanceResponse {
     private String idSoutenance;
     private String dateSoutenance;
+    private Sujet sujet;
+    private List<Jury> jurys;
 }
