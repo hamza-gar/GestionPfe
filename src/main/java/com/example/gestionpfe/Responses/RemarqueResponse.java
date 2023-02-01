@@ -9,8 +9,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemarqueResmonse {
+public class RemarqueResponse {
     private String idRemarque;
     private String remarque;
     private Float note;
+    private String target;
+    private String idEtudiant;
 }

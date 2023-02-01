@@ -11,23 +11,24 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Remarque {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
     private String idRemarque;
 
-    @Column(nullable = false,length = 1000)
+    @Column(nullable = false, length = 1000)
     private String remarque;
 
     @Column(nullable = false)
     private Float note;
 
-    @ManyToOne
-    @JoinColumn(name = "archive_id",nullable = false)
-    private Archive archive;
+    @Column(nullable = false)
+    private String target;
 
-    /*TODO:
-    *  + Add ForeignKey for "etudiant" "jury"*/
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id", referencedColumnName = "id", nullable = false)
+    private Etudiant etudiant;
+
 
 }

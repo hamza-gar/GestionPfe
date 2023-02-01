@@ -459,7 +459,7 @@ public class EquipeServiceImpl implements EquipeService {
         }
 
         for (Jury jury: equipeEntity.getSujet().getSoutenance().getJurys()){
-
+            /*TODO: Send mail with drive link to this jury */
         }
         return true;
     }

@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RemarqueRequests {
-    private String idRemarque;
+public class RemarqueRequest {
     private String remarque;
     private Float note;
+    private String target;
+    private String idEtudiant;
 }

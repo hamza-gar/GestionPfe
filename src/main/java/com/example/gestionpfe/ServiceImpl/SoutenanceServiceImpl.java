@@ -107,6 +107,7 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         Soutenance soutenance = new Soutenance();
         soutenance.setIdSoutenance(util.generateUserId(32));
         soutenance.setSujet(sujet);
+        soutenance.setEnded(false);
         soutenance.setDateSoutenance(soutenanceDto.getDateSoutenance());
 
         Soutenance soutenanceSaved = soutenanceRepository.save(soutenance);
@@ -187,6 +188,43 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         emailSender.sendInvitationJury(emailJury, invitation.getIdInvitation(), roleJury, soutenance.getDateSoutenance().toString(), soutenance.getSujet().getNomSujet());
 
         return true;
+    }
+
+    @Override
+    public SoutenanceDto updateDateSoutenance(String username, SoutenanceDto soutenanceDto) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        logger.info("Enseignant found successfully : " + username);
+        Soutenance soutenance = soutenanceRepository.findByIdSoutenance(soutenanceDto.getIdSoutenance());
+        if (soutenance == null) {
+            logger.info("Soutenance not found");
+            throw new RuntimeException("Soutenance not found");
+        }
+        logger.info("Soutenance found successfully");
+        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail())) {
+            logger.warn("Enseignant is not the owner of the sujet");
+            throw new RuntimeException("Enseignant is not the owner of the sujet");
+        }
+        if (soutenance.getEnded()) {
+            logger.warn("Soutenance has already ended");
+            throw new RuntimeException("Soutenance has already ended");
+        }
+        if (soutenanceDto.getDateSoutenance() == null) {
+            logger.warn("Date is null");
+            throw new RuntimeException("Date is null");
+        }
+        if (soutenanceDto.getDateSoutenance().before(new Date())) {
+            logger.warn("Date is before today");
+            throw new RuntimeException("Date is before today");
+        }
+        soutenance.setDateSoutenance(soutenanceDto.getDateSoutenance());
+        soutenanceRepository.save(soutenance);
+        logger.info("Soutenance's date updated successfully");
+
+        return modelMapper.map(soutenance, SoutenanceDto.class);
     }
 
     @Override
