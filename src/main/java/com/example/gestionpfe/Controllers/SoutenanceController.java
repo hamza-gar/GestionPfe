@@ -24,26 +24,26 @@ public class SoutenanceController {
     @Autowired
     SoutenanceService soutenanceService;
 
-    @GetMapping(path="/{id}")
-    public ResponseEntity<SoutenanceResponse> getSoutenanceById(@PathVariable String id){
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<SoutenanceResponse> getSoutenanceById(@PathVariable String id) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
 
-        SoutenanceDto soutenanceDto= soutenanceService.getSoutenanceByIdSoutenance(username,id);
+        SoutenanceDto soutenanceDto = soutenanceService.getSoutenanceByIdSoutenance(username, id);
         SoutenanceResponse soutenanceResponse = new SoutenanceResponse();
         soutenanceResponse = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
         return ResponseEntity.ok(soutenanceResponse);
     }
 
     @GetMapping
-    public ResponseEntity<List<SoutenanceResponse>> getAllSoutenances(@RequestParam(value= "page") int page, @RequestParam(value = "limit") int limit){
+    public ResponseEntity<List<SoutenanceResponse>> getAllSoutenances(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
 
-        List<SoutenanceResponse>soutenanceResponse = new ArrayList<>();
-        List<SoutenanceDto> soutenances = soutenanceService.getAllSoutenance(username,page,limit);
+        List<SoutenanceResponse> soutenanceResponse = new ArrayList<>();
+        List<SoutenanceDto> soutenances = soutenanceService.getAllSoutenance(username, page, limit);
 
-        for(SoutenanceDto soutenanceDto : soutenances){
+        for (SoutenanceDto soutenanceDto : soutenances) {
             SoutenanceResponse soutenance1 = new SoutenanceResponse();
             soutenance1 = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
 
@@ -54,13 +54,13 @@ public class SoutenanceController {
     }
 
     @PostMapping
-    public ResponseEntity<SoutenanceResponse> addSoutenance(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "idSujet") String idSujet){
+    public ResponseEntity<SoutenanceResponse> addSoutenance(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "idSujet") String idSujet) {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
         SoutenanceDto soutenance = new SoutenanceDto();
         soutenance.setDateSoutenance(soutenanceRequest.getDateSoutenance());
-        SoutenanceDto soutenanceDto = soutenanceService.addSoutenance(username,soutenance,idSujet);
+        SoutenanceDto soutenanceDto = soutenanceService.addSoutenance(username, soutenance, idSujet);
 
         SoutenanceResponse soutenanceResponse = new SoutenanceResponse();
         soutenanceResponse = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
@@ -68,31 +68,36 @@ public class SoutenanceController {
 
     }
 
-    @PutMapping(path="/invite")
-    public ResponseEntity<Boolean> inviteJury(@RequestBody SoutenanceRequest soutenanceRequest,@RequestParam(value = "emailEnseignant") String emailEnseignant,@RequestParam(value = "roleJury") String roleJury){
+    @PutMapping(path = "/invite")
+    public ResponseEntity<Boolean> inviteJury(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "emailEnseignant") String emailEnseignant, @RequestParam(value = "roleJury") String roleJury) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
 
         SoutenanceDto soutenance = new SoutenanceDto();
         soutenance.setIdSoutenance(soutenanceRequest.getIdSoutenance());
 
-        return ResponseEntity.ok(soutenanceService.inviteJurys(username,roleJury,emailEnseignant,soutenance));
+        return ResponseEntity.ok(soutenanceService.inviteJurys(username, roleJury, emailEnseignant, soutenance));
     }
 
 
+    @PutMapping(path = "/date-update")
+    public ResponseEntity<SoutenanceResponse> updateDateSoutenance(@RequestBody SoutenanceRequest soutenanceRequest) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
 
-    @PutMapping(path="/{id}")
-    public ResponseEntity<SoutenanceResponse> updateSoutenance(@PathVariable String id, @RequestBody Soutenance soutenance){
         SoutenanceDto soutenanceDto = new SoutenanceDto();
-        soutenanceDto = modelMapper.map(soutenance, SoutenanceDto.class);
-        SoutenanceDto soutenanceDto1 = soutenanceService.updateSoutenance(id,soutenanceDto);
+        soutenanceDto.setIdSoutenance(soutenanceRequest.getIdSoutenance());
+        soutenanceDto.setDateSoutenance(soutenanceRequest.getDateSoutenance());
+        soutenanceDto = soutenanceService.updateDateSoutenance(username, soutenanceDto);
         SoutenanceResponse soutenanceResponse = new SoutenanceResponse();
-        soutenanceResponse = modelMapper.map(soutenanceDto1, SoutenanceResponse.class);
+        soutenanceResponse.setIdSoutenance(soutenanceDto.getIdSoutenance());
+        soutenanceResponse.setDateSoutenance(soutenanceDto.getDateSoutenance().toString());
+        soutenanceResponse.setIdSujet(soutenanceDto.getSujet().getIdSujet());
         return ResponseEntity.ok(soutenanceResponse);
     }
 
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity<Object> deleteSoutenance(@PathVariable String id){
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Object> deleteSoutenance(@PathVariable String id) {
         soutenanceService.deleteSoutenance(id);
         return ResponseEntity.noContent().build();
     }

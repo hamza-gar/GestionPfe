@@ -18,6 +18,7 @@ public class SoutenanceDto {
     private long id;
     private String idSoutenance;
     private Date dateSoutenance;
+    private Boolean ended;
     private Sujet sujet;
     private List<Jury> jurys;
 }

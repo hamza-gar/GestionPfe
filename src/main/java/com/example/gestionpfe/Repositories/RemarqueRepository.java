@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RemarqueRepository extends PagingAndSortingRepository<Remarque,Long> {
-Remarque findByIdRemarque(String idRemarque);
+    Remarque findByIdRemarque(String idRemarque);
 }

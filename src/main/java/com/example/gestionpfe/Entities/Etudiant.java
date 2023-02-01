@@ -50,6 +50,9 @@ public class Etudiant implements Serializable {
     @JoinColumn(name = "filiere_id")
     private Filiere filiere;
 
+    @OneToMany(mappedBy = "etudiant")
+    private List<Remarque> remarques;
+
 
 
 }

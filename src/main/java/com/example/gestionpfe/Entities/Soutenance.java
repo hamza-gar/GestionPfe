@@ -13,11 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 public class Soutenance {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(nullable = false)
     private String idSoutenance;
+
+    @Column(nullable = false)
+    private Boolean ended;
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -31,7 +34,8 @@ public class Soutenance {
     @OneToMany(mappedBy = "soutenance")
     private List<Jury> jurys;
 
+
     /*TODO:
-    *  + Add ForeignKeys for "jurys"
-    *  + Add ForeignKey for "encadrant" "equipes"*/
+     *  + Add ForeignKeys for "jurys"
+     *  + Add ForeignKey for "encadrant" "equipes"*/
 }

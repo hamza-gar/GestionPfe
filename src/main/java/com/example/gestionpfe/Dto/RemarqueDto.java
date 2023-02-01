@@ -1,5 +1,6 @@
 package com.example.gestionpfe.Dto;
 
+import com.example.gestionpfe.Entities.Etudiant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ public class RemarqueDto {
     private String idRemarque;
     private String remarque;
     private Float note;
-//    private ArchiveDto archive;
+    private String target;
+    private Etudiant etudiant;
 }

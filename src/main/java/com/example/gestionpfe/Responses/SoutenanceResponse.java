@@ -16,6 +16,5 @@ import java.util.List;
 public class SoutenanceResponse {
     private String idSoutenance;
     private String dateSoutenance;
-    private Sujet sujet;
-    private List<Jury> jurys;
+    private String idSujet;
 }

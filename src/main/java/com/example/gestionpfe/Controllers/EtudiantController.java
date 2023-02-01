@@ -2,13 +2,16 @@ package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
+import com.example.gestionpfe.Dto.RemarqueDto;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Exceptions.exception;
 import com.example.gestionpfe.Requests.EtudiantRequest;
 import com.example.gestionpfe.Responses.DomaineResponse;
 import com.example.gestionpfe.Responses.ErrorMessages;
 import com.example.gestionpfe.Responses.EtudiantResponse;
+import com.example.gestionpfe.Responses.RemarqueResponse;
 import com.example.gestionpfe.Services.EtudiantService;
+import com.example.gestionpfe.Services.RemarqueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +36,9 @@ public class EtudiantController {
 
     @Autowired
     controllerVerification controllerVeri;
+
+    @Autowired
+    RemarqueService remarqueService;
 
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDETUDIANT_AUTHORITY')")
@@ -111,5 +118,20 @@ public class EtudiantController {
         etudiantService.deleteEtudiant(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/voirremarque")
+    public ResponseEntity<List<RemarqueResponse>> voirRemarque() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<RemarqueDto> remarqueDtos = remarqueService.getMyRemarques(username);
+        List<RemarqueResponse> remarqueResponses = new ArrayList<>();
+        for (RemarqueDto remarqueDto : remarqueDtos) {
+            RemarqueResponse remarqueResponse = new RemarqueResponse();
+            remarqueResponse = modelMapper.map(remarqueDto, RemarqueResponse.class);
+            remarqueResponses.add(remarqueResponse);
+        }
+        return new ResponseEntity<List<RemarqueResponse>>(remarqueResponses, HttpStatus.OK);
     }
 }
