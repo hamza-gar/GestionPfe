@@ -13,6 +13,7 @@ public interface EquipeService {
     EquipeDto removeEtudiant(String idEquipe,String idEtudiant);
     EquipeDto joinEquipe(String username,EquipeDto equipeDto);
     EquipeDto addDriveLink(String username,EquipeDto equipeDto);
+    Boolean shareDriveLink(String username,EquipeDto equipeDto);
     List<String> getEmailsOfEquipe(String username,EquipeDto equipeDto);
     void deleteEquipe(String id);
     List<EquipeDto> getAllEquipes(String username,int page, int limit);
