@@ -120,27 +120,6 @@ public class HtmlMessageSender {
     /***********************************************************************************************************************************************************************************************************************************************************************/
 
 
-    static String VoteHeader =
-            "          <tr>\n" +
-                    "            <td style=\"padding:36px 30px 42px 30px;\">\n" +
-                    "              <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
-                    "                <tr>\n" +
-                    "                  <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
-                    "                    <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendes Vous </h1>\n" +
-                    "                    <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
-                    "J'ai choisi cette date pour notre prochaine réunion, est-ce que ça vous convient ?<b>\n";
-
-
-    static String RefuseRendesVous = "</b></p>\n" +
-
-            "<tr>\n" + "<td>\n" + "<p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" + "\n" +
-            "si cela est possible pour vous, nous allons le faire, sinon nous choisirons une autre date.\n" +
-            "\n" +
-            "</p>" + "<p>" + "Cordialement\n" + "</p>" + "<p>" + "L'équipe\n" + "</p>" + "</td>" + "</tr>\n" +
-            "              </table>\n" +
-            "            </td>\n" +
-            "          </tr>\n";
-
     /***********************************************************************************************************************************************************************************************************************************************************************/
 
     static String invitation1 = "          <tr>\n" +
@@ -248,28 +227,31 @@ public class HtmlMessageSender {
 
     /***********************************************************************************************************************************************************************************************************************************************************************/
 
-    static String InvitationStateRefused ="<tr>\n" +
+    static String InvitationStateRefused = "<tr>\n" +
             "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
             "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
             "              <tr>\n" +
             "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
-            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">état d'invitation</h1>\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">État d'invitation</h1>\n" +
             "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
-            "                    votre invitation a été refusée.\n" +
+            "                    L'invite \" ";
+
+    static String InvitationRefuse2 = " \" a refusée l'invitation.\n" +
             "                  </p>\n" +
             "                  <h1><p>\uD83D\uDE14</p></h1>\n" +
             "                  <p>Cordialement.</p>\n" +
             "                  <p>L'equipe.</p>\n" +
             "                </td>\n" +
             "              </tr>";
-    static String InvitationStateAccepted="<tr>\n" +
+    static String InvitationStateAccepted = "<tr>\n" +
             "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
             "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
             "              <tr>\n" +
             "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
-            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">état d'invitation</h1>\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">État d'invitation</h1>\n" +
             "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
-            "                    votre invitation a été acceptée.\n" +
+            "                    L'invite \" ";
+    static String InvitationAccepte2 = " \" a acceptée l'invitation.\n" +
             "                  </p>\n" +
             "                  <h1><p>\uD83D\uDE04</p></h1>\n" +
             "                  <p>Cordialement.</p>\n" +
@@ -277,6 +259,7 @@ public class HtmlMessageSender {
             "                </td>\n" +
             "              </tr>";
     /***********************************************************************************************************************************************************************************************************************************************************************/
+
     static String SoutenancePostPoned1 = " <tr>\n" +
             "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
             "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
@@ -284,11 +267,15 @@ public class HtmlMessageSender {
             "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
             "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Report de Soutenance</h1>\n" +
             "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
-            "                    Cher/Chère etudiants\n" +
+            "                    Cher/Chère utilisateurs\n" +
             "                  </p>\n" +
             "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
-            "                    Je vous écris pour vous informer que Soutenance prévu pour";
-    static String SoutenancePostPoned2 = "a été reporté.\n" +
+            "                    Il vous est informé que la Soutenance prévu pour le sujet : ";
+
+    static String SoutenancePostPoned2 = "a été reporté le : ";
+
+    static String SoutenancePostPoned3 = " - à : ";
+    static String SoutenancePostPoned4 =  ".\n" +
             "                  </p>\n" +
             "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">Nous sommes désolés pour tout inconvénient que cela peut vous causer,\n" +
             "                    mais des considérations imprévues ont rendu nécessaire ce report.\n" +
@@ -298,6 +285,159 @@ public class HtmlMessageSender {
             "                  </p>\n" +
             "                  <p>Cordialement</p>\n" +
             "                  <p>Enseignat</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String RendezVousPris1 = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendez-vous fixé</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Chers utilisateurs\n" +
+            "                  </p>\n" +
+            "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Il vous est informé que suite au vote majoritaire, la date pour le rendez-vous a été fixée pour le : ";
+
+    static String RendezVousPris2 = " - à : ";
+
+    static String RendezVousPris3 = " .\n" +
+            "                  </p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String RendezVousNonPrisEt = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendez-vous fixé</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher/Chère étudiant\n" +
+            "                  </p>\n" +
+            "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Il vous est informé que suite au vote majoritaire, la date pour le rendez-vous n'a pu étre fixée.\n" +
+            "                  </p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+
+    static String RendezVousNonPrisEns1 = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendez-vous fixé</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher/Chère Enseignant\n" +
+            "                  </p>\n" +
+            "                  <p style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Il vous est informé que suite au vote majoritaire, la date pour le rendez-vous n'a pu étre fixée.\n" +
+            "                  </p>\n" +
+            "                  <p style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    vous êtes donc demandé à fixer une nouvelle date pour le rendez-vous du sujet : ";
+    static String RendezVousNonPrisEns2 = ".\n" +
+            "                  </p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String RendezVousFixed = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rendez-vous fixé par votre enseignant</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher/Chère etudiants\n" +
+            "                  </p>\n" +
+            "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Il vous est informé que votre enseignant \" ";
+
+    static String RendezVousFixed2 = " \" vous a fixé un rendez-vous pour le : ";
+
+    static String RendezVousFixed3 = " - à : ";
+
+    static String RendezVousFixed4 = "." +
+            "</p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String DemandeRendezVous = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Nouvelle demande de Rendez-vous</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher/Chère enseignant\n" +
+            "                  </p>\n" +
+            "                  <p style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Nous avons le plaisir de vous informer qu'un étudiant souhaite fixer un rendez-vous avec vous. Afin de finaliser cette demande, nous avons besoin de votre confirmation de la date et de l'heure qui vous conviennent le mieux.\n" +
+            "                  </p>\n" +
+            "                  <p style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Sujet : \"";
+
+    static String DemandeRendezVous2 = "\".\n" +
+            "                  </p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String ResetPassword1 = "<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Réinitialisation de mot de passe</h1>\n" +
+            "\n" +
+            "\n" +
+            "                  <p\n" +
+            "                    style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher(e) utilisateur(trice),\n" +
+            "                  </p>\n" +
+            "                  <p\n" +
+            "                    style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Nous avons reçu une demande de réinitialisation de votre mot de passe depuis la plateforme \"\n" +
+            "                    GestionPFE \". Si vous n'êtes pas à l'origine de cette demande, veuillez nous en informer\n" +
+            "                    immédiatement.\n" +
+            "                  </p>\n" +
+            "                  <p\n" +
+            "                    style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Pour réinitialiser votre mot de passe, veuillez utiliser le code de réinitialisation suivant :\n" +
+            "                    \"<strong> ";
+
+    static String ResetPassword2 = " </strong>\". Ce code sera valable pendant 24 heures seulement, alors veuillez le utiliser\n" +
+            "                    dès que possible. </p>\n" +
+            "                  <p>Cordialement</p>\n" +
             "                </td>\n" +
             "              </tr>";
 }

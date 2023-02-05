@@ -28,25 +28,28 @@ public class EnseignantController {
 
     @Autowired
     controllerVerification controllerVeri;
+
+
+
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDENSEIGNANT_AUTHORITY')")
-    @GetMapping(path="/{id}")
-    public ResponseEntity<EnseignantResponse> getEnseignant(@PathVariable String id){
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<EnseignantResponse> getEnseignant(@PathVariable String id) {
         EnseignantDto enseignantDto = enseignantService.getEnseignantByIdEnseignant(id);
-        EnseignantResponse  enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        EnseignantResponse enseignantResponse = new EnseignantResponse();
+        enseignantResponse = modelMapper.map(enseignantDto, EnseignantResponse.class);
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('GET_ALL_ENSEIGNANT_AUTHORITY')")
     @GetMapping
-    public List<EnseignantResponse> getAllEnseignants(@RequestParam(value = "page") int page, @RequestParam(value="limit" )int limit){
+    public List<EnseignantResponse> getAllEnseignants(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         List<EnseignantResponse> enseignantResponse = new ArrayList<>();
-        List<EnseignantDto> enseignants = enseignantService.getAllEnseignants(page,limit);
+        List<EnseignantDto> enseignants = enseignantService.getAllEnseignants(page, limit);
 
-        for(EnseignantDto enseignantDto:enseignants){
+        for (EnseignantDto enseignantDto : enseignants) {
             EnseignantResponse enseignant = new EnseignantResponse();
-            enseignant = modelMapper.map(enseignantDto,EnseignantResponse.class);
+            enseignant = modelMapper.map(enseignantDto, EnseignantResponse.class);
 
             enseignantResponse.add(enseignant);
         }
@@ -57,58 +60,74 @@ public class EnseignantController {
     public void verifyEnseignant(@PathVariable String token, HttpServletResponse response) {
         EnseignantDto enseignantDto = enseignantService.verifyEnseignant(token);
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        enseignantResponse = modelMapper.map(enseignantDto, EnseignantResponse.class);
 
         controllerVeri.redirectToAngularPage(response);
     }
 
     @PostMapping
-    public ResponseEntity<EnseignantResponse> addEnseignant(@RequestBody EnseignantRequest enseignantRequest){
+    public ResponseEntity<EnseignantResponse> addEnseignant(@RequestBody EnseignantRequest enseignantRequest) {
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignantRequest,EnseignantDto.class);
+        enseignantDto = modelMapper.map(enseignantRequest, EnseignantDto.class);
 
 
         EnseignantDto AddEnseignant = enseignantService.addEnseignant(enseignantDto);
 
-        if(AddEnseignant==null)
+        if (AddEnseignant == null)
             return new ResponseEntity<EnseignantResponse>(new EnseignantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(AddEnseignant,EnseignantResponse.class);
+        enseignantResponse = modelMapper.map(AddEnseignant, EnseignantResponse.class);
 
-        return new ResponseEntity<EnseignantResponse>(enseignantResponse,HttpStatus.CREATED);
+        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasAuthority('UPDATE_ENSEIGNANT_AUTHORITY')")
-    @PutMapping(path="/{id}")
-    public ResponseEntity<EnseignantResponse> updateEnseignant(@PathVariable String id,@RequestBody EnseignantRequest enseignantRequest){
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<EnseignantResponse> updateEnseignant(@PathVariable String id, @RequestBody EnseignantRequest enseignantRequest) {
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignantRequest,EnseignantDto.class);
+        enseignantDto = modelMapper.map(enseignantRequest, EnseignantDto.class);
 
-        EnseignantDto UpdateEnseignant = enseignantService.updateEnseignant(id,enseignantDto);
+        EnseignantDto UpdateEnseignant = enseignantService.updateEnseignant(id, enseignantDto);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(UpdateEnseignant,EnseignantResponse.class);
+        enseignantResponse = modelMapper.map(UpdateEnseignant, EnseignantResponse.class);
 
-        return new ResponseEntity<EnseignantResponse>(enseignantResponse,HttpStatus.ACCEPTED);
+        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(path="/sendVerification/{id}")
-    public ResponseEntity<EnseignantResponse> sendVerification(@PathVariable String id){
+    @GetMapping(path = "/sendVerification/{id}")
+    public ResponseEntity<EnseignantResponse> sendVerification(@PathVariable String id) {
 
         EnseignantDto enseignantDto = enseignantService.resendVerification(id);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(enseignantDto,EnseignantResponse.class);
+        enseignantResponse = modelMapper.map(enseignantDto, EnseignantResponse.class);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
+
     @PreAuthorize("hasAuthority('DELETE_ENSEIGNANT_AUTHORITY')")
-    @DeleteMapping(path="/{id}")
-    public ResponseEntity<Object> deleteEnseignant(@PathVariable String id){
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Object> deleteEnseignant(@PathVariable String id) {
         enseignantService.deleteEnseignant(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping(path = "/password")
+    public ResponseEntity<EnseignantResponse> updatePassword(@RequestParam(value = "email") String email, @RequestParam(value = "key") String key, @RequestParam(value = "password") String password) {
+        EnseignantDto enseignantDto = new EnseignantDto();
+        enseignantDto.setEmail(email);
+
+//        EnseignantDto UpdateEnseignant = enseignantService.updatePassword(enseignantDto);
+
+        EnseignantResponse enseignantResponse = new EnseignantResponse();
+//        enseignantResponse = modelMapper.map(UpdateEnseignant,EnseignantResponse.class);
+
+        return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.ACCEPTED);
     }
 
 

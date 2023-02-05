@@ -30,5 +30,4 @@ public class Remarque {
     @JoinColumn(name = "etudiant_id", referencedColumnName = "id", nullable = false)
     private Etudiant etudiant;
 
-
 }

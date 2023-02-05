@@ -222,6 +222,15 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         }
         soutenance.setDateSoutenance(soutenanceDto.getDateSoutenance());
         soutenanceRepository.save(soutenance);
+
+        for (Jury jury : soutenance.getJurys()) {
+            emailSender.PostPonedEmail(jury.getEnseignant().getEmail(), soutenance.getSujet().getNomSujet(), soutenanceDto.getDateSoutenance());
+        }
+        for (Etudiant etudiant : soutenance.getSujet().getEquipe().get(0).getEtudiant()) {
+            emailSender.PostPonedEmail(etudiant.getEmail(), soutenance.getSujet().getNomSujet(), soutenanceDto.getDateSoutenance());
+        }
+        emailSender.PostPonedEmail(soutenance.getSujet().getEncadrant().getEmail(), soutenance.getSujet().getNomSujet(), soutenanceDto.getDateSoutenance());
+
         logger.info("Soutenance's date updated successfully");
 
         return modelMapper.map(soutenance, SoutenanceDto.class);

@@ -10,6 +10,7 @@ import com.example.gestionpfe.Repositories.SoutenanceRepository;
 import com.example.gestionpfe.Requests.InvitationRequest;
 import com.example.gestionpfe.Services.JuryService;
 import com.example.gestionpfe.Services.SoutenanceService;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import jdk.jshell.execution.Util;
 import org.slf4j.Logger;
@@ -41,6 +42,9 @@ public class JuryServiceImpl implements JuryService {
     @Autowired
     JuryRepository juryRepository;
 
+    @Autowired
+    EmailSender mailSender;
+
 
     @Override
     public Boolean reponseInvitation(InvitationDto invitationDto) {
@@ -58,13 +62,16 @@ public class JuryServiceImpl implements JuryService {
             jury.setIdJury(util.generateUserId(32));
             juryRepository.save(jury);
             logger.info("Jury accepted invitation,Jury added to soutenance : " + invitation.getIdSoutenance());
-        }else{
+            mailSender.InvitationAccepted(soutenanceRepository.findByIdSoutenance(invitation.getIdSoutenance()).getSujet().getEncadrant().getEmail(), invitation.getEmailInvite());
+        } else {
             logger.info("Jury declined invitation");
+            mailSender.InvitationRefused(soutenanceRepository.findByIdSoutenance(invitation.getIdSoutenance()).getSujet().getEncadrant().getEmail(), invitation.getEmailInvite());
+
         }
 
         invitationRepository.delete(invitation);
         logger.info("Invitation deleted");
-        /* TODO: send email telling the encadrant that the jury accepted / declined the invitation.*/
+
         return invitationDto.getAccepted();
     }
 
@@ -75,8 +82,8 @@ public class JuryServiceImpl implements JuryService {
         List<Soutenance> soutenances = soutenancesPage.getContent();
         List<SoutenanceDto> soutenanceDtos = new ArrayList<>();
         for (Soutenance soutenance : soutenances) {
-            for (Jury Jury:soutenance.getJurys()) {
-                if (Jury.getEnseignant().getEmail().equals(mailJury)){
+            for (Jury Jury : soutenance.getJurys()) {
+                if (Jury.getEnseignant().getEmail().equals(mailJury)) {
                     SoutenanceDto soutenanceDto = new SoutenanceDto();
                     soutenanceDto.setIdSoutenance(soutenance.getIdSoutenance());
                     soutenanceDto.setDateSoutenance(soutenance.getDateSoutenance());
