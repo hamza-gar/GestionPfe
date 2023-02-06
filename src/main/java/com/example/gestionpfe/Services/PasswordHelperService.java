@@ -12,5 +12,5 @@ public interface PasswordHelperService {
 
     String generateToken(String email);
 
-    Boolean checkExpiration(String jwtToken);
+    Boolean checkExpiration(String jwtToken, String email);
 }

@@ -59,7 +59,7 @@ public class PasswordHelperController {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = principal.toString();
 
-        if (!email.equals(passwordHelperRequest.getEmail()) && passwordHelperService.checkExpiration(req.getHeader(SecurityConstants.HEADER_STRING)) ) {
+        if (!email.equals(passwordHelperRequest.getEmail()) && passwordHelperService.checkExpiration(req.getHeader(SecurityConstants.HEADER_STRING),passwordHelperRequest.getEmail())) {
             throw new RuntimeException("You are not allowed");
         }
 

@@ -88,6 +88,7 @@ public class EtudiantController {
 
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.CREATED);
     }
+
     @PreAuthorize("hasAuthority('UPDATE_ETUDIANT_AUTHORITY')")
     @PutMapping(path = "/{id}")
     public ResponseEntity<EtudiantResponse> updateEtudiant(@PathVariable String id, @RequestBody EtudiantRequest etudiantrequest) {

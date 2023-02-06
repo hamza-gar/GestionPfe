@@ -109,12 +109,14 @@ public class PasswordHelperServiceImpl implements PasswordHelperService {
         if (etudiant != null) {
             etudiant.setEncryptedPassword(bCryptPasswordEncoder.encode(passwordHelperDto.getKey()));
             etudiantRepository.save(etudiant);
+            logger.info("Etudiant password updated");
             return true;
         }
         Enseignant enseignant = enseignantRepository.findByEmail(passwordHelperDto.getEmail());
         if (enseignant != null) {
             enseignant.setEncryptedPassword(bCryptPasswordEncoder.encode(passwordHelperDto.getKey()));
             enseignantRepository.save(enseignant);
+            logger.info("Enseignant password updated");
             return true;
         }
         logger.error("Something went wrong !");
@@ -129,18 +131,20 @@ public class PasswordHelperServiceImpl implements PasswordHelperService {
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_PASSWORDHELPER))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
                 .compact();
-
+        logger.info("Token generated : " + token);
         return token;
     }
 
     @Override
-    public Boolean checkExpiration(String jwtToken) {
+    public Boolean checkExpiration(String jwtToken, String email) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.TOKEN_SECRET)
                 .parseClaimsJws(jwtToken)
                 .getBody();
+        String user = claims.getSubject();
         long expirationTime = claims.getExpiration().getTime();
-
-        return System.currentTimeMillis() > expirationTime;
+        logger.info("Expired : " + (System.currentTimeMillis() > expirationTime && !user.equals(email)));
+        return System.currentTimeMillis() > expirationTime && !user.equals(email);
     }
+
 }

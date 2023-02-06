@@ -17,6 +17,7 @@ public class EtudiantRequest {
     private String nom;
     private String prenom;
     private String email;
+    private String nomFiliere;
     private String password;
 
 }

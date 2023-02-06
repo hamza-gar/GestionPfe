@@ -4,10 +4,7 @@ import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.InitialUsersSetup;
-import com.example.gestionpfe.Repositories.DomaineRepository;
-import com.example.gestionpfe.Repositories.EtudiantRepository;
-import com.example.gestionpfe.Repositories.RoleRepository;
-import com.example.gestionpfe.Repositories.SujetRepository;
+import com.example.gestionpfe.Repositories.*;
 import com.example.gestionpfe.Security.Etudiant.EtudiantPrincipal;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Services.EtudiantService;
@@ -59,6 +56,9 @@ public class EtudiantServiceImpl implements EtudiantService {
     @Autowired
     SujetRepository sujetRepository;
 
+    @Autowired
+    FiliereRepository filiereRepository;
+
     @Override
     public EtudiantDto addEtudiant(EtudiantDto etudiantDto) {
 
@@ -67,19 +67,27 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
             Etudiant checkEtudiant = etudianRepository.findByEmail(etudiantDto.getEmail());
 
-
-            if (checkEtudiant != null) throw new RuntimeException("Etudiant deja exist !!!");
+            if (checkEtudiant != null) {
+                logger.error("Etudiant already exist !");
+                throw new RuntimeException("Etudiant deja exist !");
+            }
+            Filiere filiere = filiereRepository.findByNomFiliere(etudiantDto.getNomFiliere());
+            if(filiere == null){
+                logger.error("Filiere not found !");
+                throw new RuntimeException("Filiere not found !");
+            }
             Etudiant etudianEntity = new Etudiant();
             etudianEntity = modelMapper.map(etudiantDto, Etudiant.class);
-
 
             etudianEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(etudiantDto.getPassword()));
             etudianEntity.setIdEtudiant(util.generateUserId(32));
             String token = util.generateUserId(26);
             etudianEntity.setEmailVerificationToken(token);
+            etudianEntity.setFiliere(filiere);
             etudianEntity.setEmailVerificationStatus(false);
             Role erole = roleRepository.findByName("ROLE_ETUDIANT");
             etudianEntity.setRole(erole);
+
             emailSender.sendVerificationMail(etudianEntity.getEmail(), token, "etudiants");
 
             Etudiant newEtudiant = etudianRepository.save(etudianEntity);
@@ -90,7 +98,10 @@ public class EtudiantServiceImpl implements EtudiantService {
 
             logger.info("Etudiant created:" + newEtudiantDto.getEmail());
             return newEtudiantDto;
-        } else throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie  !!!");
+        } else {
+            logger.error("le domaine ne figure pas dans la liste des domaines verifie !");
+            throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie !");
+        }
 
 
     }
