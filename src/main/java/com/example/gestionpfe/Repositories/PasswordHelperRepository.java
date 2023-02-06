@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface PasswordHelperRepository extends JpaRepository<PasswordHelper, Long> {
     PasswordHelper findByIdPasswordHelper(String idPasswordHelper);
     PasswordHelper findByEmail(String email);
-    PasswordHelper findByKeyAndEmail(String key, String email);
+    PasswordHelper findByKeyCodeAndEmail(String key, String email);
 }

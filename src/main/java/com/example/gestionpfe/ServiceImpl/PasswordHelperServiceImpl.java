@@ -7,10 +7,14 @@ import com.example.gestionpfe.Entities.PasswordHelper;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.EtudiantRepository;
 import com.example.gestionpfe.Repositories.PasswordHelperRepository;
+import com.example.gestionpfe.Security.SecurityConstants;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.PasswordHelperService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -65,15 +69,14 @@ public class PasswordHelperServiceImpl implements PasswordHelperService {
             passwordHelper = new PasswordHelper();
             passwordHelper.setIdPasswordHelper(utils.generateUserId(32));
             passwordHelper.setEmail(passwordHelperDto.getEmail());
-            if (etudiant == null) {
-                passwordHelper.setIsEtudiant(false);
-            }
+            passwordHelper.setIsEtudiant(etudiant != null);
+
         }
 
-        passwordHelper.setKey(utils.generateKey(6));
+        passwordHelper.setKeyCode(utils.generateKey(6));
         passwordHelper.setTimeCreated(new Date());
 
-        emailSender.ForgottenPassword(passwordHelper.getEmail(), passwordHelper.getKey());
+        emailSender.ForgottenPassword(passwordHelper.getEmail(), passwordHelper.getKeyCode());
         PasswordHelper storedPasswordHelper = passwordHelperRepository.save(passwordHelper);
 
         return modelMapper.map(storedPasswordHelper, PasswordHelperDto.class);
@@ -81,7 +84,7 @@ public class PasswordHelperServiceImpl implements PasswordHelperService {
 
     @Override
     public Boolean checkKey(PasswordHelperDto passwordHelperDto) {
-        PasswordHelper passwordHelper = passwordHelperRepository.findByKeyAndEmail(passwordHelperDto.getKey(), passwordHelperDto.getEmail());
+        PasswordHelper passwordHelper = passwordHelperRepository.findByKeyCodeAndEmail(passwordHelperDto.getKey(), passwordHelperDto.getEmail());
         if (passwordHelper == null) {
             logger.warn("Key not found");
             return false;
@@ -116,5 +119,28 @@ public class PasswordHelperServiceImpl implements PasswordHelperService {
         }
         logger.error("Something went wrong !");
         return false;
+    }
+
+    @Override
+    public String generateToken(String email) {
+        String token = Jwts.builder()
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_PASSWORDHELPER))
+                .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET)
+                .compact();
+
+        return token;
+    }
+
+    @Override
+    public Boolean checkExpiration(String jwtToken) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SecurityConstants.TOKEN_SECRET)
+                .parseClaimsJws(jwtToken)
+                .getBody();
+        long expirationTime = claims.getExpiration().getTime();
+
+        return System.currentTimeMillis() > expirationTime;
     }
 }

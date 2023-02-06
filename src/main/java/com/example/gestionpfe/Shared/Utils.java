@@ -27,7 +27,7 @@ public class Utils {
     public String generateKey(int length) {
         StringBuilder returnValue = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
-            returnValue.append(NUMBERS.charAt(RANDOM.nextInt(ALPHABET.length())));
+            returnValue.append(NUMBERS.charAt(RANDOM.nextInt(NUMBERS.length())));
         }
         return new String(returnValue);
     }

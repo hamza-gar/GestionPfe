@@ -19,7 +19,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Invitation implements Serializable {
+public class Invitation {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;

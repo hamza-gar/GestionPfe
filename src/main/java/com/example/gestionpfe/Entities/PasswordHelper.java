@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PasswordHelper implements Serializable {
+public class PasswordHelper {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private long id;
@@ -26,7 +26,7 @@ public class PasswordHelper implements Serializable {
     private String idPasswordHelper;
 
     @Column(nullable = false)
-    private String key;
+    private String keyCode;
 
     @Column(nullable = false, unique = true)
     private String email;
