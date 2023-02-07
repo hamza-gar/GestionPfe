@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/forgotPassword")
@@ -25,20 +27,20 @@ public class PasswordHelperController {
     PasswordHelperService passwordHelperService;
 
     @PostMapping
-    public Boolean forgotPassword(@RequestParam(value = "email") String email) {
+    public Boolean forgotPassword(@RequestBody PasswordHelperRequest passwordHelperRequest) {
 
         PasswordHelperDto passwordHelperDto = new PasswordHelperDto();
 
-        passwordHelperDto.setEmail(email);
+        passwordHelperDto.setEmail(passwordHelperRequest.getEmail());
 
         passwordHelperDto = passwordHelperService.createPasswordHelper(passwordHelperDto);
 
         return true;
     }
 
-    @GetMapping
-    public Boolean checkKey(@RequestBody PasswordHelperRequest passwordHelperRequest, HttpServletResponse res) {
-
+    @PostMapping(path="/checkKey")
+    public ResponseEntity<?> checkKey(@RequestBody PasswordHelperRequest passwordHelperRequest, HttpServletResponse res) {
+        HashMap<String, String> map = new HashMap<>();
         PasswordHelperDto passwordHelperDto = new PasswordHelperDto();
 
         passwordHelperDto.setEmail(passwordHelperRequest.getEmail());
@@ -46,15 +48,17 @@ public class PasswordHelperController {
         Boolean operation = passwordHelperService.checkKey(passwordHelperDto);
 
         if (operation) {
+            map.put("key", passwordHelperService.generateToken(passwordHelperRequest.getEmail()));
             res.addHeader(SecurityConstants.HEADER_STRING, operation ? passwordHelperService.generateToken(passwordHelperRequest.getEmail()) : "false");
         }
 
-        return operation;
+
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
 
 
 
-    @PutMapping
+    @PutMapping(path="/updatePass")
     public Boolean changePassword(@RequestBody PasswordHelperRequest passwordHelperRequest, HttpServletRequest req) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String email = principal.toString();

@@ -52,8 +52,10 @@ public class SujetController {
 
             sujetResponse.add(sujet);
         }
+        System.out.println(sujetResponse);
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
+
 
     @GetMapping(path="/filiere")
     public ResponseEntity<List<SujetResponse>> getAllSujetsByFiliere(@RequestParam(value = "page") int page, @RequestParam(value="limit" ) int limit,@RequestParam(value = "filiere") String idFiliere){

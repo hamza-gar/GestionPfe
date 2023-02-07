@@ -55,5 +55,7 @@ public class EnseignantAuthenticationFilter extends UsernamePasswordAuthenticati
         EnseignantDto enseignantDto = enseignantService.getEnseignant(userName);
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("enseignant_id",enseignantDto.getIdEnseignant());
+
+        res.getWriter().write("{\"token\":\""+token+"\",\"enseignant_id\":\""+enseignantDto.getIdEnseignant()+"\"}");
     }
 }

@@ -57,5 +57,7 @@ public class AdminAuthenticationFilter extends UsernamePasswordAuthenticationFil
         AdminDto adminDto = adminService.getAdmin(userName);
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("admin_id",adminDto.getIdAdmin());
+
+        res.getWriter().write("{\"token\":\""+token+"\",\"admin_id\":\""+adminDto.getIdAdmin()+"\"}");
     }
 }

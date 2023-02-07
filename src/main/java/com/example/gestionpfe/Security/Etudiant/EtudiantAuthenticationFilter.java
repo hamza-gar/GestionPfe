@@ -48,13 +48,18 @@ public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticat
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
                                             FilterChain chain, Authentication auth)throws IOException , ServletException {
         String userName = ((EtudiantPrincipal)auth.getPrincipal()).getUsername();
-        String token = Jwts.builder().setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
-                signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 
         EtudiantService etudiantService = (EtudiantService) SpringApplicationContext.getBean("etudiantServiceImpl");
         EtudiantDto etudiantDto = etudiantService.getEtudiant(userName);
 
+        String token = Jwts.builder().claim("id",etudiantDto.getIdEtudiant()).setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
+                signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
+
+
+
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("etudiant_id",etudiantDto.getIdEtudiant());
+
+        res.getWriter().write("{\"token\":\""+token+"\",\"etudiant_id\":\""+etudiantDto.getIdEtudiant()+"\"}");
     }
 }
