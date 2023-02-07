@@ -34,7 +34,7 @@ public class FiliereController {
         return ResponseEntity.ok(filiereResponse);
     }
 
-    @PreAuthorize("hasAuthority('GET_ALL_FILIERES_AUTHORITY')")
+
     @GetMapping
     public ResponseEntity<List<FiliereResponse>> getAllFilieres(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         List<FiliereResponse> filiereResponse = new ArrayList<>();

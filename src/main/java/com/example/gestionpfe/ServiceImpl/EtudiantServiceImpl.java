@@ -72,7 +72,7 @@ public class EtudiantServiceImpl implements EtudiantService {
                 throw new RuntimeException("Etudiant deja exist !");
             }
             Filiere filiere = filiereRepository.findByNomFiliere(etudiantDto.getNomFiliere());
-            if(filiere == null){
+            if (filiere == null) {
                 logger.error("Filiere not found !");
                 throw new RuntimeException("Filiere not found !");
             }
@@ -112,10 +112,24 @@ public class EtudiantServiceImpl implements EtudiantService {
         Etudiant etudiantEntity = etudianRepository.findByEmail(email);
         if (etudiantEntity == null) throw new UsernameNotFoundException(email);
 
-        EtudiantDto etudianDto = new EtudiantDto();
-        etudianDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
-        logger.info("Etudiant retrieved:" + etudianDto.getEmail());
-        return etudianDto;
+        EtudiantDto etudiantDto = new EtudiantDto();
+
+        etudiantDto.setIdEtudiant(etudiantEntity.getIdEtudiant());
+        etudiantDto.setApogee(etudiantEntity.getApogee());
+        etudiantDto.setCne(etudiantEntity.getCne());
+        etudiantDto.setCin(etudiantEntity.getCin());
+        etudiantDto.setNom(etudiantEntity.getNom());
+        etudiantDto.setPrenom(etudiantEntity.getPrenom());
+        etudiantDto.setEmail(etudiantEntity.getEmail());
+        etudiantDto.setPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setFiliere(etudiantEntity.getFiliere());
+        etudiantDto.setEncryptedPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(etudiantEntity.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(etudiantEntity.getEmailVerificationToken());
+
+
+        logger.info("Etudiant retrieved:" + etudiantDto.getEmail());
+        return etudiantDto;
     }
 
     @Override
@@ -125,7 +139,21 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-        etudiantDto = modelMapper.map(etudiantEntity, EtudiantDto.class);
+
+        etudiantDto.setIdEtudiant(etudiantEntity.getIdEtudiant());
+        etudiantDto.setApogee(etudiantEntity.getApogee());
+        etudiantDto.setCne(etudiantEntity.getCne());
+        etudiantDto.setCin(etudiantEntity.getCin());
+        etudiantDto.setNom(etudiantEntity.getNom());
+        etudiantDto.setPrenom(etudiantEntity.getPrenom());
+        etudiantDto.setEmail(etudiantEntity.getEmail());
+        etudiantDto.setPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setFiliere(etudiantEntity.getFiliere());
+        etudiantDto.setEncryptedPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(etudiantEntity.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(etudiantEntity.getEmailVerificationToken());
+
+
         logger.info("Etudiant retrieved:" + etudiantDto.getEmail());
 
         return etudiantDto;
@@ -144,41 +172,52 @@ public class EtudiantServiceImpl implements EtudiantService {
         Long Apogee = etudianRepository.findByIdEtudiant(id).getApogee();
         String Email = etudianRepository.findByIdEtudiant(id).getEmail();
 
-        if(etudiantdto.getNom() == null){
+        if (etudiantdto.getNom() == null) {
             etudiantEntity.setNom(Nom);
-        }else{
+        } else {
             etudiantEntity.setNom(etudiantdto.getNom());
         }
-        if(etudiantdto.getPrenom() == null){
+        if (etudiantdto.getPrenom() == null) {
             etudiantEntity.setPrenom(Prenom);
-        }else{
+        } else {
             etudiantEntity.setPrenom(etudiantdto.getPrenom());
         }
-        if(etudiantdto.getCin() == null){
+        if (etudiantdto.getCin() == null) {
             etudiantEntity.setCin(Cin);
-        }else{
+        } else {
             etudiantEntity.setCin(etudiantdto.getCin());
         }
-        if(etudiantdto.getCne() == null){
+        if (etudiantdto.getCne() == null) {
             etudiantEntity.setCne(Cne);
-        }else{
+        } else {
             etudiantEntity.setCne(etudiantdto.getCne());
         }
-        if(etudiantdto.getApogee() == null){
+        if (etudiantdto.getApogee() == null) {
             etudiantEntity.setApogee(Apogee);
-        }else{
+        } else {
             etudiantEntity.setApogee(etudiantdto.getApogee());
         }
-        if(etudiantdto.getEmail() == null){
+        if (etudiantdto.getEmail() == null) {
             etudiantEntity.setEmail(Email);
-        }else{
+        } else {
             etudiantEntity.setEmail(etudiantdto.getEmail());
         }
 
         Etudiant etudiantUpdated = etudianRepository.save(etudiantEntity);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-        etudiantDto = modelMapper.map(etudiantUpdated, EtudiantDto.class);
+        etudiantDto.setIdEtudiant(etudiantUpdated.getIdEtudiant());
+        etudiantDto.setApogee(etudiantUpdated.getApogee());
+        etudiantDto.setCne(etudiantUpdated.getCne());
+        etudiantDto.setCin(etudiantUpdated.getCin());
+        etudiantDto.setNom(etudiantUpdated.getNom());
+        etudiantDto.setPrenom(etudiantUpdated.getPrenom());
+        etudiantDto.setEmail(etudiantUpdated.getEmail());
+        etudiantDto.setPassword(etudiantUpdated.getEncryptedPassword());
+        etudiantDto.setFiliere(etudiantUpdated.getFiliere());
+        etudiantDto.setEncryptedPassword(etudiantUpdated.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(etudiantUpdated.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(etudiantUpdated.getEmailVerificationToken());
         logger.info("Etudiant updated successfully : " + etudiantDto.getEmail());
 
         return etudiantDto;
@@ -192,7 +231,18 @@ public class EtudiantServiceImpl implements EtudiantService {
         Etudiant updatedEtudiant = etudianRepository.save(etudiant);
 
         EtudiantDto etudiantDto = new EtudiantDto();
-        etudiantDto = modelMapper.map(updatedEtudiant, EtudiantDto.class);
+        etudiantDto.setIdEtudiant(updatedEtudiant.getIdEtudiant());
+        etudiantDto.setApogee(updatedEtudiant.getApogee());
+        etudiantDto.setCne(updatedEtudiant.getCne());
+        etudiantDto.setCin(updatedEtudiant.getCin());
+        etudiantDto.setNom(updatedEtudiant.getNom());
+        etudiantDto.setPrenom(updatedEtudiant.getPrenom());
+        etudiantDto.setEmail(updatedEtudiant.getEmail());
+        etudiantDto.setPassword(updatedEtudiant.getEncryptedPassword());
+        etudiantDto.setFiliere(updatedEtudiant.getFiliere());
+        etudiantDto.setEncryptedPassword(updatedEtudiant.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(updatedEtudiant.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(updatedEtudiant.getEmailVerificationToken());
         logger.info("Etudiant verified." + etudiantDto.getEmail());
         return etudiantDto;
     }
@@ -203,7 +253,19 @@ public class EtudiantServiceImpl implements EtudiantService {
         if (etudiant == null) throw new UsernameNotFoundException(etudiantId);
         emailSender.sendVerificationMail(etudiant.getEmail(), etudiant.getEmailVerificationToken(), "etudiants");
         EtudiantDto etudiantDto = new EtudiantDto();
-        etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
+        etudiantDto.setIdEtudiant(etudiant.getIdEtudiant());
+        etudiantDto.setApogee(etudiant.getApogee());
+        etudiantDto.setCne(etudiant.getCne());
+        etudiantDto.setCin(etudiant.getCin());
+        etudiantDto.setNom(etudiant.getNom());
+        etudiantDto.setPrenom(etudiant.getPrenom());
+        etudiantDto.setEmail(etudiant.getEmail());
+        etudiantDto.setPassword(etudiant.getEncryptedPassword());
+        etudiantDto.setFiliere(etudiant.getFiliere());
+        etudiantDto.setEncryptedPassword(etudiant.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(etudiant.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(etudiant.getEmailVerificationToken());
+
         logger.info("Resent verification to student : " + etudiantDto.getEmail());
         return etudiantDto;
     }
@@ -226,7 +288,20 @@ public class EtudiantServiceImpl implements EtudiantService {
         List<Etudiant> etudiants = etudiantPages.getContent();
         for (Etudiant etudiant : etudiants) {
             EtudiantDto etudiantDto = new EtudiantDto();
-            etudiantDto = modelMapper.map(etudiant, EtudiantDto.class);
+
+            etudiantDto.setIdEtudiant(etudiant.getIdEtudiant());
+            etudiantDto.setApogee(etudiant.getApogee());
+            etudiantDto.setCne(etudiant.getCne());
+            etudiantDto.setCin(etudiant.getCin());
+            etudiantDto.setNom(etudiant.getNom());
+            etudiantDto.setPrenom(etudiant.getPrenom());
+            etudiantDto.setEmail(etudiant.getEmail());
+            etudiantDto.setPassword(etudiant.getEncryptedPassword());
+            etudiantDto.setFiliere(etudiant.getFiliere());
+            etudiantDto.setEncryptedPassword(etudiant.getEncryptedPassword());
+            etudiantDto.setEmailVerificationStatus(etudiant.getEmailVerificationStatus());
+            etudiantDto.setEmailVerificationToken(etudiant.getEmailVerificationToken());
+
 
             etudiantDtos.add(etudiantDto);
         }
@@ -251,7 +326,7 @@ public class EtudiantServiceImpl implements EtudiantService {
         for (Equipe equipe : equipes) {
             logger.info("Equipe found : " + equipe.getIdEquipe());
             logger.info("comparing sujet id : " + equipe.getSujet().getIdSujet() + " with " + idSujet);
-            if (equipe.getSujet().getIdSujet().equals(idSujet)){
+            if (equipe.getSujet().getIdSujet().equals(idSujet)) {
                 logger.info("Etudiant already in sujet");
                 return true;
             }

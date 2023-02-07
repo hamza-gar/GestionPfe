@@ -19,5 +19,4 @@ public class EtudiantRequest {
     private String email;
     private String nomFiliere;
     private String password;
-
 }

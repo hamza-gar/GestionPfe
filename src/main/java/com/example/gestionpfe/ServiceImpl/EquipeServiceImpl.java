@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EquipeServiceImpl implements EquipeService {
@@ -229,7 +231,7 @@ public class EquipeServiceImpl implements EquipeService {
         logger.info("l'etudiant n'est pas deja dans 3 equipes pour ce meme encadrant.");
 
         if (equipeEntity.getIsPrivate()) {
-            if(equipeDto.getCryptedPassword() == null){
+            if (equipeDto.getCryptedPassword() == null) {
                 logger.info("equipe is private, password is required");
                 throw new RuntimeException("equipe is private, password is required");
             }
@@ -268,7 +270,7 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public List<EquipeDto> getAllEquipes(String username,int page, int limit) {
+    public List<EquipeDto> getAllEquipes(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {
             logger.info("enseignant not found");
@@ -277,32 +279,28 @@ public class EquipeServiceImpl implements EquipeService {
 
         List<EquipeDto> equipeDto = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
-
-        Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
+        Page<Equipe> equipePage = equipeRepository.findAllBySujet_Encadrant_IdEnseignant(enseignant.getIdEnseignant(), pageableRequest);
         List<Equipe> equipeList = equipePage.getContent();
         for (Equipe equipe : equipeList) {
-
-            if(equipe.getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
-                EquipeDto equipeDto1 = new EquipeDto();
-                equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
-                equipeDto.add(equipeDto1);
-            }
+            EquipeDto equipeDto1 = new EquipeDto();
+            equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+            equipeDto.add(equipeDto1);
         }
         return equipeDto;
     }
 
     @Override
-    public List<EquipeDto> getGroupesOfSujets(String username,String idSujet, int page, int limit) {
+    public List<EquipeDto> getGroupesOfSujets(String username, String idSujet, int page, int limit) {
         Boolean isEtudiant;
         if (enseignantRepository.findByEmail(username) == null) {
             if (etudiantRepository.findByEmail(username) == null) {
                 logger.info("No user found !!!");
                 throw new RuntimeException("No user found !!!");
-            }else {
+            } else {
                 logger.info("etudiant found");
                 isEtudiant = true;
             }
-        }else {
+        } else {
             logger.info("enseignant found");
             isEtudiant = false;
         }
@@ -312,24 +310,23 @@ public class EquipeServiceImpl implements EquipeService {
             logger.info("sujet not found");
             throw new RuntimeException("sujet not found !!!");
         }
+
         List<EquipeDto> equipeDto = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
-
-        Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
-        List<Equipe> equipeList = equipePage.getContent();
-        for (Equipe equipe : equipeList) {
-            if(equipe.getSujet().getIdSujet().equals(idSujet)){
-                if(isEtudiant) {
-                    EquipeDto equipeDto1 = new EquipeDto();
-                    equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
-                    equipeDto.add(equipeDto1);
-                }else if(equipe.getEtudiant().size() == equipe.getTailleEquipe()){
-                    EquipeDto equipeDto1 = new EquipeDto();
-                    equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
-                    equipeDto.add(equipeDto1);
-                }
-            }
+        Page<Equipe> equipePage = new PageImpl<>(new ArrayList<>());
+        if (isEtudiant) {
+            equipePage = equipeRepository.findAllBySujet_IdSujet(idSujet, pageableRequest);
+        } else {
+            equipePage = equipeRepository.findAllByEtudiantsCountAndSujetId(sujet.getTailleEquipe(), idSujet, pageableRequest);
         }
+
+        for (Equipe equipe : equipePage) {
+            logger.info("equipe found: " + equipe.getIdEquipe() + ".");
+            EquipeDto equipeDto1 = new EquipeDto();
+            equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+            equipeDto.add(equipeDto1);
+        }
+//
         return equipeDto;
     }
 
@@ -343,22 +340,18 @@ public class EquipeServiceImpl implements EquipeService {
 
         List<EquipeDto> equipeDto = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
-
-        Page<Equipe> equipePage = equipeRepository.findAll(pageableRequest);
-        List<Equipe> equipeList = equipePage.getContent();
-        for (Equipe equipe : equipeList) {
-
-            if(equipe.getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant()) && equipe.getSujet().getLocked()){
-                EquipeDto equipeDto1 = new EquipeDto();
-                equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
-                equipeDto.add(equipeDto1);
-            }
+        Page<Equipe> equipePage = equipeRepository.findAllBySujet_Encadrant_IdEnseignantAndSujet_Locked(enseignant.getIdEnseignant(), true, pageableRequest);
+        for (Equipe equipe : equipePage) {
+            logger.info("equipe found: " + equipe.getIdEquipe() + ".");
+            EquipeDto equipeDto1 = new EquipeDto();
+            equipeDto1 = modelMapper.map(equipe, EquipeDto.class);
+            equipeDto.add(equipeDto1);
         }
         return equipeDto;
     }
 
     @Override
-    public EquipeDto addDriveLink(String username,EquipeDto equipeDto) {
+    public EquipeDto addDriveLink(String username, EquipeDto equipeDto) {
         Equipe EquipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
 
         if (EquipeEntity == null) {
@@ -372,7 +365,7 @@ public class EquipeServiceImpl implements EquipeService {
             throw new RuntimeException("etudiant not found !!!");
         }
 
-        if(!EquipeEntity.getEtudiant().contains(etudiant)){
+        if (!EquipeEntity.getEtudiant().contains(etudiant)) {
             logger.info("you cant add drive link to this equipe");
             throw new RuntimeException("you cant add drive link to this equipe");
         }
@@ -391,7 +384,7 @@ public class EquipeServiceImpl implements EquipeService {
             }
         } catch (Exception e) {
             logger.error("Error checking the link: " + e.getMessage());
-            throw new RuntimeException("Error checking the link: " + e.getMessage()+". Make sure the link is correct and that the file is public.");
+            throw new RuntimeException("Error checking the link: " + e.getMessage() + ". Make sure the link is correct and that the file is public.");
         }
 
         EquipeEntity.setDriveLink(equipeDto.getDriveLink());
@@ -417,14 +410,14 @@ public class EquipeServiceImpl implements EquipeService {
             throw new RuntimeException("etudiant not found !!!");
         }
 
-        if(!EquipeEntity.getEtudiant().contains(etudiant)){
+        if (!EquipeEntity.getEtudiant().contains(etudiant)) {
             logger.warn("you cant get emails of this equipe");
             throw new RuntimeException("you cant get emails of this equipe");
         }
 
         List<String> emails = new ArrayList<>();
         for (Etudiant etudiant1 : EquipeEntity.getEtudiant()) {
-            if(!etudiant1.getEmail().equals(username)) {
+            if (!etudiant1.getEmail().equals(username)) {
                 emails.add(etudiant1.getEmail());
             }
         }
@@ -434,7 +427,7 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
-    public Boolean shareDriveLink(String username,EquipeDto equipeDto){
+    public Boolean shareDriveLink(String username, EquipeDto equipeDto) {
         Equipe equipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
         if (equipeEntity == null) {
             logger.warn("equipe not found");
@@ -449,16 +442,16 @@ public class EquipeServiceImpl implements EquipeService {
             logger.warn("you cant share drive link of this equipe");
             throw new RuntimeException("you cant share drive link of this equipe");
         }
-        if(equipeEntity.getDriveLink() == null){
+        if (equipeEntity.getDriveLink() == null) {
             logger.warn("there is no drive link to share");
             throw new RuntimeException("there is no drive link to share");
         }
-        if(equipeEntity.getSujet().getSoutenance().getJurys().size() != 3){
+        if (equipeEntity.getSujet().getSoutenance().getJurys().size() != 3) {
             logger.warn("you cant share drive link before adding 3 jurys");
             throw new RuntimeException("you cant share drive link before adding 3 jurys");
         }
 
-        for (Jury jury: equipeEntity.getSujet().getSoutenance().getJurys()){
+        for (Jury jury : equipeEntity.getSujet().getSoutenance().getJurys()) {
             /*TODO: Send mail with drive link to this jury */
         }
         return true;

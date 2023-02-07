@@ -78,22 +78,33 @@ public class JuryServiceImpl implements JuryService {
     @Override
     public List<SoutenanceDto> getSoutenanceByJury(String mailJury, int page, int limit) {
         Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Soutenance> soutenancesPage = soutenanceRepository.findAll(pageableRequest);
-        List<Soutenance> soutenances = soutenancesPage.getContent();
         List<SoutenanceDto> soutenanceDtos = new ArrayList<>();
-        for (Soutenance soutenance : soutenances) {
-            for (Jury Jury : soutenance.getJurys()) {
-                if (Jury.getEnseignant().getEmail().equals(mailJury)) {
-                    SoutenanceDto soutenanceDto = new SoutenanceDto();
-                    soutenanceDto.setIdSoutenance(soutenance.getIdSoutenance());
-                    soutenanceDto.setDateSoutenance(soutenance.getDateSoutenance());
-                    soutenanceDto.setJurys(soutenance.getJurys());
-                    soutenanceDto.setId(soutenance.getId());
-                    soutenanceDto.setSujet(soutenance.getSujet());
-                    soutenanceDtos.add(soutenanceDto);
-                }
-            }
+        Page<Soutenance> soutenancesPage = soutenanceRepository.findAllByJuryEmail(mailJury, pageableRequest);
+        for (Soutenance soutenance : soutenancesPage.getContent()) {
+            SoutenanceDto soutenanceDto = new SoutenanceDto();
+            soutenanceDto.setIdSoutenance(soutenance.getIdSoutenance());
+            soutenanceDto.setDateSoutenance(soutenance.getDateSoutenance());
+            soutenanceDto.setJurys(soutenance.getJurys());
+            soutenanceDto.setId(soutenance.getId());
+            soutenanceDto.setSujet(soutenance.getSujet());
+            soutenanceDtos.add(soutenanceDto);
         }
+//        Page<Soutenance> soutenancesPage = soutenanceRepository.findAll(pageableRequest);
+//        List<Soutenance> soutenances = soutenancesPage.getContent();
+//        List<SoutenanceDto> soutenanceDtos = new ArrayList<>();
+//        for (Soutenance soutenance : soutenances) {
+//            for (Jury Jury : soutenance.getJurys()) {
+//                if (Jury.getEnseignant().getEmail().equals(mailJury)) {
+//                    SoutenanceDto soutenanceDto = new SoutenanceDto();
+//                    soutenanceDto.setIdSoutenance(soutenance.getIdSoutenance());
+//                    soutenanceDto.setDateSoutenance(soutenance.getDateSoutenance());
+//                    soutenanceDto.setJurys(soutenance.getJurys());
+//                    soutenanceDto.setId(soutenance.getId());
+//                    soutenanceDto.setSujet(soutenance.getSujet());
+//                    soutenanceDtos.add(soutenanceDto);
+//                }
+//            }
+//        }
         logger.info("Soutenances found for jury : " + mailJury);
         return soutenanceDtos;
     }

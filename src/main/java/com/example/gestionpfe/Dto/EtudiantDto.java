@@ -1,6 +1,7 @@
 package com.example.gestionpfe.Dto;
 
 import com.example.gestionpfe.Entities.Equipe;
+import com.example.gestionpfe.Entities.Filiere;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +22,9 @@ public class EtudiantDto implements Serializable {
     private String nom;
     private String prenom;
     private String email;
-    private String password;
     private String nomFiliere;
+    private String password;
+    private Filiere filiere;
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus;

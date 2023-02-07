@@ -278,10 +278,10 @@ public class InitialUsersSetup {
 
         logger.info("Creating Etudiants...");
         Etudiant etudiant1 = createEtudiant("hamza.garmouch@etu.uae.ac.ma", etudiantRole, filiere);
-        Etudiant etudiant2 = createEtudiant("aba1@etu.com", etudiantRole, filiere);
+        Etudiant etudiant2 = createEtudiant("abdellah.lakhssassi@hotmail.com", etudiantRole, filiere);
         Etudiant etudiant3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
         Etudiant etudiant4 = createEtudiant("aba3@etu.com", etudiantRole, filiere);
-        Etudiant etudiant5 = createEtudiant("abdellah.samourail@gmail.com", etudiantRole, filiere);
+        Etudiant etudiant5 = createEtudiant("aba4@etu.com", etudiantRole, filiere);
         logger.info("Etudiants created.");
 
 
