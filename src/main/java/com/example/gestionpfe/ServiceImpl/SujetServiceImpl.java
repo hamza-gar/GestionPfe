@@ -264,6 +264,7 @@ public class SujetServiceImpl implements SujetService {
         List<SujetDto> sujetDtoList = new ArrayList<>();
         Page<Sujet> SujetPages = sujetRepository.findAll(PageRequest.of(page, limit));
         List<Sujet> sujetList = SujetPages.getContent();
+
         Filiere filiere = filiereRepository.findByIdFiliere(idFiliere);
         if (filiere == null) {
             logger.info("filiere not found");
@@ -278,5 +279,15 @@ public class SujetServiceImpl implements SujetService {
         }
         logger.info("sujet list found successfully.");
         return sujetDtoList;
+    }
+
+    @Override
+    public long countSujets(String username) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            return sujetRepository.countAllByLocked(false);
+        }
+        return sujetRepository.count();
     }
 }
