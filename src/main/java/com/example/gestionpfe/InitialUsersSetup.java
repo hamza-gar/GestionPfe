@@ -230,6 +230,9 @@ public class InitialUsersSetup {
         sAdminAuthorities.add(DELETE_FILIERE_AUTHORITY);
         adminAuthorities.add(DELETE_FILIERE_AUTHORITY);
 
+        Authority GET_ALL_RENDEZVOUS_AUTHORITY = createAuthority("GET_ALL_RENDEZVOUS_AUTHORITY");
+        enseignantAuthorities.add(GET_ALL_RENDEZVOUS_AUTHORITY);
+
         Authority TAKE_RENDEZVOUS_AUTHORITY = createAuthority("TAKE_RENDEZVOUS_AUTHORITY");
         etudiantAuthorities.add(TAKE_RENDEZVOUS_AUTHORITY);
 
@@ -265,10 +268,10 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating Enseignants...");
-        Enseignant enseignant = createEnseignant("abdellah.lakhssassi@prof.com",enseignantRole, departement);
-        Enseignant enseignant2 = createEnseignant("abdellah.lakhssassi@hotmail.com",enseignantRole, departement);
-        Enseignant enseignant3 = createEnseignant("abdellah.samourail@gmail.com",enseignantRole, departement);
-        Enseignant enseignant4 = createEnseignant("hamza.garmouch@etu.uae.ac.ma",enseignantRole, departement);
+        Enseignant enseignant = createEnseignant("abdellah.lakhssassi@prof.com", enseignantRole, departement);
+        Enseignant enseignant2 = createEnseignant("abdellah.lakhssassi@hotmail.com", enseignantRole, departement);
+        Enseignant enseignant3 = createEnseignant("abdellah.samourail@gmail.com", enseignantRole, departement);
+        Enseignant enseignant4 = createEnseignant("hamza.garmouch@etu.uae.ac.ma", enseignantRole, departement);
         logger.info("Enseignants created.");
 
 
@@ -285,27 +288,33 @@ public class InitialUsersSetup {
         logger.info("Etudiants created.");
 
 
-
         logger.info("Creating subjects...");
-        Sujet sujet = createSujet("Sujet 1", "Sujet 1", 2, enseignant);
+        Sujet sujet = createSujet("Chess AI", "Sujet 1", 2, enseignant, true, false);
+        Sujet sujet1 = createSujet("Google Map API", "Sujet 1", 4, enseignant, true, false);
+        Sujet sujet2 = createSujet("Gestion de Stock", "Sujet 1", 3, enseignant4, false, false);
+        Sujet sujet3 = createSujet("Gestion pfe", "Sujet 1", 3, enseignant3, false, false);
+        Sujet sujet4 = createSujet("Robot cuisinier", "Sujet 1", 2, enseignant2, true, true);
+        Sujet sujet5 = createSujet("System de securite de porte", "Sujet 1", 3, enseignant2, false, false);
+        Sujet sujet6 = createSujet("Gestion de Location de voiture", "Sujet 1", 3, enseignant3, false, false);
+        Sujet sujet7 = createSujet("Jeux 2D", "Sujet 1", 2, enseignant4, false, false);
         logger.info("Subject created.");
 
         logger.info("Creating groupes...");
-        Equipe groupe = createEquipe(2,sujet,"ha");
+        Equipe groupe = createEquipe(2, sujet, "ha");
 //        Equipe groupe2 = createEquipe(2,sujet);
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
-        groupe=addEtudiantToEquipe(etudiant1, groupe);
-        groupe=addEtudiantToEquipe(etudiant2, groupe);
+        groupe = addEtudiantToEquipe(etudiant1, groupe);
+        groupe = addEtudiantToEquipe(etudiant2, groupe);
 //        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
         logger.info("Students added to group.");
 
     }
 
     @Transactional
-    public Equipe createEquipe(int tailleEquipe,Sujet sujet,String driveLink) {
+    public Equipe createEquipe(int tailleEquipe, Sujet sujet, String driveLink) {
         Equipe equipe = equipeRepository.findByIdEquipe(utils.generateUserId(32));
         if (equipe == null) {
             equipe = new Equipe();
@@ -323,7 +332,7 @@ public class InitialUsersSetup {
 
     @Transactional
     public Equipe addEtudiantToEquipe(Etudiant etudiant, Equipe equipe) {
-        if(equipe.getEtudiant() == null) {
+        if (equipe.getEtudiant() == null) {
             equipe.setEtudiant(new ArrayList<>());
         }
         equipe.getEtudiant().add(etudiant);
@@ -332,7 +341,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Sujet createSujet(String s, String s1, int tailleEquipe, Enseignant encadrant) {
+    public Sujet createSujet(String s, String s1, int tailleEquipe, Enseignant encadrant, Boolean locked, Boolean done) {
         Sujet sujet = sujetRepository.findByNomSujet(s);
         if (sujet == null) {
             sujet = new Sujet();
@@ -341,8 +350,8 @@ public class InitialUsersSetup {
             sujet.setDescriptionSujet(s1);
             sujet.setTailleEquipe(tailleEquipe);
             sujet.setEncadrant(encadrant);
-            sujet.setLocked(true);
-            sujet.setDone(true);
+            sujet.setLocked(locked);
+            sujet.setDone(done);
             sujet = sujetRepository.save(sujet);
         }
         return sujet;
@@ -431,7 +440,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Enseignant createEnseignant(String mail,Role enseignantRole, Departement departement) {
+    public Enseignant createEnseignant(String mail, Role enseignantRole, Departement departement) {
         Enseignant enseignant = enseignantRepository.findByEmail("abdellah.samourail@prof.com");
         if (enseignant == null) {
             enseignant = new Enseignant();

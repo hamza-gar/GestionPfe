@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -232,25 +233,26 @@ public class SujetServiceImpl implements SujetService {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
 
-        Page<Sujet> SujetPages = sujetRepository.findAll(pageableRequest);
-        List<Sujet> sujetList = SujetPages.getContent();
+        Page<Sujet> sujetPages;
         if (enseignant == null) {
             logger.warn("enseignant not found");
-            for (Sujet sujetEntity : sujetList) {
-                if (!sujetEntity.getLocked()){
-                    SujetDto sujetDto = new SujetDto();
-                    sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
-                    sujetDtoList.add(sujetDto);
-                }
+            sujetPages = sujetRepository.findAllByLocked(false,pageableRequest);
+            for (Sujet sujetEntity : sujetPages) {
+                SujetDto sujetDto = new SujetDto();
+                sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+                sujetDtoList.add(sujetDto);
             }
         }else{
             logger.info("enseignant found successfully");
-            for (Sujet sujetEntity : sujetList) {
+            sujetPages = sujetRepository.findAll(pageableRequest);
+            for (Sujet sujetEntity : sujetPages) {
                 SujetDto sujetDto = new SujetDto();
                 sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
                 sujetDtoList.add(sujetDto);
             }
         }
+
+
 
 
         logger.info("sujet list found successfully");

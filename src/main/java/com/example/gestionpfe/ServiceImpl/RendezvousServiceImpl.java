@@ -251,17 +251,22 @@ public class RendezvousServiceImpl implements RendezvousService {
 
         List<RendezvousDto> rendezvousDtos = new ArrayList<>();
         Pageable pageableRequest = PageRequest.of(page, limit);
-        Page<Rendezvous> rendezvousPage = rendezvousRepository.findAll(pageableRequest);
-
-        List<Rendezvous> rendezvous = rendezvousPage.getContent();
-
-        for (Rendezvous rendezvousEntity : rendezvous) {
-            RendezvousDto rendezvousDto = new RendezvousDto();
-            if (rendezvousEntity.getEncadrant().getEmail().equals(username)) {
-                rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
-                rendezvousDtos.add(rendezvousDto);
-            }
+        Page<Rendezvous> rendezvousPage = rendezvousRepository.findAllByEncadrant_Email(username, pageableRequest);
+        for (Rendezvous rendezvousEntity : rendezvousPage.getContent()) {
+            RendezvousDto rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
+            rendezvousDtos.add(rendezvousDto);
         }
+//        Page<Rendezvous> rendezvousPage = rendezvousRepository.findAll(pageableRequest);
+//
+//        List<Rendezvous> rendezvous = rendezvousPage.getContent();
+//
+//        for (Rendezvous rendezvousEntity : rendezvous) {
+//            RendezvousDto rendezvousDto = new RendezvousDto();
+//            if (rendezvousEntity.getEncadrant().getEmail().equals(username)) {
+//                rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
+//                rendezvousDtos.add(rendezvousDto);
+//            }
+//        }
         logger.info("all Rendezvous found successfully");
         return rendezvousDtos;
     }
