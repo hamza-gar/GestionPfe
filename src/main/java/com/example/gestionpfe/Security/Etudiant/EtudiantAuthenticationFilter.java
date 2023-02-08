@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class EtudiantAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
 
     public EtudiantAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -37,7 +37,7 @@ public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticat
             EtudiantLoginRequest creds = new ObjectMapper().readValue(req.getInputStream(), EtudiantLoginRequest.class);
             return authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -46,20 +46,19 @@ public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticat
 
     @Override
     protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
-                                            FilterChain chain, Authentication auth)throws IOException , ServletException {
-        String userName = ((EtudiantPrincipal)auth.getPrincipal()).getUsername();
+                                            FilterChain chain, Authentication auth) throws IOException, ServletException {
+        String userName = ((EtudiantPrincipal) auth.getPrincipal()).getUsername();
 
         EtudiantService etudiantService = (EtudiantService) SpringApplicationContext.getBean("etudiantServiceImpl");
         EtudiantDto etudiantDto = etudiantService.getEtudiant(userName);
 
-        String token = Jwts.builder().claim("id",etudiantDto.getIdEtudiant()).setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
+        String token = Jwts.builder().claim("id", etudiantDto.getIdEtudiant()).setSubject(userName).setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME)).
                 signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET).compact();
 
 
-
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
-        res.addHeader("etudiant_id",etudiantDto.getIdEtudiant());
+        res.addHeader("etudiant_id", etudiantDto.getIdEtudiant());
 
-        res.getWriter().write("{\"token\":\""+token+"\",\"id\":\""+etudiantDto.getIdEtudiant()+"\",\"user\":\"etudiant\"}");
+        res.getWriter().write("{\"token\":\"" + token + "\",\"id\":\"" + etudiantDto.getIdEtudiant() + "\",\"mail\":\"" + etudiantDto.getEmail() + "\",\"user\":\"etudiant\"}");
     }
 }
