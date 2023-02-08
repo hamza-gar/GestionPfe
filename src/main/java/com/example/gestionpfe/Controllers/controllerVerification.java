@@ -11,7 +11,7 @@ public class controllerVerification {
     @GetMapping("/example")
     public void redirectToAngularPage(HttpServletResponse response) {
         response.setStatus(302);
-        response.setHeader("Location", "http://localhost:4200/verifications");
+        response.setHeader("Location", "http://localhost:4200/verification");
         }
 }
 

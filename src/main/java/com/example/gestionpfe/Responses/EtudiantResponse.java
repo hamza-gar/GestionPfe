@@ -18,4 +18,5 @@ public class EtudiantResponse {
     private String prenom;
     private String email;
     private Boolean emailVerificationStatus;
+    private String nomFiliere;
 }

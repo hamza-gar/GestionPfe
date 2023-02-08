@@ -47,6 +47,7 @@ public class EtudiantController {
         EtudiantDto etudiantdto = etudiantService.getEtudiantByIdEtudiant(id);
         EtudiantResponse etudiantResponse = new EtudiantResponse();
         etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
+        etudiantResponse.setNomFiliere(etudiantdto.getFiliere().getNomFiliere());
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
 

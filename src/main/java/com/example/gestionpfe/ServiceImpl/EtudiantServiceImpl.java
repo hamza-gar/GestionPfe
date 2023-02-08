@@ -165,43 +165,30 @@ public class EtudiantServiceImpl implements EtudiantService {
 
         if (etudiantEntity == null) throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
-        String Nom = etudianRepository.findByIdEtudiant(id).getNom();
-        String Prenom = etudianRepository.findByIdEtudiant(id).getPrenom();
-        String Cin = etudianRepository.findByIdEtudiant(id).getCin();
-        String Cne = etudianRepository.findByIdEtudiant(id).getCne();
-        Long Apogee = etudianRepository.findByIdEtudiant(id).getApogee();
-        String Email = etudianRepository.findByIdEtudiant(id).getEmail();
 
-        if (etudiantdto.getNom() == null) {
-            etudiantEntity.setNom(Nom);
-        } else {
+
+        if (etudiantdto.getNom() != null) {
             etudiantEntity.setNom(etudiantdto.getNom());
         }
-        if (etudiantdto.getPrenom() == null) {
-            etudiantEntity.setPrenom(Prenom);
-        } else {
+        if (etudiantdto.getPrenom() != null) {
             etudiantEntity.setPrenom(etudiantdto.getPrenom());
         }
-        if (etudiantdto.getCin() == null) {
-            etudiantEntity.setCin(Cin);
-        } else {
+        if (etudiantdto.getCin() != null) {
             etudiantEntity.setCin(etudiantdto.getCin());
         }
-        if (etudiantdto.getCne() == null) {
-            etudiantEntity.setCne(Cne);
-        } else {
+        if (etudiantdto.getCne() != null) {
             etudiantEntity.setCne(etudiantdto.getCne());
         }
-        if (etudiantdto.getApogee() == null) {
-            etudiantEntity.setApogee(Apogee);
-        } else {
+        if (etudiantdto.getApogee() != null) {
             etudiantEntity.setApogee(etudiantdto.getApogee());
         }
-        if (etudiantdto.getEmail() == null) {
-            etudiantEntity.setEmail(Email);
-        } else {
+        if (etudiantdto.getEmail() != null) {
             etudiantEntity.setEmail(etudiantdto.getEmail());
         }
+        if (etudiantdto.getPassword() != null) {
+            etudiantEntity.setEncryptedPassword(etudiantdto.getPassword());
+        }
+
 
         Etudiant etudiantUpdated = etudianRepository.save(etudiantEntity);
 

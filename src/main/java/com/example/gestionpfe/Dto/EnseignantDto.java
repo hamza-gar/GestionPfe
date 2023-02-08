@@ -1,5 +1,6 @@
 package com.example.gestionpfe.Dto;
 
+import com.example.gestionpfe.Entities.Departement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,5 @@ public class EnseignantDto {
     private String encryptedPassword;
     private String emailVerificationToken;
     private Boolean emailVerificationStatus ;
+    private Departement departement;
 }

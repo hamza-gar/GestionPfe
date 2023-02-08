@@ -38,6 +38,7 @@ public class EnseignantController {
         EnseignantDto enseignantDto = enseignantService.getEnseignantByIdEnseignant(id);
         EnseignantResponse enseignantResponse = new EnseignantResponse();
         enseignantResponse = modelMapper.map(enseignantDto, EnseignantResponse.class);
+        enseignantResponse.setNomDepartement(enseignantDto.getDepartement().getNomDepartement());
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.OK);
     }
 
