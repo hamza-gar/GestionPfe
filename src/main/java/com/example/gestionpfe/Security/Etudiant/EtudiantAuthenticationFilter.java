@@ -60,6 +60,6 @@ public class    EtudiantAuthenticationFilter extends UsernamePasswordAuthenticat
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("etudiant_id",etudiantDto.getIdEtudiant());
 
-        res.getWriter().write("{\"token\":\""+token+"\",\"id\":\""+etudiantDto.getIdEtudiant()+"\"}");
+        res.getWriter().write("{\"token\":\""+token+"\",\"id\":\""+etudiantDto.getIdEtudiant()+"\",\"user\":\"etudiant\"}");
     }
 }

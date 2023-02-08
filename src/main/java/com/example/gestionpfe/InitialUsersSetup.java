@@ -269,9 +269,9 @@ public class InitialUsersSetup {
 
         logger.info("Creating Enseignants...");
         Enseignant enseignant = createEnseignant("abdellah.lakhssassi@prof.com", enseignantRole, departement);
-        Enseignant enseignant2 = createEnseignant("abdellah.lakhssassi@hotmail.com", enseignantRole, departement);
-        Enseignant enseignant3 = createEnseignant("abdellah.samourail@gmail.com", enseignantRole, departement);
-        Enseignant enseignant4 = createEnseignant("hamza.garmouch@etu.uae.ac.ma", enseignantRole, departement);
+        Enseignant enseignant2 = createEnseignant("ens@hotmail.com", enseignantRole, departement);
+        Enseignant enseignant3 = createEnseignant("ens2@gmail.com", enseignantRole, departement);
+        Enseignant enseignant4 = createEnseignant("ens3@etu.uae.ac.ma", enseignantRole, departement);
         logger.info("Enseignants created.");
 
 
