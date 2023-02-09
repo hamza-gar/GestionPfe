@@ -74,9 +74,11 @@ public class EquipeServiceImpl implements EquipeService {
             logger.info("etudiant not found");
             throw new RuntimeException("etudiant not found !!!");
         }
-        if (etudiant.getEquipe().get(0).getSujet().getLocked()) {
-            logger.info("This student is already working on a locked sujet.");
-            throw new RuntimeException("This student already working on a locked sujet.");
+        if(etudiant.getEquipe().size()!=0) {
+            if (etudiant.getEquipe().get(0).getSujet().getLocked()) {
+                logger.info("This student is already working on a locked sujet.");
+                throw new RuntimeException("This student already working on a locked sujet.");
+            }
         }
         equipeDto.getEtudiant().add(etudiant);
         List<Etudiant> etudiants = new ArrayList<>();
