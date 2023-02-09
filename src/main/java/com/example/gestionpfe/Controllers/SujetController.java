@@ -52,8 +52,8 @@ public class SujetController {
             EnseignantDto enseignant = enseignantService.getEnseignantByIdEnseignant(sujetDto.getEncadrant().getIdEnseignant());
             SujetResponse sujet = new SujetResponse();
             sujet = modelMapper.map(sujetDto, SujetResponse.class);
-            sujet.setNomEnseignant(enseignant.getNom().substring(0,1).toUpperCase()+enseignant.getNom().substring(1)+
-                    " "+enseignant.getPrenom().substring(0,1).toUpperCase()+enseignant.getPrenom().substring(1));
+            sujet.setNomEnseignant(enseignant.getNom().substring(0, 1).toUpperCase() + enseignant.getNom().substring(1) +
+                    " " + enseignant.getPrenom().substring(0, 1).toUpperCase() + enseignant.getPrenom().substring(1));
             sujet.setEmailEnseignant(enseignant.getEmail());
             sujetResponse.add(sujet);
         }
@@ -83,6 +83,22 @@ public class SujetController {
 
         Long count = sujetService.countSujets(username);
         return new ResponseEntity<Long>(count, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/posted")
+    public ResponseEntity<List<SujetResponse>> getMySujets(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<SujetResponse> sujetResponse = new ArrayList<>();
+        List<SujetDto> sujets = sujetService.getAllMySujets(username, page, limit);
+
+        for (SujetDto sujetDto : sujets) {
+            SujetResponse sujet = new SujetResponse();
+            sujet = modelMapper.map(sujetDto, SujetResponse.class);
+            sujetResponse.add(sujet);
+        }
+        return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
 
 

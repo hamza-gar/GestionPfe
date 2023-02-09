@@ -17,7 +17,10 @@ public interface SujetRepository extends PagingAndSortingRepository<Sujet, Long>
 
     Page<Sujet> findAllByLocked(boolean locked, Pageable pageable);
 
+    Page<Sujet> findAllByEncadrant_IdEnseignant(String idEnseignant, Pageable pageable);
+
     long countAllByLocked(boolean locked);
+
 
 
 }

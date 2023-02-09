@@ -171,7 +171,7 @@ public class SujetServiceImpl implements SujetService {
             } else {
                 if (equipe.getTailleEquipe() == equipe.getEtudiant().size()) {
                     equipeList.add(equipe);
-                }else{
+                } else {
                     logger.info("this equipe is not full");
                     throw new RuntimeException("this equipe is not full");
                 }
@@ -197,7 +197,7 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public SujetDto validateSujet(String username, SujetDto sujetDto,Boolean done) {
+    public SujetDto validateSujet(String username, SujetDto sujetDto, Boolean done) {
         Sujet sujetEntity = sujetRepository.findByIdSujet(sujetDto.getIdSujet());
         if (sujetEntity == null) {
             logger.warn("sujet not found");
@@ -226,7 +226,7 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public List<SujetDto> getAllSujets(String username,int page, int limit) {
+    public List<SujetDto> getAllSujets(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
 
 
@@ -237,13 +237,13 @@ public class SujetServiceImpl implements SujetService {
         Page<Sujet> sujetPages;
         if (enseignant == null) {
             logger.warn("enseignant not found");
-            sujetPages = sujetRepository.findAllByLocked(false,pageableRequest);
+            sujetPages = sujetRepository.findAllByLocked(false, pageableRequest);
             for (Sujet sujetEntity : sujetPages) {
                 SujetDto sujetDto = new SujetDto();
                 sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
                 sujetDtoList.add(sujetDto);
             }
-        }else{
+        } else {
             logger.info("enseignant found successfully");
             sujetPages = sujetRepository.findAll(pageableRequest);
             for (Sujet sujetEntity : sujetPages) {
@@ -252,8 +252,6 @@ public class SujetServiceImpl implements SujetService {
                 sujetDtoList.add(sujetDto);
             }
         }
-
-
 
 
         logger.info("sujet list found successfully");
@@ -291,4 +289,23 @@ public class SujetServiceImpl implements SujetService {
         }
         return sujetRepository.count();
     }
+
+    @Override
+    public List<SujetDto> getAllMySujets(String username, int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            throw new RuntimeException(username);
+        }
+        List<SujetDto> sujetDtoList = new ArrayList<>();
+        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignant(username, PageRequest.of(page, limit));
+        for (Sujet sujetEntity : SujetPages) {
+            SujetDto sujetDto = new SujetDto();
+            sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+            sujetDtoList.add(sujetDto);
+        }
+        logger.info("sujet list found successfully.");
+        return sujetDtoList;
+    }
+
 }
