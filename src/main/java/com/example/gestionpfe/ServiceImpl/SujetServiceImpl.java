@@ -298,7 +298,7 @@ public class SujetServiceImpl implements SujetService {
             throw new RuntimeException(username);
         }
         List<SujetDto> sujetDtoList = new ArrayList<>();
-        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignant(username, PageRequest.of(page, limit));
+        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignant(enseignant.getIdEnseignant(), PageRequest.of(page, limit));
         for (Sujet sujetEntity : SujetPages) {
             SujetDto sujetDto = new SujetDto();
             sujetDto = modelMapper.map(sujetEntity, SujetDto.class);

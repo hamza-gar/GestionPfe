@@ -84,11 +84,13 @@ public class EquipeServiceImpl implements EquipeService {
 
         equipeDto.setEtudiant(etudiants);
 
+
         SujetDto sujet = sujetService.getSujetById(sujetId);
         if (sujet == null) {
             logger.info("sujet not found");
             throw new RuntimeException("sujet not found !!!");
         }
+
         if (sujet.getLocked()) {
             logger.info("This subject is locked.");
             throw new RuntimeException("This subject is locked.");
@@ -97,6 +99,11 @@ public class EquipeServiceImpl implements EquipeService {
         if (etudiantService.etudiantAlreadyInSujet(equipeDto.getEtudiant().get(0).getIdEtudiant(), sujetId)) {
             logger.info("This Etudiant is already existing in a team for this subject.");
             throw new RuntimeException("This Etudiant is already existing in a team for this subject.");
+        }
+
+        if(!sujet.getEncadrant().getDepartement().getFilieres().contains(etudiant.getFiliere())){
+            logger.info("This Etudiant is not in the same filiere as the subject.");
+            throw new RuntimeException("This Etudiant is not in the same filiere as the subject.");
         }
 
         if (etudiantService.etudiantIn3Sujets(equipeDto.getEtudiant().get(0).getIdEtudiant(), sujet.getEncadrant().getIdEnseignant())) {
@@ -234,6 +241,21 @@ public class EquipeServiceImpl implements EquipeService {
             throw new RuntimeException("This Etudiant is already existing in 3 different 'Sujets' of the same 'Encadrant'.");
         }
         logger.info("l'etudiant n'est pas deja dans 3 equipes pour ce meme encadrant.");
+
+        if(etudiant.getEquipe().get(0).getSujet().getLocked()){
+            logger.info("L'etudiant travaille deja dans une equipe.");
+            throw new RuntimeException("L'etudiant travaille deja dans une equipe.");
+        }
+
+        if(equipeEntity.getSujet().getLocked()){
+            logger.info("L'equipe est deja complete.");
+            throw new RuntimeException("L'equipe est deja complete.");
+        }
+
+        if (!equipeEntity.getSujet().getEncadrant().getDepartement().getFilieres().contains(etudiant.getFiliere())) {
+            logger.info("L'etudiant n'est pas de la meme filiere que l'encadrant.");
+            throw new RuntimeException("L'etudiant n'est pas de la meme filiere que l'encadrant.");
+        }
 
         if (equipeEntity.getIsPrivate()) {
             if (equipeDto.getCryptedPassword() == null) {
