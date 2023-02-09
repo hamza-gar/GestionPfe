@@ -127,7 +127,6 @@ public class EtudiantServiceImpl implements EtudiantService {
         etudiantDto.setEmailVerificationStatus(etudiantEntity.getEmailVerificationStatus());
         etudiantDto.setEmailVerificationToken(etudiantEntity.getEmailVerificationToken());
 
-
         logger.info("Etudiant retrieved:" + etudiantDto.getEmail());
         return etudiantDto;
     }

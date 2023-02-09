@@ -23,6 +23,7 @@ public interface EquipeRepository extends PagingAndSortingRepository<Equipe, Lon
 
     Page<Equipe> findAllBySujet_Encadrant_IdEnseignantAndSujet_Locked(String idEnseignant, Boolean locked, Pageable pageable);
 
+
     @Query("SELECT e FROM equipes e JOIN e.etudiant equipe_etudiant WHERE ((size(e.etudiant) = :etudiantsCount) AND (e.sujet.idSujet = :idSujet)) GROUP BY e")
     Page<Equipe> findAllByEtudiantsCountAndSujetId(@Param("etudiantsCount") int etudiantsCount, @Param("idSujet") String idSujet, Pageable pageable);
 }

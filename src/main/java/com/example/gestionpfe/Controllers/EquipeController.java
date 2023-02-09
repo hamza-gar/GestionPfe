@@ -191,4 +191,13 @@ public class EquipeController {
         return new ResponseEntity<Boolean>(equipeService.shareDriveLink(username, equipeDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('GET_BY_IDEQUIPE_AUTHORITY')")
+    @GetMapping(path = "/get-members")
+    public ResponseEntity<List<String[]>> getMembers(@RequestParam(value = "idEquipe") String idEquipe) {
+
+        List<String[]> members = equipeService.getEquipeMembers(idEquipe);
+
+        return new ResponseEntity<List<String[]>>(members, HttpStatus.OK);
+    }
+
 }

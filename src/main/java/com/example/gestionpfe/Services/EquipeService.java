@@ -19,4 +19,6 @@ public interface EquipeService {
     List<EquipeDto> getAllEquipes(String username,int page, int limit);
     List<EquipeDto> getGroupesOfSujets(String username,String idSujet,int page, int limit);
     List<EquipeDto> getLockedEquipes(String username,int page, int limit);
+    int countMembers(String idEquipe);
+    List<String[]> getEquipeMembers(String idEquipe);
 }

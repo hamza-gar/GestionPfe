@@ -351,6 +351,34 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public int countMembers(String idEquipe) {
+        Equipe equipe = equipeRepository.findByIdEquipe(idEquipe);
+        if (equipe == null) {
+            logger.info("equipe not found");
+            throw new RuntimeException("equipe not found !!!");
+        }
+        return equipe.getEtudiant().size();
+    }
+
+    @Override
+    public List<String[]> getEquipeMembers(String idEquipe) {
+        logger.info("getEquipeMembers");
+        Equipe equipe = equipeRepository.findByIdEquipe(idEquipe);
+        if (equipe == null) {
+            logger.info("equipe not found");
+            throw new RuntimeException("equipe not found !!!");
+        }
+        List<String[]> etudiants = new ArrayList<>();
+        for (Etudiant etudiant : equipe.getEtudiant()) {
+            String[] etudiant1 = new String[2];
+            etudiant1[0] = etudiant.getNom().substring(0, 1).toUpperCase() + etudiant.getNom().substring(1) + " " + etudiant.getPrenom().substring(0, 1).toUpperCase() + etudiant.getPrenom().substring(1);
+            etudiant1[1] = etudiant.getEmail();
+            etudiants.add(etudiant1);
+        }
+        return etudiants;
+    }
+
+    @Override
     public EquipeDto addDriveLink(String username, EquipeDto equipeDto) {
         Equipe EquipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
 
