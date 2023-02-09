@@ -68,6 +68,7 @@ public class SujetServiceImpl implements SujetService {
         sujetEntity.setEncadrant(enseignant);
         sujetEntity.setIdSujet(util.generateUserId(32));
         sujetEntity.setLocked(false);
+        sujetEntity.setDone(false);
 
         Sujet newSujet = sujetRepository.save(sujetEntity);
 
