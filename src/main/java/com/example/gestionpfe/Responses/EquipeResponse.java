@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EquipeResponse {
-    private String EquipeId;
+    private String idEquipe;
     private int tailleEquipe;
     private Boolean isPrivate;
     private String cryptedPassword;

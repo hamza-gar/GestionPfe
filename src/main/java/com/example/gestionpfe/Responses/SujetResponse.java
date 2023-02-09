@@ -1,5 +1,6 @@
 package com.example.gestionpfe.Responses;
 
+import com.example.gestionpfe.Entities.Enseignant;
 import lombok.*;
 
 @Getter
@@ -11,4 +12,6 @@ public class SujetResponse {
     private String nomSujet;
     private String descriptionSujet;
     private int tailleEquipe;
+    private String nomEnseignant;
+    private String emailEnseignant;
 }

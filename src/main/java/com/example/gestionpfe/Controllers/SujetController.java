@@ -1,7 +1,9 @@
 package com.example.gestionpfe.Controllers;
 
 
+import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
+import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Requests.SujetRequest;
 import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
@@ -47,9 +49,12 @@ public class SujetController {
         List<SujetDto> sujets = sujetService.getAllSujets(username, page, limit);
 
         for (SujetDto sujetDto : sujets) {
+            EnseignantDto enseignant = enseignantService.getEnseignantByIdEnseignant(sujetDto.getEncadrant().getIdEnseignant());
             SujetResponse sujet = new SujetResponse();
             sujet = modelMapper.map(sujetDto, SujetResponse.class);
-
+            sujet.setNomEnseignant(enseignant.getNom().substring(0,1).toUpperCase()+enseignant.getNom().substring(1)+
+                    " "+enseignant.getPrenom().substring(0,1).toUpperCase()+enseignant.getPrenom().substring(1));
+            sujet.setEmailEnseignant(enseignant.getEmail());
             sujetResponse.add(sujet);
         }
         System.out.println(sujetResponse);
@@ -93,6 +98,7 @@ public class SujetController {
         SujetDto createdSujet = sujetService.addSujet(sujetDto, username);
         SujetResponse sujetResponse = new SujetResponse();
         sujetResponse = modelMapper.map(createdSujet, SujetResponse.class);
+
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.CREATED);
     }
 
