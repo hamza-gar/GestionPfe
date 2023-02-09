@@ -63,6 +63,9 @@ public class EmailSender {
     String DemandeRendezVous2 = htmlMessageSender.DemandeRendezVous2;
     String ResetPassword1 = htmlMessageSender.ResetPassword1;
     String ResetPassword2 = htmlMessageSender.ResetPassword2;
+    String ShareLienDrive1 = htmlMessageSender.ShareLienDrive1;
+    String ShareLienDrive2 = htmlMessageSender.ShareLienDrive2;
+    String ShareLienDrive3 = htmlMessageSender.ShareLienDrive3;
 
     public void sendVerificationMail(String toEmail, String token, String type) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -295,6 +298,24 @@ public class EmailSender {
             helper.setTo(toEmail);
             helper.setSubject("Gestion PFE : Demande Rendez-Vous");
             helper.setText(Header + ResetPassword1 + key + ResetPassword2 + htmlFooter, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("Mail send ....");
+    }
+
+    public void ShareLienDriveJury(String toEmail, Date date, String lien) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            String pattern = "yyyy-MM-dd";
+            String timePattern = "HH:mm";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Gestion PFE : Demande Rendez-Vous");
+            helper.setText(Header + ShareLienDrive1 + lien + ShareLienDrive2 + simpleDateFormat.format(date) + " a " + simpleTimeFormat.format(date) + ShareLienDrive3 + htmlFooter, true);
             mailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

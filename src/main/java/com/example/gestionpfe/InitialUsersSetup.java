@@ -2,6 +2,7 @@ package com.example.gestionpfe;
 
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.Repositories.*;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -56,6 +58,9 @@ public class InitialUsersSetup {
 
     @Autowired
     DepartementRepository departementRepository;
+
+    @Autowired
+    EmailSender emailSender;
 
     @EventListener
     @Transactional
@@ -311,6 +316,8 @@ public class InitialUsersSetup {
 //        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
         logger.info("Students added to group.");
 
+        logger.info("Testing mails");
+//        emailSender.ShareLienDriveJury("abdellah.samourail@gmail.com",new Date(), "youtube.com");
     }
 
     @Transactional

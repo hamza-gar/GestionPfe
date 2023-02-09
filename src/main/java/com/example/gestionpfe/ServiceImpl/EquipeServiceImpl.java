@@ -11,6 +11,7 @@ import com.example.gestionpfe.Repositories.SujetRepository;
 import com.example.gestionpfe.Services.EquipeService;
 import com.example.gestionpfe.Services.EtudiantService;
 import com.example.gestionpfe.Services.SujetService;
+import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -61,23 +62,27 @@ public class EquipeServiceImpl implements EquipeService {
     @Autowired
     EnseignantRepository enseignantRepository;
 
+    @Autowired
+    EmailSender emailSender;
+
 
     @Override
     public EquipeDto addEquipe(String username, String sujetId, EquipeDto equipeDto) {
-
-        /* TODO: check if the student is already affiliated to an already existing team */
 
         Etudiant etudiant = etudiantRepository.findByEmail(username);
         if (etudiant == null) {
             logger.info("etudiant not found");
             throw new RuntimeException("etudiant not found !!!");
         }
+        if (etudiant.getEquipe().get(0).getSujet().getLocked()) {
+            logger.info("This student is already working on a locked sujet.");
+            throw new RuntimeException("This student already working on a locked sujet.");
+        }
         equipeDto.getEtudiant().add(etudiant);
         List<Etudiant> etudiants = new ArrayList<>();
         etudiants.add(etudiant);
 
         equipeDto.setEtudiant(etudiants);
-
 
         SujetDto sujet = sujetService.getSujetById(sujetId);
         if (sujet == null) {
@@ -480,7 +485,7 @@ public class EquipeServiceImpl implements EquipeService {
         }
 
         for (Jury jury : equipeEntity.getSujet().getSoutenance().getJurys()) {
-            /*TODO: Send mail with drive link to this jury */
+            emailSender.ShareLienDriveJury(jury.getEnseignant().getEmail(), jury.getSoutenance().getDateSoutenance(), equipeEntity.getDriveLink());
         }
         return true;
     }

@@ -440,4 +440,31 @@ public class HtmlMessageSender {
             "                  <p>Cordialement</p>\n" +
             "                </td>\n" +
             "              </tr>";
+
+    /***********************************************************************************************************************************************************************************************************************************************************************/
+
+    static String ShareLienDrive1 ="<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Réinitialisation de mot de\n" +
+            "                    passe</h1>\n" +
+            "\n" +
+            "\n" +
+            "                  <p\n" +
+            "                    style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher(e)s Jury,\n" +
+            "                  </p>\n" +
+            "                  <p\n" +
+            "                    style=\"text-align:justify-all;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Veuillez trouver ci-joint le <a href=\"";
+
+    static String ShareLienDrive2 ="\">Lien google drive</a> contenant les fichiers du projet de soutenance prevu pour le : ";
+
+    static String ShareLienDrive3 =".\n" +
+            "                  </p>\n" +
+            "                  <p>Cordialement</p>\n" +
+            "                </td>\n" +
+            "              </tr>";
 }
