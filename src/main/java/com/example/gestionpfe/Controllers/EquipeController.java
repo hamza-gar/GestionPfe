@@ -200,4 +200,14 @@ public class EquipeController {
         return new ResponseEntity<List<String[]>>(members, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/self")
+    public ResponseEntity<EquipeResponse> getSelfEquipe() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        EquipeDto equipeDto = equipeService.getMyEquipe(username);
+
+        return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
+    }
+
 }

@@ -165,6 +165,27 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public EquipeDto getMyEquipe(String username) {
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiant not found");
+            throw new RuntimeException("etudiant not found !!!");
+        }
+        if(etudiant.getEquipe().size()==0) {
+            logger.info("cet etudiant n'est inscrit dans aucune equipe");
+            throw new RuntimeException("cet etudiant n'est inscrit dans aucune equipe");
+        }
+        if (etudiant.getEquipe().get(0).getSujet().getLocked() != true) {
+            logger.info("cet etudiant n'est pas dans une equipe travaillant sur un sujet");
+            throw new RuntimeException("cet etudiant n'est pas dans une equipe travaillant sur un sujet");
+        }
+        EquipeDto equipeDto = new EquipeDto();
+        equipeDto = modelMapper.map(etudiant.getEquipe().get(0), EquipeDto.class);
+        logger.info("equipe found successfully");
+        return equipeDto;
+    }
+
+    @Override
     public EquipeDto updateEquipe(EquipeDto equipeDto) {
         Equipe EquipeEntity = equipeRepository.findByIdEquipe(equipeDto.getIdEquipe());
 
