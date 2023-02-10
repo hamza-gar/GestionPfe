@@ -432,7 +432,7 @@ public class EquipeServiceImpl implements EquipeService {
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
             ResponseEntity<String> response = restTemplate.exchange(equipeDto.getDriveLink(), HttpMethod.HEAD, entity, String.class);
-            if (response.getStatusCode().is2xxSuccessful() && response.getHeaders().getLocation().toString().contains("drive.google.com/file")) {
+            if (response.getStatusCode().is2xxSuccessful() && equipeDto.getDriveLink().contains("drive.google.com/")) {
                 logger.info("Link is working");
 
             } else {

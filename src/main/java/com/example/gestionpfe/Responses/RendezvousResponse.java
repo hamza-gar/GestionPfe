@@ -17,4 +17,5 @@ public class RendezvousResponse {
     private Boolean fixed;
     private String idEquipe;
     private String nomSujet;
+    private int vote;
 }
