@@ -159,9 +159,9 @@ public class RendezvousServiceImpl implements RendezvousService {
         Rendezvous rendezvous = rendezvousRepository.save(rendezvousEntity);
         for (Etudiant et : rendezvous.getEquipe().getEtudiant()) {
             String etudiantMail = et.getEmail();
-//            mailSender.RendezVousFixed(etudiantMail,username,rendezvous.getDateRendezvous());
+            mailSender.RendezVousFixed(etudiantMail,username,rendezvous.getDateRendezvous());
         }
-        mailSender.RendezVousFixed("abdellah.samourail@gmail.com", username, rendezvous.getDateRendezvous());
+        //mailSender.RendezVousFixed("abdellah.samourail@gmail.com", username, rendezvous.getDateRendezvous());
 
         logger.info("Rendezvous updated successfully");
 
