@@ -15,4 +15,6 @@ public class RendezvousResponse {
     private String idRendezvous;
     private Date dateRendezvous;
     private Boolean fixed;
+    private String idEquipe;
+    private String nomSujet;
 }

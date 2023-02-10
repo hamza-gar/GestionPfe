@@ -17,4 +17,6 @@ public class RendezvousDto {
     private Date dateRendezvous;
     private int vote;
     private Boolean fixed;
+    private String idEquipe;
+    private String nomSujet;
 }

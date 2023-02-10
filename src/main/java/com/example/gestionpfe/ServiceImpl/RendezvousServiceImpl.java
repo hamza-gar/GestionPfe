@@ -254,6 +254,8 @@ public class RendezvousServiceImpl implements RendezvousService {
         Page<Rendezvous> rendezvousPage = rendezvousRepository.findAllByEncadrant_Email(username, pageableRequest);
         for (Rendezvous rendezvousEntity : rendezvousPage.getContent()) {
             RendezvousDto rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
+            rendezvousDto.setIdEquipe(rendezvousEntity.getEquipe().getIdEquipe());
+            rendezvousDto.setNomSujet(rendezvousEntity.getEquipe().getSujet().getNomSujet());
             rendezvousDtos.add(rendezvousDto);
         }
 
