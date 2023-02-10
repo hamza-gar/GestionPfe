@@ -294,9 +294,9 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating subjects...");
-        Sujet sujet = createSujet("Chess AI", "Sujet 1", 2, enseignant, true, false);
-        Sujet sujet1 = createSujet("Google Map API", "Sujet 1", 4, enseignant, true, false);
-        Sujet sujet2 = createSujet("Gestion de Stock", "Sujet 1", 3, enseignant4, false, false);
+        Sujet sujet = createSujet("Chess AI", "Sujet 1", 2, enseignant2, true, false);
+        Sujet sujet1 = createSujet("Google Map API", "Sujet 1", 4, enseignant2, true, false);
+        Sujet sujet2 = createSujet("Gestion de Stock", "Sujet 1", 3, enseignant2, false, false);
         Sujet sujet3 = createSujet("Gestion pfe", "Sujet 1", 3, enseignant3, false, false);
         Sujet sujet4 = createSujet("Robot cuisinier", "Sujet 1", 2, enseignant2, true, true);
         Sujet sujet5 = createSujet("System de securite de porte", "Sujet 1", 3, enseignant2, false, false);
@@ -306,14 +306,15 @@ public class InitialUsersSetup {
 
         logger.info("Creating groupes...");
         Equipe groupe = createEquipe(2, sujet, "ha");
-//        Equipe groupe2 = createEquipe(2,sujet);
+        Equipe groupe2 = createEquipe(2,sujet1,"ha");
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
         groupe = addEtudiantToEquipe(etudiant1, groupe);
         groupe = addEtudiantToEquipe(etudiant2, groupe);
-//        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
+        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
+        groupe2=addEtudiantToEquipe(etudiant4, groupe2);
         logger.info("Students added to group.");
 
         logger.info("Testing mails");

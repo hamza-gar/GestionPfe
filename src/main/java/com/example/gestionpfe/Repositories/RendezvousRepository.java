@@ -14,5 +14,7 @@ public interface RendezvousRepository extends PagingAndSortingRepository<Rendezv
 
     Rendezvous findByDateRendezvous(Date dateRendezvous);
 
+    Rendezvous findByEquipe_IdEquipe(String idEquipe);
+
     Page<Rendezvous> findAllByEncadrant_Email(String email, Pageable pageable);
 }

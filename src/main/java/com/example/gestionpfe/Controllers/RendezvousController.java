@@ -111,4 +111,14 @@ public class RendezvousController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping(path = "/self")
+    public ResponseEntity<RendezvousResponse> getRendezvousBySelf(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+        RendezvousDto rendezvousDto = rendezvousService.getMonRendezVous(username);
+        RendezvousResponse rendezvousResponse = new RendezvousResponse();
+        rendezvousResponse = modelMapper.map(rendezvousDto, RendezvousResponse.class);
+        return ResponseEntity.ok(rendezvousResponse);
+    }
+
 }

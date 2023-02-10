@@ -12,6 +12,7 @@ public interface RendezvousService {
     RendezvousDto getRendezvousByIdRendezvous(String username,String id);
     RendezvousDto fixRendezVous(String id,RendezvousDto rendezvous);
     RendezvousDto voteRendezvous(String username,RendezvousDto rendezvousDto);
+    RendezvousDto getMonRendezVous(String username);
     void deleteRendezvous(String id);
     List<RendezvousDto> getAllRendezvous(String username,int page, int limit);
 }

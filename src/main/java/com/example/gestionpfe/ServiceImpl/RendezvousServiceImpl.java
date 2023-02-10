@@ -263,4 +263,23 @@ public class RendezvousServiceImpl implements RendezvousService {
         return rendezvousDtos;
     }
 
+    @Override
+    public RendezvousDto getMonRendezVous(String username){
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("Etudiant not found");
+            throw new RuntimeException("Etudiant not found");
+        }
+        Rendezvous rendezvousEntity = rendezvousRepository.findByEquipe_IdEquipe(etudiant.getEquipe().get(0).getIdEquipe());
+        if (rendezvousEntity == null) {
+            logger.info("Rendezvous not found");
+            return null;
+        }
+        RendezvousDto rendezvousDto = modelMapper.map(rendezvousEntity, RendezvousDto.class);
+        rendezvousDto.setIdEquipe(rendezvousEntity.getEquipe().getIdEquipe());
+        rendezvousDto.setNomSujet(rendezvousEntity.getEquipe().getSujet().getNomSujet());
+        logger.info("Rendezvous found successfully");
+        return rendezvousDto;
+    }
+
 }
