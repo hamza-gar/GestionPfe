@@ -271,14 +271,25 @@ public class InitialUsersSetup {
 
         logger.info("Creating Universities...");
         Universite universite = createUniversite("Université Abdelmalek Essaadi","Tanger-Tétouan-Al Hoceïma");
+        Universite universite2 = createUniversite("Université Hassan II","Casablanca-Settat");
+        Universite universite3 = createUniversite("Université Mohammed V","Rabat-Salé-Kénitra");
 
         logger.info("All Universities created.");
 
         logger.info("Creating Facultes...");
         Etablissement etablissement = createEtablissement("Faculté des Sciences et Techniques", universite);
+        Etablissement etablissement2 = createEtablissement("Faculté des Sciences Juridiques, Economiques et Sociales", universite);
+        Etablissement etablissement3 = createEtablissement("Faculté des Sciences de la Santé", universite2);
+
 
         logger.info("Creating Departements...");
         Departement departement = createDepartement("Departement Informatique",etablissement);
+        Departement departement2 = createDepartement("Departement Mathematique",etablissement);
+        Departement departement3 = createDepartement("Departement Physique",etablissement);
+        Departement departement4 = createDepartement("Departement de mathematique financiere",etablissement2);
+        Departement departement5 = createDepartement("Departement de droit",etablissement2);
+        Departement departement6 = createDepartement("Departement de neurologie",etablissement3);
+        Departement departement7 = createDepartement("Departement d'ancologie",etablissement3);
         logger.info("Departement Informatique created.");
 
         logger.info("Creating Users...");
@@ -358,6 +369,7 @@ public class InitialUsersSetup {
             etablissement.setNomEtablissement(nomEtablissement);
             etablissement.setAdresse("Adresse 111111");
             etablissement.setUniversite(universite);
+            logger.info("Etablissement "+ etablissement.getNomEtablissement() + " "+ etablissement.getIdEtablissement()  +" created.");
             etablissement = etablissementRepository.save(etablissement);
         }
         return etablissement;

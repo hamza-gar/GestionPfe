@@ -28,7 +28,7 @@ public class Etablissement {
     private String adresse;
 
     @ManyToOne
-    @JoinColumn(name = "universite_id", unique = true, nullable = false)
+    @JoinColumn(name = "universite_id", nullable = false)
     private Universite universite;
 
     @OneToMany(mappedBy = "etablissement")

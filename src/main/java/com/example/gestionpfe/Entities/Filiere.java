@@ -29,11 +29,11 @@ public class Filiere implements Serializable {
     private String etablissement;
 
     @ManyToOne
-    @JoinColumn(name = "departement_id",unique = true,nullable = false)
+    @JoinColumn(name = "departement_id",nullable = false)
     private Departement departement;
 
     @OneToOne
-    @JoinColumn(name = "responsable_id",unique = true,nullable = false)
+    @JoinColumn(name = "responsable_id",nullable = false)
     private Enseignant responsable;
 
     @OneToMany(mappedBy = "filiere")

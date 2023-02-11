@@ -90,6 +90,24 @@ public class DepartementServiceImpl implements DepartementService {
     }
 
     @Override
+    public List<DepartementDto> getAllDepartementsOfEtablissement(String idEtablissement) {
+        List<Departement> departements = departementRepository.findAllByEtablissement_IdEtablissement(idEtablissement);
+        if (departements == null) {
+            logger.info("departements not found");
+            return null;
+        }
+        logger.info("departements found successfully." + departements.size() + " departements found");
+        List<DepartementDto> departementDtos = new ArrayList<>();
+        for (Departement departement : departements) {
+            DepartementDto departementDto = new DepartementDto();
+            departementDto = modelMapper.map(departement, DepartementDto.class);
+
+            departementDtos.add(departementDto);
+        }
+        return departementDtos;
+    }
+
+    @Override
     public List<DepartementDto> getAllDepartements(int page, int limit) {
         List<Departement> departements = new ArrayList<>();
 
@@ -106,4 +124,6 @@ public class DepartementServiceImpl implements DepartementService {
         logger.info("departements found successfully");
         return departementDtos;
     }
+
+
 }

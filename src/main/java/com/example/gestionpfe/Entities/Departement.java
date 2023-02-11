@@ -27,7 +27,7 @@ public class Departement implements Serializable {
     private String nomDepartement;
 
     @ManyToOne
-    @JoinColumn(name = "etablissement_id",unique = true,nullable = false)
+    @JoinColumn(name = "etablissement_id" ,nullable = false)
     private Etablissement etablissement;
 
     @OneToMany(mappedBy = "departement", cascade = {CascadeType.ALL})

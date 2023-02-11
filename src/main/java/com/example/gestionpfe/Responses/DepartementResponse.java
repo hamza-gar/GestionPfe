@@ -15,7 +15,7 @@ import java.util.List;
 public class DepartementResponse {
     private String idDepartement;
     private String nomDepartement;
-    private Etablissement etablissement;
-    private List<Enseignant> enseignants;
-    private List<Filiere> filieres;
+    private String nomEtablissement;
+    private List<String> enseignants;
+    private List<String> filieres;
 }
