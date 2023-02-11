@@ -1,12 +1,17 @@
 package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.AdminDto;
+import com.example.gestionpfe.Dto.DepartementDto;
 import com.example.gestionpfe.Dto.DomaineDto;
+import com.example.gestionpfe.Entities.Etablissement;
 import com.example.gestionpfe.Requests.AdminRequest;
+import com.example.gestionpfe.Requests.DepartementRequest;
 import com.example.gestionpfe.Responses.AdminResponse;
+import com.example.gestionpfe.Responses.DepartementResponse;
 import com.example.gestionpfe.Responses.DomaineResponse;
 import com.example.gestionpfe.Services.AdminService;
 
+import com.example.gestionpfe.Services.DepartementService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,8 @@ public class AdminController {
     ModelMapper modelMapper = new ModelMapper();
     @Autowired
     AdminService adminService;
+    @Autowired
+    DepartementService departementService;
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     @GetMapping(path = "/{id}")
@@ -86,5 +93,21 @@ public class AdminController {
             adminResponses.add(adminResponse);
         }
         return adminResponses;
+    }
+
+    @PostMapping(path = "/departements")
+    public ResponseEntity<DepartementResponse> addDepartement(@RequestBody DepartementRequest departementRequest) {
+        DepartementDto departementDto = new DepartementDto();
+        departementDto = modelMapper.map(departementRequest, DepartementDto.class);
+        Etablissement etablissement = new Etablissement();
+        etablissement.setIdEtablissement(departementRequest.getIdEtablissement());
+
+        departementDto.setEtablissement(etablissement);
+
+        departementDto = departementService.addDepartement(departementDto);
+        DepartementResponse departementResponse = new DepartementResponse();
+        departementResponse = modelMapper.map(departementDto, DepartementResponse.class);
+
+        return new ResponseEntity<DepartementResponse>(departementResponse, HttpStatus.CREATED);
     }
 }

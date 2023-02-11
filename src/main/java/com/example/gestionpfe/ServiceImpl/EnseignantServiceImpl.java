@@ -2,10 +2,12 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
+import com.example.gestionpfe.Entities.Departement;
 import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Entities.Role;
 import com.example.gestionpfe.InitialUsersSetup;
+import com.example.gestionpfe.Repositories.DepartementRepository;
 import com.example.gestionpfe.Repositories.DomaineRepository;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
 import com.example.gestionpfe.Repositories.RoleRepository;
@@ -55,24 +57,33 @@ public class EnseignantServiceImpl implements EnseignantService {
     RoleRepository roleRepository;
 
     @Autowired
+    DepartementRepository departementRepository;
+
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public EnseignantDto addEnseignant(EnseignantDto enseignantDto) {
 
         String domaine = enseignantDto.getEmail().split("@")[1];
-        if(domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine))
-        {
+        if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
             logger.info("le domaine ne figure pas dans la liste des domaines verifie !");
             throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie !");
-        }else{
+        } else {
             Enseignant checkEnseignant = enseignantRepository.findByEmail(enseignantDto.getEmail());
 
-            if(checkEnseignant!=null) throw new RuntimeException("Enseignant deja exist !!!");
+            if (checkEnseignant != null) {
+                logger.warn("Enseignant deja exist !!!");
+                throw new RuntimeException("Enseignant deja exist !!!");
+            }
             Enseignant enseignantEntity = new Enseignant();
-            enseignantEntity = modelMapper.map(enseignantDto,Enseignant.class);
+            enseignantEntity = modelMapper.map(enseignantDto, Enseignant.class);
 
-
+            Departement departement = departementRepository.findByIdDepartement(enseignantDto.getDepartement().getIdDepartement());
+            if (departement == null) {
+                logger.warn("Departement not found !!!");
+                throw new RuntimeException("Departement not found !!!");
+            }
             enseignantEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(enseignantDto.getPassword()));
             enseignantEntity.setIdEnseignant(util.generateUserId(32));
 
@@ -81,13 +92,13 @@ public class EnseignantServiceImpl implements EnseignantService {
             enseignantEntity.setEmailVerificationStatus(false);
             Role role = roleRepository.findByName("ROLE_ENSEIGNANT");
             enseignantEntity.setRole(role);
-            emailSender.sendVerificationMail(enseignantEntity.getEmail(), token,"enseignants");
+            enseignantEntity.setDepartement(departement);
 
 
             Enseignant newEnseignant = enseignantRepository.save(enseignantEntity);
-
+            emailSender.sendVerificationMail(enseignantEntity.getEmail(), token, "enseignants");
             EnseignantDto newEnseignantDto = new EnseignantDto();
-            newEnseignantDto = modelMapper.map(newEnseignant,EnseignantDto.class);
+            newEnseignantDto = modelMapper.map(newEnseignant, EnseignantDto.class);
 
             logger.info("Enseignant added successfully.");
 
@@ -99,11 +110,11 @@ public class EnseignantServiceImpl implements EnseignantService {
 
     @Override
     public EnseignantDto getEnseignant(String email) {
-        Enseignant enseignantEntity =  enseignantRepository.findByEmail(email);
-        if(enseignantEntity==null)throw new UsernameNotFoundException(email);
+        Enseignant enseignantEntity = enseignantRepository.findByEmail(email);
+        if (enseignantEntity == null) throw new UsernameNotFoundException(email);
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
+        enseignantDto = modelMapper.map(enseignantEntity, EnseignantDto.class);
 
         logger.info("Enseignant retrieved by email successfully.");
         return enseignantDto;
@@ -111,12 +122,12 @@ public class EnseignantServiceImpl implements EnseignantService {
 
     @Override
     public EnseignantDto getEnseignantByIdEnseignant(String id) {
-        Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
+        Enseignant enseignantEntity = enseignantRepository.findByIdEnseignant(id);
 
-        if(enseignantEntity == null)throw new UsernameNotFoundException(id);
+        if (enseignantEntity == null) throw new UsernameNotFoundException(id);
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
+        enseignantDto = modelMapper.map(enseignantEntity, EnseignantDto.class);
 
         logger.info("Enseignant retrieved by idEnseignant successfully.");
 
@@ -125,33 +136,33 @@ public class EnseignantServiceImpl implements EnseignantService {
 
     @Override
     public EnseignantDto updateEnseignant(String id, EnseignantDto enseignantDto) {
-        Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
+        Enseignant enseignantEntity = enseignantRepository.findByIdEnseignant(id);
 
-        if(enseignantEntity == null)throw new UsernameNotFoundException(id);
+        if (enseignantEntity == null) throw new UsernameNotFoundException(id);
         /*TODO: optional fields.*/
 
 
-        if(enseignantDto.getNom()!=null){
+        if (enseignantDto.getNom() != null) {
             enseignantEntity.setNom(enseignantDto.getNom());
         }
 
-        if(enseignantDto.getPrenom()!=null){
+        if (enseignantDto.getPrenom() != null) {
             enseignantEntity.setPrenom(enseignantDto.getPrenom());
         }
-        if(enseignantDto.getCin()!=null){
+        if (enseignantDto.getCin() != null) {
             enseignantEntity.setCin(enseignantDto.getCin());
         }
-        if(enseignantDto.getEmail()!=null){
+        if (enseignantDto.getEmail() != null) {
             enseignantEntity.setEmail(enseignantDto.getEmail());
         }
-        if(enseignantDto.getPassword()!=null){
+        if (enseignantDto.getPassword() != null) {
             enseignantEntity.setEncryptedPassword(enseignantDto.getPassword());
         }
 
         Enseignant enseignantUpdated = enseignantRepository.save(enseignantEntity);
 
         EnseignantDto newenseignantDto = new EnseignantDto();
-        newenseignantDto = modelMapper.map(enseignantUpdated,EnseignantDto.class);
+        newenseignantDto = modelMapper.map(enseignantUpdated, EnseignantDto.class);
 
         logger.info("Enseignant updated successfully.");
 
@@ -167,7 +178,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         Enseignant updatedEnseignant = enseignantRepository.save(enseignant);
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(updatedEnseignant,EnseignantDto.class);
+        enseignantDto = modelMapper.map(updatedEnseignant, EnseignantDto.class);
 
         logger.info("Enseignant verified successfully.");
         return enseignantDto;
@@ -177,11 +188,11 @@ public class EnseignantServiceImpl implements EnseignantService {
     public EnseignantDto resendVerification(String enseignantId) {
         Enseignant enseignant = enseignantRepository.findByIdEnseignant(enseignantId);
         if (enseignant == null) throw new UsernameNotFoundException(enseignantId);
-        emailSender.sendVerificationMail(enseignant.getEmail(), enseignant.getEmailVerificationToken(),"enseignants");
+        emailSender.sendVerificationMail(enseignant.getEmail(), enseignant.getEmailVerificationToken(), "enseignants");
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignant,EnseignantDto.class);
+        enseignantDto = modelMapper.map(enseignant, EnseignantDto.class);
 
-        logger.info("Resent verification mail to: "+enseignantDto.getEmail());
+        logger.info("Resent verification mail to: " + enseignantDto.getEmail());
         return enseignantDto;
     }
 
@@ -193,7 +204,7 @@ public class EnseignantServiceImpl implements EnseignantService {
         List<Enseignant> enseignants = enseignantsPage.getContent();
         for (Enseignant enseignantEntity : enseignants) {
             EnseignantDto enseignantDto = new EnseignantDto();
-            enseignantDto = modelMapper.map(enseignantEntity,EnseignantDto.class);
+            enseignantDto = modelMapper.map(enseignantEntity, EnseignantDto.class);
             enseignantDtos.add(enseignantDto);
         }
         logger.info("All Enseignants retrieved successfully");
@@ -202,22 +213,22 @@ public class EnseignantServiceImpl implements EnseignantService {
 
     @Override
     public void deleteEnseignant(String id) {
-        Enseignant enseignantEntity =  enseignantRepository.findByIdEnseignant(id);
+        Enseignant enseignantEntity = enseignantRepository.findByIdEnseignant(id);
 
-        if(enseignantEntity == null){
-            logger.info("Enseignant not found with id:"+id);
+        if (enseignantEntity == null) {
+            logger.info("Enseignant not found with id:" + id);
             return;
         }
-        logger.info("Enseignant deleted : "+enseignantEntity.getIdEnseignant());
+        logger.info("Enseignant deleted : " + enseignantEntity.getIdEnseignant());
         enseignantRepository.delete(enseignantEntity);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Enseignant enseignantEntity =  enseignantRepository.findByEmail(email);
+        Enseignant enseignantEntity = enseignantRepository.findByEmail(email);
 
-        if(enseignantEntity==null)throw new UsernameNotFoundException(email);
-        logger.info("Enseignant loaded by username: "+ enseignantEntity.getIdEnseignant());
+        if (enseignantEntity == null) throw new UsernameNotFoundException(email);
+        logger.info("Enseignant loaded by username: " + enseignantEntity.getIdEnseignant());
         return new EnseignantPrincipal(enseignantEntity);
     }
 }

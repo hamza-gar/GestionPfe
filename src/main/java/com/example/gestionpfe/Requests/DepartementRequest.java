@@ -1,4 +1,4 @@
-package com.example.gestionpfe.Responses;
+package com.example.gestionpfe.Requests;
 
 import com.example.gestionpfe.Entities.Enseignant;
 import com.example.gestionpfe.Entities.Etablissement;
@@ -6,16 +6,18 @@ import com.example.gestionpfe.Entities.Filiere;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
+@Data
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-public class DepartementResponse {
+public class DepartementRequest {
     private String idDepartement;
     private String nomDepartement;
-    private Etablissement etablissement;
-    private List<Enseignant> enseignants;
-    private List<Filiere> filieres;
+    private String idEtablissement;
+    private List<String> idEnseignants;
+    private List<String> idFilieres;
 }

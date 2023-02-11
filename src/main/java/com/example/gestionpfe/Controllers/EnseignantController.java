@@ -1,9 +1,13 @@
 package com.example.gestionpfe.Controllers;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
+import com.example.gestionpfe.Dto.EtablissementDto;
+import com.example.gestionpfe.Entities.Departement;
 import com.example.gestionpfe.Requests.EnseignantRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
+import com.example.gestionpfe.Responses.EtablissementResponse;
 import com.example.gestionpfe.Services.EnseignantService;
+import com.example.gestionpfe.Services.EtablissementService;
 import com.example.gestionpfe.Services.SujetService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +33,8 @@ public class EnseignantController {
     @Autowired
     controllerVerification controllerVeri;
 
-
+    @Autowired
+    EtablissementService etablissementService;
 
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDENSEIGNANT_AUTHORITY')")
@@ -68,17 +73,20 @@ public class EnseignantController {
 
     @PostMapping
     public ResponseEntity<EnseignantResponse> addEnseignant(@RequestBody EnseignantRequest enseignantRequest) {
+        Departement departement = new Departement();
+        departement.setIdDepartement(enseignantRequest.getIdDepartement());
+
         EnseignantDto enseignantDto = new EnseignantDto();
         enseignantDto = modelMapper.map(enseignantRequest, EnseignantDto.class);
 
+        enseignantDto.setDepartement(departement);
+        EnseignantDto addEnseignant = enseignantService.addEnseignant(enseignantDto);
 
-        EnseignantDto AddEnseignant = enseignantService.addEnseignant(enseignantDto);
-
-        if (AddEnseignant == null)
+        if (addEnseignant == null)
             return new ResponseEntity<EnseignantResponse>(new EnseignantResponse(), HttpStatus.NOT_ACCEPTABLE);
 
         EnseignantResponse enseignantResponse = new EnseignantResponse();
-        enseignantResponse = modelMapper.map(AddEnseignant, EnseignantResponse.class);
+        enseignantResponse = modelMapper.map(addEnseignant, EnseignantResponse.class);
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.CREATED);
     }
@@ -130,6 +138,7 @@ public class EnseignantController {
 
         return new ResponseEntity<EnseignantResponse>(enseignantResponse, HttpStatus.ACCEPTED);
     }
+
 
 
 //    @PostMapping(path="/addSujet")

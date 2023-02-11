@@ -55,6 +55,11 @@ public class InitialUsersSetup {
     @Autowired
     SujetRepository sujetRepository;
 
+    @Autowired
+    UniversiteRepository universiteRepository;
+
+    @Autowired
+    EtablissementRepository etablissementRepository;
 
     @Autowired
     DepartementRepository departementRepository;
@@ -264,8 +269,17 @@ public class InitialUsersSetup {
         Domaine fake2 = createDomaine("hotmail.com", false);
         logger.info("All Domaines created.");
 
+        logger.info("Creating Universities...");
+        Universite universite = createUniversite("Université Abdelmalek Essaadi","Tanger-Tétouan-Al Hoceïma");
+
+        logger.info("All Universities created.");
+
+        logger.info("Creating Facultes...");
+        Etablissement etablissement = createEtablissement("Faculté des Sciences et Techniques", universite);
+
         logger.info("Creating Departements...");
-        Departement departement = createDepartement("Departement Informatique");
+        Departement departement = createDepartement("Departement Informatique",etablissement);
+        logger.info("Departement Informatique created.");
 
         logger.info("Creating Users...");
         Administrateur administrateur = createAdministrateur(sAdminRole);
@@ -321,6 +335,34 @@ public class InitialUsersSetup {
 //        emailSender.ShareLienDriveJury("abdellah.samourail@gmail.com",new Date(), "youtube.com");
     }
 
+
+    @Transactional
+    public Universite createUniversite(String nomUniversite, String adresse) {
+        Universite universite = universiteRepository.findByNomUniversite(nomUniversite);
+        if (universite == null) {
+            universite = new Universite();
+            universite.setIdUniversite(utils.generateUserId(32));
+            universite.setNomUniversite(nomUniversite);
+            universite.setAdresse(adresse);
+            universite = universiteRepository.save(universite);
+        }
+        return universite;
+    }
+
+    @Transactional
+    public Etablissement createEtablissement(String nomEtablissement, Universite universite) {
+        Etablissement etablissement = etablissementRepository.findByNomEtablissement(nomEtablissement);
+        if (etablissement == null) {
+            etablissement = new Etablissement();
+            etablissement.setIdEtablissement(utils.generateUserId(32));
+            etablissement.setNomEtablissement(nomEtablissement);
+            etablissement.setAdresse("Adresse 111111");
+            etablissement.setUniversite(universite);
+            etablissement = etablissementRepository.save(etablissement);
+        }
+        return etablissement;
+    }
+
     @Transactional
     public Equipe createEquipe(int tailleEquipe, Sujet sujet, String driveLink) {
         Equipe equipe = equipeRepository.findByIdEquipe(utils.generateUserId(32));
@@ -367,11 +409,13 @@ public class InitialUsersSetup {
 
 
     @Transactional
-    public Departement createDepartement(String departementName) {
+    public Departement createDepartement(String departementName, Etablissement etablissement) {
         Departement departement = departementRepository.findByNomDepartement(departementName);
         if (departement == null) {
             departement = new Departement();
+            departement.setIdDepartement(utils.generateUserId(32));
             departement.setNomDepartement(departementName);
+            departement.setEtablissement(etablissement);
             departement = departementRepository.save(departement);
         }
         return departement;

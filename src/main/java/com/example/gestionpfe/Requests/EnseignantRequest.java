@@ -15,4 +15,5 @@ public class EnseignantRequest {
     private String prenom;
     private String email;
     private String password;
+    private String idDepartement;
 }

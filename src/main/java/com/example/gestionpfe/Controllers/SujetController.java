@@ -101,6 +101,21 @@ public class SujetController {
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/mylocked")
+    public ResponseEntity<List<SujetResponse>> getMyLockedSujets(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<SujetResponse> sujetResponse = new ArrayList<>();
+        List<SujetDto> sujets = sujetService.getAllMyLockedSujets(username, page, limit);
+
+        for (SujetDto sujetDto : sujets) {
+            SujetResponse sujet = new SujetResponse();
+            sujet = modelMapper.map(sujetDto, SujetResponse.class);
+            sujetResponse.add(sujet);
+        }
+        return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
+    }
 
     @PreAuthorize("hasAuthority('ADD_SUJET_AUTHORITY')")
     @PostMapping

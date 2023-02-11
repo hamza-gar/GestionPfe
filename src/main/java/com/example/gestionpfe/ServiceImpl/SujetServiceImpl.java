@@ -308,4 +308,21 @@ public class SujetServiceImpl implements SujetService {
         return sujetDtoList;
     }
 
+    @Override
+    public List<SujetDto> getAllMyLockedSujets(String username,int page, int limit){
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            throw new RuntimeException(username);
+        }
+        List<SujetDto> sujetDtoList = new ArrayList<>();
+        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignantAndLocked(enseignant.getIdEnseignant(),true, PageRequest.of(page, limit));
+        for (Sujet sujetEntity : SujetPages) {
+            SujetDto sujetDto = new SujetDto();
+            sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+            sujetDtoList.add(sujetDto);
+        }
+        logger.info("sujet list found successfully.");
+        return sujetDtoList;
+    }
 }

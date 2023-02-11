@@ -15,6 +15,7 @@ public interface SujetService {
     void deleteSujet(String id);
     List<SujetDto> getAllSujets(String username,int page, int limit);
     List<SujetDto> getAllSujetsByFiliere(String filiere, int page, int limit);
+    List<SujetDto> getAllMyLockedSujets(String username,int page, int limit);
     long countSujets(String username);
     List<SujetDto> getAllMySujets(String username,int page, int limit);
 }
