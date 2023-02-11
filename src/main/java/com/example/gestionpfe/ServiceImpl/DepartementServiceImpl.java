@@ -90,8 +90,8 @@ public class DepartementServiceImpl implements DepartementService {
     }
 
     @Override
-    public List<DepartementDto> getAllDepartementsOfEtablissement(String idEtablissement) {
-        List<Departement> departements = departementRepository.findAllByEtablissement_IdEtablissement(idEtablissement);
+    public List<DepartementDto> getAllDepartementsOfEtablissement(String nomEtablissement) {
+        List<Departement> departements = departementRepository.findAllByEtablissement_NomEtablissement(nomEtablissement);
         if (departements == null) {
             logger.info("departements not found");
             return null;

@@ -1,15 +1,13 @@
 package com.example.gestionpfe.Controllers;
 
 
-import com.example.gestionpfe.Dto.EnseignantDto;
-import com.example.gestionpfe.Dto.InvitationDto;
-import com.example.gestionpfe.Dto.RemarqueDto;
-import com.example.gestionpfe.Dto.SoutenanceDto;
+import com.example.gestionpfe.Dto.*;
 import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Requests.InvitationRequest;
 import com.example.gestionpfe.Requests.JuryRequest;
 import com.example.gestionpfe.Requests.RemarqueRequest;
 import com.example.gestionpfe.Responses.EnseignantResponse;
+import com.example.gestionpfe.Responses.JuryResponse;
 import com.example.gestionpfe.Responses.SoutenanceResponse;
 import com.example.gestionpfe.Services.JuryService;
 import com.example.gestionpfe.Services.RemarqueService;
@@ -93,4 +91,24 @@ public class JuryController {
         }
         return ResponseEntity.ok(enseignantResponse);
     }
+
+    @GetMapping(path = "/invites/{idSujet}")
+    public ResponseEntity<List<JuryResponse>> getInvitedJurys(@PathVariable String idSujet, @RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+
+        List<JuryResponse> juryResponses = new ArrayList<>();
+        List<JuryDto> jurys = juryService.getJuryBySujet(idSujet, page, limit);
+
+        for (JuryDto juryDto : jurys) {
+            JuryResponse juryResponse = new JuryResponse();
+            juryResponse.setNomJury(juryDto.getEnseignant().getNom().substring(0, 1).toUpperCase() + juryDto.getEnseignant().getNom().substring(1) + " " + juryDto.getEnseignant().getPrenom().substring(0, 1).toUpperCase() + juryDto.getEnseignant().getPrenom().substring(1));
+            juryResponse.setMailJury(juryDto.getEnseignant().getEmail());
+            juryResponse.setIdSoutenance(juryDto.getSoutenance().getIdSoutenance());
+            juryResponse.setTypeJury(juryDto.getTypeJury());
+            juryResponse.setIdJury(juryDto.getIdJury());
+            juryResponses.add(juryResponse);
+        }
+
+        return ResponseEntity.ok(juryResponses);
+    }
+
 }

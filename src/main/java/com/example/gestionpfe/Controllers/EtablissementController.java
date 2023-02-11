@@ -44,9 +44,9 @@ public class EtablissementController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<List<DepartementResponse>> getDepartementsByEtablissementId(@PathVariable String id) {
+    public ResponseEntity<List<DepartementResponse>> getDepartementsByEtablissementId(@PathVariable String nomEtablissement) {
         List<DepartementResponse> departementResponse = new ArrayList<>();
-        List<DepartementDto> departements = departementService.getAllDepartementsOfEtablissement(id);
+        List<DepartementDto> departements = departementService.getAllDepartementsOfEtablissement(nomEtablissement);
         for (DepartementDto departementDto : departements) {
             DepartementResponse departement = new DepartementResponse();
             departement.setIdDepartement(departementDto.getIdDepartement());

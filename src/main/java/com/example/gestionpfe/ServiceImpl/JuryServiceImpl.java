@@ -2,6 +2,7 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.InvitationDto;
+import com.example.gestionpfe.Dto.JuryDto;
 import com.example.gestionpfe.Dto.SoutenanceDto;
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.Repositories.EnseignantRepository;
@@ -116,5 +117,22 @@ public class JuryServiceImpl implements JuryService {
             enseignantDtos.add(enseignantDto);
         }
         return enseignantDtos;
+    }
+
+    @Override
+    public List<JuryDto> getJuryBySujet(String idSujet, int page, int limit) {
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        List<JuryDto> juryDtos = new ArrayList<>();
+        Page<Jury> jurysPage = juryRepository.findAllBySoutenance_Sujet_IdSujet(idSujet, pageableRequest);
+        for (Jury jury : jurysPage.getContent()) {
+            JuryDto juryDto = new JuryDto();
+            juryDto.setIdJury(jury.getIdJury());
+            juryDto.setEnseignant(jury.getEnseignant());
+            juryDto.setSoutenance(jury.getSoutenance());
+            juryDto.setTypeJury(jury.getTypeJury());
+            juryDtos.add(juryDto);
+        }
+        logger.info("Jurys found for sujet : " + idSujet);
+        return juryDtos;
     }
 }

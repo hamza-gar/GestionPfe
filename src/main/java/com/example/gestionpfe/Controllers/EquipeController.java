@@ -218,4 +218,6 @@ public class EquipeController {
         return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
     }
 
+
+
 }

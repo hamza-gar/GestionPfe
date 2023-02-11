@@ -11,5 +11,6 @@ public interface DepartementRepository extends PagingAndSortingRepository<Depart
     Departement findByIdDepartement(String idDepartement);
     Departement findByNomDepartement(String nomDepartement);
     List<Departement> findAllByEtablissement_IdEtablissement(String idEtablissement);
+    List<Departement> findAllByEtablissement_NomEtablissement(String nomEtablissement);
     Departement findById(String id);
 }
