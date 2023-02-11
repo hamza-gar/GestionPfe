@@ -1,6 +1,7 @@
 package com.example.gestionpfe.Controllers;
 
 
+import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.InvitationDto;
 import com.example.gestionpfe.Dto.RemarqueDto;
 import com.example.gestionpfe.Dto.SoutenanceDto;
@@ -8,6 +9,7 @@ import com.example.gestionpfe.Entities.Etudiant;
 import com.example.gestionpfe.Requests.InvitationRequest;
 import com.example.gestionpfe.Requests.JuryRequest;
 import com.example.gestionpfe.Requests.RemarqueRequest;
+import com.example.gestionpfe.Responses.EnseignantResponse;
 import com.example.gestionpfe.Responses.SoutenanceResponse;
 import com.example.gestionpfe.Services.JuryService;
 import com.example.gestionpfe.Services.RemarqueService;
@@ -73,5 +75,22 @@ public class JuryController {
         remarqueService.addRemarque(username, remarqueDto);
 
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping(path = "/jurys")
+    public ResponseEntity<List<EnseignantResponse>> getAllEnseignantsToInvite(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<EnseignantResponse> enseignantResponse = new ArrayList<>();
+        List<EnseignantDto> enseignants = juryService.getEnseignantsToInvite(username, page, limit);
+
+        for (EnseignantDto enseignantDto : enseignants) {
+            EnseignantResponse enseignant = new EnseignantResponse();
+            enseignant = modelMapper.map(enseignantDto, EnseignantResponse.class);
+
+            enseignantResponse.add(enseignant);
+        }
+        return ResponseEntity.ok(enseignantResponse);
     }
 }

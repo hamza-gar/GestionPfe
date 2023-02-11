@@ -36,6 +36,7 @@ public class EnseignantController {
     @Autowired
     EtablissementService etablissementService;
 
+
     //added now
     @PreAuthorize("hasAuthority('GET_BY_IDENSEIGNANT_AUTHORITY')")
     @GetMapping(path = "/{id}")
@@ -61,6 +62,8 @@ public class EnseignantController {
         }
         return enseignantResponse;
     }
+
+
 
     @GetMapping(path = "/verification/{token}")
     public void verifyEnseignant(@PathVariable String token, HttpServletResponse response) {

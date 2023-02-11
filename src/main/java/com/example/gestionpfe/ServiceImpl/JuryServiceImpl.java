@@ -1,5 +1,6 @@
 package com.example.gestionpfe.ServiceImpl;
 
+import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.InvitationDto;
 import com.example.gestionpfe.Dto.SoutenanceDto;
 import com.example.gestionpfe.Entities.*;
@@ -91,5 +92,29 @@ public class JuryServiceImpl implements JuryService {
         }
         logger.info("Soutenances found for jury : " + mailJury);
         return soutenanceDtos;
+    }
+
+    @Override
+    public List<EnseignantDto> getEnseignantsToInvite(String username,int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        String idEtablissement = enseignant.getDepartement().getEtablissement().getIdEtablissement();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        List<EnseignantDto> enseignantDtos = new ArrayList<>();
+        Page<Enseignant> enseignantsPage = enseignantRepository.findAllByDepartement_Etablissement_IdEtablissementAndEmailIsNot(idEtablissement, username ,pageableRequest);
+        for (Enseignant enseignant1 : enseignantsPage.getContent()) {
+            EnseignantDto enseignantDto = new EnseignantDto();
+            enseignantDto.setId(enseignant1.getId());
+            enseignantDto.setNom(enseignant1.getNom());
+            enseignantDto.setPrenom(enseignant1.getPrenom());
+            enseignantDto.setEmail(enseignant1.getEmail());
+            enseignantDto.setCin(enseignant1.getCin());
+            enseignantDto.setDepartement(enseignant1.getDepartement());
+            enseignantDtos.add(enseignantDto);
+        }
+        return enseignantDtos;
     }
 }
