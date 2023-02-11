@@ -165,6 +165,20 @@ public class EquipeServiceImpl implements EquipeService {
     }
 
     @Override
+    public EquipeDto getEquipeBySujetId(String idSujet) {
+
+        Equipe equipeEntity = equipeRepository.findBySujet_IdSujet(idSujet);
+        if (equipeEntity == null) {
+            logger.info("equipe not found");
+            return null;
+        }
+        logger.info("equipe found successfully");
+        EquipeDto equipeDto = new EquipeDto();
+        equipeDto = modelMapper.map(equipeEntity, EquipeDto.class);
+        return equipeDto;
+    }
+
+    @Override
     public EquipeDto getMyEquipe(String username) {
         Etudiant etudiant = etudiantRepository.findByEmail(username);
         if (etudiant == null) {

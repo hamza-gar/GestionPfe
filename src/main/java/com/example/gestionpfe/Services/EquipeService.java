@@ -9,6 +9,7 @@ public interface EquipeService {
     EquipeDto addEquipe(String username,String sujetId,EquipeDto equipeDto);
     EquipeDto getEquipeByIdEquipe(String idEquipe);
     EquipeDto getEquipeById(String id);
+    EquipeDto getEquipeBySujetId(String idSujet);
     EquipeDto getMyEquipe(String username);
     EquipeDto updateEquipe(EquipeDto equipeDto);
     EquipeDto removeEtudiant(String idEquipe,String idEtudiant);

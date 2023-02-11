@@ -210,4 +210,12 @@ public class EquipeController {
         return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/getbysujet")
+    public ResponseEntity<EquipeResponse> getEquipeBySujet(@RequestParam(value = "idSujet") String idSujet) {
+
+        EquipeDto equipeDto = equipeService.getEquipeBySujetId(idSujet);
+
+        return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
+    }
+
 }

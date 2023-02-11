@@ -15,6 +15,8 @@ import java.util.List;
 public interface EquipeRepository extends PagingAndSortingRepository<Equipe, Long> {
     Equipe findByIdEquipe(String idEquipe);
 
+    Equipe findBySujet_IdSujet(String idSujet);
+
     List<Equipe> findByEtudiant(Etudiant etudiant);
 
     Page<Equipe> findAllBySujet_Encadrant_IdEnseignant(String idEnseignant, Pageable pageable);
