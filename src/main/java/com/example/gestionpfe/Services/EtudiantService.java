@@ -1,6 +1,5 @@
 package com.example.gestionpfe.Services;
 
-import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtudiantDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -18,6 +17,8 @@ public interface EtudiantService extends UserDetailsService {
     List<EtudiantDto> getAllEtudiants(int page, int limit);
     Boolean etudiantAlreadyInSujet(String idEtudiant, String idSujet);
     Boolean etudiantIn3Sujets(String idEtudiant,String idEnseignant);
+
+    boolean estPostulant(String username);
 }
 
 

@@ -53,7 +53,7 @@ public class RemarqueServiceImpl implements RemarqueService {
             logger.warn("etudiant not found !!!");
             throw new RuntimeException("etudiant not found !!!");
         }
-        if (!etudiant.getEquipe().get(0).getSujet().getSoutenance().getJurys().stream().anyMatch(jury -> jury.getEnseignant().getIdEnseignant().equals(enseignant.getIdEnseignant()))) {
+        if (!etudiant.getEquipe().get(0).getSujet().getSoutenance().getJurys().stream().anyMatch(jury -> jury.getEnseignant().getIdEnseignant().equals(enseignant.getIdEnseignant())) && !etudiant.getEquipe().get(0).getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
             logger.warn("vous n'etes pas membre du jury de ce sujet");
             throw new RuntimeException("vous n'etes pas membre du jury de ce sujet");
         }

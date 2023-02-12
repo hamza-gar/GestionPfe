@@ -371,6 +371,23 @@ public class EtudiantServiceImpl implements EtudiantService {
         return false;
     }
 
+    @Override
+    public boolean estPostulant(String username) {
+        Etudiant etudiant = etudianRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with email :" + username);
+            throw new UsernameNotFoundException(username);
+        }
+        List<Equipe> equipes = etudiant.getEquipe();
+        if (equipes.size() != 1)
+            return true;
+        if (equipes.get(0).getSujet() == null)
+            return true;
+        if (!equipes.get(0).getSujet().getLocked())
+            return true;
+        return false;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

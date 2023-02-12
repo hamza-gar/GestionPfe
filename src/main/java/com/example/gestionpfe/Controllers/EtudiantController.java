@@ -145,4 +145,13 @@ public class EtudiantController {
         }
         return new ResponseEntity<List<RemarqueResponse>>(remarqueResponses, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/estpostulant")
+    public ResponseEntity<Boolean> estPostulant() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        boolean estPostulant = etudiantService.estPostulant(username);
+        return new ResponseEntity<Boolean>(estPostulant, HttpStatus.OK);
+    }
 }
