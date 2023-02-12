@@ -65,6 +65,12 @@ public class InitialUsersSetup {
     DepartementRepository departementRepository;
 
     @Autowired
+    SoutenanceRepository soutenanceRepository;
+
+    @Autowired
+    JuryRepository juryRepository;
+
+    @Autowired
     EmailSender emailSender;
 
     @EventListener
@@ -270,9 +276,9 @@ public class InitialUsersSetup {
         logger.info("All Domaines created.");
 
         logger.info("Creating Universities...");
-        Universite universite = createUniversite("Université Abdelmalek Essaadi","Tanger-Tétouan-Al Hoceïma");
-        Universite universite2 = createUniversite("Université Hassan II","Casablanca-Settat");
-        Universite universite3 = createUniversite("Université Mohammed V","Rabat-Salé-Kénitra");
+        Universite universite = createUniversite("Université Abdelmalek Essaadi", "Tanger-Tétouan-Al Hoceïma");
+        Universite universite2 = createUniversite("Université Hassan II", "Casablanca-Settat");
+        Universite universite3 = createUniversite("Université Mohammed V", "Rabat-Salé-Kénitra");
 
         logger.info("All Universities created.");
 
@@ -283,13 +289,13 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating Departements...");
-        Departement departement = createDepartement("Departement Informatique",etablissement);
-        Departement departement2 = createDepartement("Departement Mathematique",etablissement);
-        Departement departement3 = createDepartement("Departement Physique",etablissement);
-        Departement departement4 = createDepartement("Departement de mathematique financiere",etablissement2);
-        Departement departement5 = createDepartement("Departement de droit",etablissement2);
-        Departement departement6 = createDepartement("Departement de neurologie",etablissement3);
-        Departement departement7 = createDepartement("Departement d'ancologie",etablissement3);
+        Departement departement = createDepartement("Departement Informatique", etablissement);
+        Departement departement2 = createDepartement("Departement Mathematique", etablissement);
+        Departement departement3 = createDepartement("Departement Physique", etablissement);
+        Departement departement4 = createDepartement("Departement de mathematique financiere", etablissement2);
+        Departement departement5 = createDepartement("Departement de droit", etablissement2);
+        Departement departement6 = createDepartement("Departement de neurologie", etablissement3);
+        Departement departement7 = createDepartement("Departement d'ancologie", etablissement3);
         logger.info("Departement Informatique created.");
 
         logger.info("Creating Users...");
@@ -319,7 +325,7 @@ public class InitialUsersSetup {
 
 
         logger.info("Creating subjects...");
-        Sujet sujet = createSujet("Chess AI", "Sujet 1", 2, enseignant2, true, false);
+        Sujet sujet = createSujet("Chess AI", "Sujet 1", 2, enseignant2, true, true);
         Sujet sujet1 = createSujet("Google Map API", "Sujet 1", 4, enseignant2, true, false);
         Sujet sujet2 = createSujet("Gestion de Stock", "Sujet 1", 3, enseignant2, false, false);
         Sujet sujet3 = createSujet("Gestion pfe", "Sujet 1", 3, enseignant3, false, false);
@@ -331,19 +337,50 @@ public class InitialUsersSetup {
 
         logger.info("Creating groupes...");
         Equipe groupe = createEquipe(2, sujet, "ha");
-        Equipe groupe2 = createEquipe(2,sujet1,"ha");
+        Equipe groupe2 = createEquipe(2, sujet1, "ha");
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
         groupe = addEtudiantToEquipe(etudiant1, groupe);
         groupe = addEtudiantToEquipe(etudiant2, groupe);
-        groupe2=addEtudiantToEquipe(etudiant3, groupe2);
-        groupe2=addEtudiantToEquipe(etudiant4, groupe2);
+        groupe2 = addEtudiantToEquipe(etudiant3, groupe2);
+        groupe2 = addEtudiantToEquipe(etudiant4, groupe2);
         logger.info("Students added to group.");
+
+        logger.info("creating soutenances..");
+        Soutenance soutenance = createSoutenance(new Date(), sujet);
+
+        logger.info("adding jury to group...");
+        Jury jury = addJurytoSoutenance(enseignant, soutenance, "President");
+        Jury jury2 = addJurytoSoutenance(enseignant4, soutenance, "Invite");
+        Jury jury3 = addJurytoSoutenance(enseignant3, soutenance, "Rapporteur");
+        logger.info("jury added to group.");
 
         logger.info("Testing mails");
 //        emailSender.ShareLienDriveJury("abdellah.samourail@gmail.com",new Date(), "youtube.com");
+    }
+
+    @Transactional
+    public Soutenance createSoutenance(Date date, Sujet s) {
+        Soutenance soutenance = new Soutenance();
+        soutenance.setIdSoutenance(utils.generateUserId(32));
+        soutenance.setDateSoutenance(date);
+        soutenance.setSujet(s);
+        soutenance.setEnded(false);
+        soutenance = soutenanceRepository.save(soutenance);
+        return soutenance;
+    }
+
+    @Transactional
+    public Jury addJurytoSoutenance(Enseignant enseignant, Soutenance soutenance, String typeJury) {
+        Jury jury = new Jury();
+        jury.setIdJury(utils.generateUserId(32));
+        jury.setEnseignant(enseignant);
+        jury.setSoutenance(soutenance);
+        jury.setTypeJury(typeJury);
+        jury = juryRepository.save(jury);
+        return jury;
     }
 
 
@@ -369,7 +406,7 @@ public class InitialUsersSetup {
             etablissement.setNomEtablissement(nomEtablissement);
             etablissement.setAdresse("Adresse 111111");
             etablissement.setUniversite(universite);
-            logger.info("Etablissement "+ etablissement.getNomEtablissement() + " "+ etablissement.getIdEtablissement()  +" created.");
+            logger.info("Etablissement " + etablissement.getNomEtablissement() + " " + etablissement.getIdEtablissement() + " created.");
             etablissement = etablissementRepository.save(etablissement);
         }
         return etablissement;

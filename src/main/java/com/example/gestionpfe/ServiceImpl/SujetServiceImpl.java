@@ -309,6 +309,20 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public Boolean isValidated(String mail, String idSujet) {
+        Sujet sujet = sujetRepository.findByIdSujet(idSujet);
+        if (sujet == null) {
+            logger.warn("sujet not found");
+            throw new RuntimeException(idSujet);
+        }
+        if (sujet.getEncadrant().getEmail().equals(mail)) {
+            logger.info("sujet is validated");
+            return sujet.getDone();
+        }
+        return false;
+    }
+
+    @Override
     public List<SujetDto> getAllMyLockedSujets(String username,int page, int limit){
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {

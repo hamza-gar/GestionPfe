@@ -157,6 +157,16 @@ public class SujetController {
         return new ResponseEntity<SujetResponse>(modelMapper.map(response, SujetResponse.class), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/isValidated")
+    public ResponseEntity<Boolean> isSujetValidated(@RequestParam(value = "idSujet") String idSujet) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String mail = principal.toString();
+
+        Boolean response = sujetService.isValidated(mail, idSujet);
+
+        return new ResponseEntity<Boolean>(response, HttpStatus.OK);
+    }
+
 
     @PreAuthorize("hasAuthority('UPDATE_SUJET_AUTHORITY')")
     @PutMapping(path = "/{id}")

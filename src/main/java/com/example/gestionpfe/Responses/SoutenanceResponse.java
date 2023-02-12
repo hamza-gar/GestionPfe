@@ -15,6 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class SoutenanceResponse {
     private String idSoutenance;
+    private String nomSujet;
     private String dateSoutenance;
     private String idSujet;
+    private String idEquipe;
 }

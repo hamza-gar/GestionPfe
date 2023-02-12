@@ -3,6 +3,7 @@ package com.example.gestionpfe.ServiceImpl;
 import com.example.gestionpfe.Dto.SoutenanceDto;
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.Repositories.*;
+import com.example.gestionpfe.Services.JuryService;
 import com.example.gestionpfe.Services.SoutenanceService;
 import com.example.gestionpfe.Shared.EmailSender;
 import com.example.gestionpfe.Shared.Utils;
@@ -43,6 +44,9 @@ public class SoutenanceServiceImpl implements SoutenanceService {
 
     @Autowired
     SujetRepository sujetRepository;
+
+    @Autowired
+    JuryService juryService;
 
     @Autowired
     InvitationRepository invitationRepository;
@@ -104,6 +108,7 @@ public class SoutenanceServiceImpl implements SoutenanceService {
             throw new RuntimeException("Soutenance date is before today");
         }
 
+
         Soutenance soutenance = new Soutenance();
         soutenance.setIdSoutenance(util.generateUserId(32));
         soutenance.setSujet(sujet);
@@ -112,7 +117,8 @@ public class SoutenanceServiceImpl implements SoutenanceService {
 
         Soutenance soutenanceSaved = soutenanceRepository.save(soutenance);
 
-        logger.info("Soutenance saved successfully");
+        juryService.addJury(enseignant, soutenanceSaved, "Encadrant du projet");
+        logger.info("Soutenance saved successfully with encadrant as jury.");
 
         return modelMapper.map(soutenanceSaved, SoutenanceDto.class);
     }
@@ -153,7 +159,7 @@ public class SoutenanceServiceImpl implements SoutenanceService {
             throw new RuntimeException("Enseignant is not the owner of the sujet");
         }
 
-        if (soutenance.getJurys().size() == 3) {
+        if (soutenance.getJurys().size() == 4) {
             logger.warn("You can't invite anymore jury for this soutenance");
             throw new RuntimeException("You can't invite anymore jury for this soutenance");
         }
@@ -237,7 +243,7 @@ public class SoutenanceServiceImpl implements SoutenanceService {
     }
 
     @Override
-    public SoutenanceDto getSoutenanceByIdSujet(String username,String idSujet) {
+    public SoutenanceDto getSoutenanceByIdSujet(String username, String idSujet) {
         Soutenance soutenance = soutenanceRepository.findBySujet_IdSujet(idSujet);
         if (soutenance == null) {
             logger.warn("Soutenance not found");
@@ -249,7 +255,7 @@ public class SoutenanceServiceImpl implements SoutenanceService {
             throw new RuntimeException("Enseignant not found");
         }
         logger.info("Enseignant found successfully : " + username);
-        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail()) && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))){
+        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail()) && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))) {
             logger.warn("Enseignant doesnt have access to this soutenance");
             throw new RuntimeException("Enseignant doesnt have access to this soutenance");
         }
@@ -297,8 +303,55 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         List<Soutenance> soutenances = soutenancePage.getContent();
         for (Soutenance soutenance : soutenances) {
             SoutenanceDto soutenanceDto1 = modelMapper.map(soutenance, SoutenanceDto.class);
+
             soutenanceDto.add(soutenanceDto1);
         }
         return soutenanceDto;
+    }
+
+    @Override
+    public List<SoutenanceDto> getAllMySoutenance(String username, int page, int limit) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        logger.info("Enseignant found successfully : " + username);
+        List<SoutenanceDto> soutenanceDto = new ArrayList<>();
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<Soutenance> soutenancePage = soutenanceRepository.findAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(enseignant.getIdEnseignant(), enseignant.getIdEnseignant(), pageableRequest);
+
+        List<Soutenance> soutenances = soutenancePage.getContent();
+        logger.info("Soutenances found successfully" + soutenances.size());
+        for (Soutenance soutenance : soutenances) {
+            SoutenanceDto soutenanceDto1 = modelMapper.map(soutenance, SoutenanceDto.class);
+
+            soutenanceDto.add(soutenanceDto1);
+        }
+        return soutenanceDto;
+    }
+
+    @Override
+    public Boolean isDateSet(String username, String idSujet) {
+        Soutenance soutenance = soutenanceRepository.findBySujet_IdSujet(idSujet);
+        if (soutenance == null) {
+            logger.warn("Soutenance not found");
+            throw new RuntimeException("Soutenance not found");
+        }
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        logger.info("Enseignant found successfully : " + username);
+        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail()) && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))) {
+            logger.warn("Enseignant doesnt have access to this soutenance");
+            throw new RuntimeException("Enseignant doesnt have access to this soutenance");
+        }
+        logger.info("Soutenance found successfully");
+        if (soutenance.getDateSoutenance() == null) {
+            return false;
+        }
+        return true;
     }
 }

@@ -18,4 +18,6 @@ public interface SujetService {
     List<SujetDto> getAllMyLockedSujets(String username,int page, int limit);
     long countSujets(String username);
     List<SujetDto> getAllMySujets(String username,int page, int limit);
+
+    Boolean isValidated(String mail, String idSujet);
 }

@@ -49,6 +49,17 @@ public class JuryServiceImpl implements JuryService {
 
 
     @Override
+    public JuryDto addJury(Enseignant enseignant, Soutenance soutenance,String role) {
+        Jury jury = new Jury();
+        jury.setEnseignant(enseignant);
+        jury.setSoutenance(soutenance);
+        jury.setTypeJury(role);
+        jury.setIdJury(util.generateUserId(32));
+        juryRepository.save(jury);
+        return null;
+    }
+
+    @Override
     public Boolean reponseInvitation(InvitationDto invitationDto) {
         Invitation invitation = invitationRepository.findByIdInvitation(invitationDto.getIdInvitation());
         if (invitation == null) {

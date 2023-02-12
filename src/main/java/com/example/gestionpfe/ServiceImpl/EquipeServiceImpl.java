@@ -538,9 +538,9 @@ public class EquipeServiceImpl implements EquipeService {
             logger.warn("there is no drive link to share");
             throw new RuntimeException("there is no drive link to share");
         }
-        if (equipeEntity.getSujet().getSoutenance().getJurys().size() != 3) {
-            logger.warn("you cant share drive link before adding 3 jurys");
-            throw new RuntimeException("you cant share drive link before adding 3 jurys");
+        if (equipeEntity.getSujet().getSoutenance().getJurys().size() != 4) {
+            logger.warn("you cant share drive link before adding 4 jurys");
+            throw new RuntimeException("you cant share drive link before adding 4 jurys");
         }
 
         for (Jury jury : equipeEntity.getSujet().getSoutenance().getJurys()) {

@@ -46,6 +46,14 @@ public class SoutenanceController {
         return ResponseEntity.ok(soutenanceResponse);
     }
 
+    @GetMapping(path="/isDateSet")
+    public ResponseEntity<Boolean> isDateSet(@RequestParam(value = "idSujet") String idSujet){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        return ResponseEntity.ok(soutenanceService.isDateSet(username, idSujet));
+    }
+
     @GetMapping
     public ResponseEntity<List<SoutenanceResponse>> getAllSoutenances(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -57,12 +65,33 @@ public class SoutenanceController {
         for (SoutenanceDto soutenanceDto : soutenances) {
             SoutenanceResponse soutenance1 = new SoutenanceResponse();
             soutenance1 = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
-
+            soutenance1.setNomSujet(soutenanceDto.getSujet().getNomSujet());
+            soutenance1.setIdEquipe(soutenanceDto.getSujet().getEquipe().get(0).getIdEquipe());
             soutenanceResponse.add(soutenance1);
 
         }
         return ResponseEntity.ok(soutenanceResponse);
     }
+
+    @GetMapping(path = "/mine")
+    public ResponseEntity<List<SoutenanceResponse>> getAllSoutenancesMine(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<SoutenanceResponse> soutenanceResponse = new ArrayList<>();
+        List<SoutenanceDto> soutenances = soutenanceService.getAllMySoutenance(username, page, limit);
+
+        for (SoutenanceDto soutenanceDto : soutenances) {
+            SoutenanceResponse soutenance1 = new SoutenanceResponse();
+            soutenance1 = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
+            soutenance1.setNomSujet(soutenanceDto.getSujet().getNomSujet());
+            soutenance1.setIdEquipe(soutenanceDto.getSujet().getEquipe().get(0).getIdEquipe());
+            logger.info("soutenance added.");
+            soutenanceResponse.add(soutenance1);
+        }
+        return ResponseEntity.ok(soutenanceResponse);
+    }
+
 
     @PostMapping
     public ResponseEntity<SoutenanceResponse> addSoutenance(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "idSujet") String idSujet) {

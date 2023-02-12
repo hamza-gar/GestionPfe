@@ -13,4 +13,6 @@ public interface SoutenanceService {
     SoutenanceDto updateSoutenance(String id, SoutenanceDto soutenanceDto);
     void deleteSoutenance(String id);
     List<SoutenanceDto> getAllSoutenance(String username, int page, int limit);
+    List<SoutenanceDto> getAllMySoutenance(String username, int page, int limit);
+    Boolean isDateSet(String username, String idSujet);
 }
