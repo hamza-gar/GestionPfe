@@ -53,13 +53,13 @@ public class RemarqueServiceImpl implements RemarqueService {
             logger.warn("etudiant not found !!!");
             throw new RuntimeException("etudiant not found !!!");
         }
-        if (!etudiant.getEquipe().get(0).getSujet().getSoutenance().getJurys().stream().anyMatch(jury -> jury.getEnseignant().getIdEnseignant().equals(enseignant.getIdEnseignant())) && !etudiant.getEquipe().get(0).getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())){
+        if (!etudiant.getEquipe().get(0).getSujet().getSoutenance().getJurys().stream().anyMatch(jury -> jury.getEnseignant().getIdEnseignant().equals(enseignant.getIdEnseignant())) && !etudiant.getEquipe().get(0).getSujet().getEncadrant().getIdEnseignant().equals(enseignant.getIdEnseignant())) {
             logger.warn("vous n'etes pas membre du jury de ce sujet");
             throw new RuntimeException("vous n'etes pas membre du jury de ce sujet");
         }
         Remarque remarqueEntity = new Remarque();
         remarqueEntity.setIdRemarque(util.generateUserId(32));
-        remarqueEntity.setRemarque(remarqueDto.getRemarque());
+        remarqueEntity.setRemarque(enseignant.getNom().substring(0, 1).toUpperCase() + enseignant.getNom().substring(1) + " " + enseignant.getPrenom().substring(0, 1).toUpperCase() + enseignant.getPrenom().substring(1) + "~" + remarqueDto.getRemarque());
         remarqueEntity.setNote(remarqueDto.getNote());
         remarqueEntity.setTarget(remarqueDto.getTarget());
         remarqueEntity.setEtudiant(etudiant);
