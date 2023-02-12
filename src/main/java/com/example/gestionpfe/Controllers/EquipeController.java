@@ -179,7 +179,7 @@ public class EquipeController {
         return new ResponseEntity<List<String>>(driveLinks, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/share-drive")
+    @PostMapping(path = "/share-drive")
     public ResponseEntity<Boolean> shareDrive(@RequestBody EquipeRequest equipeRequest) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
@@ -214,6 +214,7 @@ public class EquipeController {
     public ResponseEntity<EquipeResponse> getEquipeBySujet(@RequestParam(value = "idSujet") String idSujet) {
 
         EquipeDto equipeDto = equipeService.getEquipeBySujetId(idSujet);
+
 
         return new ResponseEntity<EquipeResponse>(modelMapper.map(equipeDto, EquipeResponse.class), HttpStatus.OK);
     }
