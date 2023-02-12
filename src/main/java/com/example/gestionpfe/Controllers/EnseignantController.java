@@ -80,9 +80,16 @@ public class EnseignantController {
         departement.setIdDepartement(enseignantRequest.getIdDepartement());
 
         EnseignantDto enseignantDto = new EnseignantDto();
-        enseignantDto = modelMapper.map(enseignantRequest, EnseignantDto.class);
-
         enseignantDto.setDepartement(departement);
+        enseignantDto.setNom(enseignantRequest.getNom());
+        enseignantDto.setPrenom(enseignantRequest.getPrenom());
+        enseignantDto.setEmail(enseignantRequest.getEmail());
+        enseignantDto.setPassword(enseignantRequest.getPassword());
+        enseignantDto.setEncryptedPassword(enseignantRequest.getPassword());
+        enseignantDto.setCin(enseignantRequest.getCin());
+
+
+
         EnseignantDto addEnseignant = enseignantService.addEnseignant(enseignantDto);
 
         if (addEnseignant == null)

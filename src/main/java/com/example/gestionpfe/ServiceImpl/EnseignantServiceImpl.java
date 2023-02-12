@@ -78,8 +78,9 @@ public class EnseignantServiceImpl implements EnseignantService {
             }
             Enseignant enseignantEntity = new Enseignant();
             enseignantEntity = modelMapper.map(enseignantDto, Enseignant.class);
-
+            logger.info(enseignantDto.getDepartement().getIdDepartement());
             Departement departement = departementRepository.findByIdDepartement(enseignantDto.getDepartement().getIdDepartement());
+
             if (departement == null) {
                 logger.warn("Departement not found !!!");
                 throw new RuntimeException("Departement not found !!!");

@@ -18,9 +18,9 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-//    @ExceptionHandler(value = {Exception.class})
-//    public ResponseEntity<Object> handleOthersException(Exception ex, WebRequest webRequest){
-//        ErrorResponse response = new ErrorResponse(new Date(), ex.getMessage());
-//        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(value = {Exception.class})
+    public ResponseEntity<Object> handleOthersException(Exception ex, WebRequest webRequest){
+        ErrorResponse response = new ErrorResponse(new Date(), ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }
