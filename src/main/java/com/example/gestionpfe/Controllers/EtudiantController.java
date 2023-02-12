@@ -51,6 +51,15 @@ public class EtudiantController {
         return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/byEmail/{email}")
+    public ResponseEntity<EtudiantResponse> getEtudiantByEmail(@PathVariable String email) {
+        EtudiantDto etudiantdto = etudiantService.getEtudiantByEmail(email);
+        EtudiantResponse etudiantResponse = new EtudiantResponse();
+        etudiantResponse = modelMapper.map(etudiantdto, EtudiantResponse.class);
+        etudiantResponse.setNomFiliere(etudiantdto.getFiliere().getNomFiliere());
+        return new ResponseEntity<EtudiantResponse>(etudiantResponse, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/verification/{token}")
     public void verifyEtudiant(@PathVariable String token , HttpServletResponse response) {
         EtudiantDto etudiantDto = etudiantService.verifyEtudiant(token);

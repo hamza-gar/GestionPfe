@@ -158,6 +158,34 @@ public class EtudiantServiceImpl implements EtudiantService {
         return etudiantDto;
     }
 
+
+    @Override
+    public EtudiantDto getEtudiantByEmail(String email) {
+        Etudiant etudiantEntity = etudianRepository.findByEmail(email);
+
+        if (etudiantEntity == null) throw new UsernameNotFoundException(email);
+
+        EtudiantDto etudiantDto = new EtudiantDto();
+
+        etudiantDto.setIdEtudiant(etudiantEntity.getIdEtudiant());
+        etudiantDto.setApogee(etudiantEntity.getApogee());
+        etudiantDto.setCne(etudiantEntity.getCne());
+        etudiantDto.setCin(etudiantEntity.getCin());
+        etudiantDto.setNom(etudiantEntity.getNom());
+        etudiantDto.setPrenom(etudiantEntity.getPrenom());
+        etudiantDto.setEmail(etudiantEntity.getEmail());
+        etudiantDto.setPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setFiliere(etudiantEntity.getFiliere());
+        etudiantDto.setEncryptedPassword(etudiantEntity.getEncryptedPassword());
+        etudiantDto.setEmailVerificationStatus(etudiantEntity.getEmailVerificationStatus());
+        etudiantDto.setEmailVerificationToken(etudiantEntity.getEmailVerificationToken());
+
+
+        logger.info("Etudiant retrieved:" + etudiantDto.getEmail());
+
+        return etudiantDto;
+    }
+
     @Override
     public EtudiantDto updateEtudiant(String id, EtudiantDto etudiantdto) {
         Etudiant etudiantEntity = etudianRepository.findByIdEtudiant(id);

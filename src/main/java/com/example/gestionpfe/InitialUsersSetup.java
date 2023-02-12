@@ -89,6 +89,8 @@ public class InitialUsersSetup {
         adminAuthorities.add(GET_BY_IDETUDIANT_AUTHORITY);
         etudiantAuthorities.add(GET_BY_IDETUDIANT_AUTHORITY);
 
+
+
         Authority GET_ALL_ETUDIANT_AUTHORITY = createAuthority("GET_ALL_ETUDIANT_AUTHORITY");
         sAdminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
         adminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
