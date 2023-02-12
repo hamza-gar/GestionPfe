@@ -9,6 +9,7 @@ public interface SoutenanceService {
     SoutenanceDto getSoutenanceByIdSoutenance(String username,String id);
     Boolean inviteJurys(String username,String roleJury ,String emailJury,SoutenanceDto soutenanceDto);
     SoutenanceDto updateDateSoutenance(String username,SoutenanceDto soutenanceDto);
+    SoutenanceDto getSoutenanceByIdSujet(String username,String idSujet);
     SoutenanceDto updateSoutenance(String id, SoutenanceDto soutenanceDto);
     void deleteSoutenance(String id);
     List<SoutenanceDto> getAllSoutenance(String username, int page, int limit);

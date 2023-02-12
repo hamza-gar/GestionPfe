@@ -15,7 +15,7 @@ import java.util.Date;
 public interface SoutenanceRepository extends PagingAndSortingRepository<Soutenance,Long> {
     Soutenance findByIdSoutenance(String idSoutenance);
     Soutenance findByDateSoutenance(Date dateSoutenance);
-
+    Soutenance findBySujet_IdSujet(String salleSoutenance);
     @Query("SELECT s FROM soutenances s JOIN s.jurys jury WHERE jury.enseignant.email = :mailJury")
     Page<Soutenance> findAllByJuryEmail(@Param("mailJury") String mailJury, Pageable pageable);
 

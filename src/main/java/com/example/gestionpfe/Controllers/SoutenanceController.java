@@ -24,6 +24,17 @@ public class SoutenanceController {
     @Autowired
     SoutenanceService soutenanceService;
 
+    @GetMapping(path = "/ofsujet")
+    public ResponseEntity<SoutenanceResponse> getSoutenanceByIdSujet(@RequestParam(value = "idSujet") String idSujet){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        SoutenanceDto soutenanceDto = soutenanceService.getSoutenanceByIdSujet(username, idSujet);
+        SoutenanceResponse soutenanceResponse = new SoutenanceResponse();
+        soutenanceResponse = modelMapper.map(soutenanceDto, SoutenanceResponse.class);
+        return ResponseEntity.ok(soutenanceResponse);
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<SoutenanceResponse> getSoutenanceById(@PathVariable String id) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

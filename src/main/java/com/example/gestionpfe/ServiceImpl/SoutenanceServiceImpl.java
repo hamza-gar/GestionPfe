@@ -237,6 +237,27 @@ public class SoutenanceServiceImpl implements SoutenanceService {
     }
 
     @Override
+    public SoutenanceDto getSoutenanceByIdSujet(String username,String idSujet) {
+        Soutenance soutenance = soutenanceRepository.findBySujet_IdSujet(idSujet);
+        if (soutenance == null) {
+            logger.warn("Soutenance not found");
+            throw new RuntimeException("Soutenance not found");
+        }
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        logger.info("Enseignant found successfully : " + username);
+        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail()) && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))){
+            logger.warn("Enseignant doesnt have access to this soutenance");
+            throw new RuntimeException("Enseignant doesnt have access to this soutenance");
+        }
+        logger.info("Soutenance found successfully");
+        return modelMapper.map(soutenance, SoutenanceDto.class);
+    }
+
+    @Override
     public SoutenanceDto updateSoutenance(String id, SoutenanceDto soutenanceDto) {
         Soutenance soutenance = soutenanceRepository.findByIdSoutenance(id);
         if (soutenance == null) {
