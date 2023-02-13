@@ -4,6 +4,7 @@ package com.example.gestionpfe.Controllers;
 import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
 import com.example.gestionpfe.Entities.Enseignant;
+import com.example.gestionpfe.Entities.Sujet;
 import com.example.gestionpfe.Requests.SujetRequest;
 import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
@@ -55,6 +56,24 @@ public class SujetController {
             sujet.setNomEnseignant(enseignant.getNom().substring(0, 1).toUpperCase() + enseignant.getNom().substring(1) +
                     " " + enseignant.getPrenom().substring(0, 1).toUpperCase() + enseignant.getPrenom().substring(1));
             sujet.setEmailEnseignant(enseignant.getEmail());
+            sujetResponse.add(sujet);
+        }
+        System.out.println(sujetResponse);
+        return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/filtered")
+    public ResponseEntity<List<SujetResponse>> getAllSujetsFiltered(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit,@RequestParam(value = "universite") String universite,@RequestParam(value = "etablissement") String etablissement,@RequestParam(value = "departement") String departement) {
+
+
+        List<SujetResponse> sujetResponse = new ArrayList<>();
+        List<SujetDto> sujets = sujetService.getAllSujetsFiltered(page, limit,universite,etablissement,departement);
+        List<SujetResponse> sujetList = new ArrayList<>();
+        SujetResponse sujet = new SujetResponse();
+
+        for (SujetDto sujetDto : sujets) {
+            sujet = modelMapper.map(sujetDto, SujetResponse.class);
+
             sujetResponse.add(sujet);
         }
         System.out.println(sujetResponse);

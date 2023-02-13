@@ -16,7 +16,7 @@ public interface DepartementService {
 
     void deleteDepartement(String id);
 
-    List<DepartementDto> getAllDepartementsOfEtablissement(String idEtablissement);
+    List<DepartementDto> getAllDepartementsOfEtablissement(String nomEtablissement);
 
     List<DepartementDto> getAllDepartements(int page, int limit);
 }

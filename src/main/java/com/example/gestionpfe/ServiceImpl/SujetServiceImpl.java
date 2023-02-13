@@ -5,10 +5,7 @@ import com.example.gestionpfe.Dto.EnseignantDto;
 import com.example.gestionpfe.Dto.SujetDto;
 import com.example.gestionpfe.Entities.*;
 import com.example.gestionpfe.InitialUsersSetup;
-import com.example.gestionpfe.Repositories.EnseignantRepository;
-import com.example.gestionpfe.Repositories.EquipeRepository;
-import com.example.gestionpfe.Repositories.FiliereRepository;
-import com.example.gestionpfe.Repositories.SujetRepository;
+import com.example.gestionpfe.Repositories.*;
 import com.example.gestionpfe.Responses.FiliereResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.EquipeService;
@@ -48,6 +45,15 @@ public class SujetServiceImpl implements SujetService {
 
     @Autowired
     EquipeService equipeService;
+
+    @Autowired
+    DepartementRepository departementRepository;
+
+    @Autowired
+    EtablissementRepository etablissementRepository;
+
+    @Autowired
+    UniversiteRepository universiteRepository;
 
     @Override
     public SujetDto addSujet(SujetDto sujetDTO, String username) {
@@ -259,6 +265,50 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public List<SujetDto> getAllSujetsFiltered(int page, int limit, String universite, String etablissement, String departement) {
+        List<SujetDto> sujetDtoList = new ArrayList<>();
+
+        Pageable pageableRequest = PageRequest.of(page, limit);
+        Page<Sujet> sujetPages;
+
+        if (departement != "") {
+            Departement departementEntity = departementRepository.findByNomDepartementAndEtablissement_NomEtablissementAndEtablissement_Universite_NomUniversite(decoder(departement), decoder(etablissement), decoder(universite));
+            if (departementEntity == null) {
+                logger.warn("departement not found");
+                throw new RuntimeException("departement not found");
+            }
+            logger.info("departement found successfully");
+            sujetPages = sujetRepository.findAllByEncadrant_Departement_IdDepartement(departementEntity.getIdDepartement(), pageableRequest);
+        } else if (etablissement != "") {
+            Etablissement etablissementEntity = etablissementRepository.findByNomEtablissementAndUniversite_NomUniversite(decoder(etablissement), decoder(universite));
+            if (etablissementEntity == null) {
+                logger.warn("etablissement not found");
+                throw new RuntimeException("etablissement not found");
+            }
+            logger.info("etablissement found successfully");
+            sujetPages = sujetRepository.findAllByEncadrant_Departement_Etablissement_IdEtablissement(etablissementEntity.getIdEtablissement(), pageableRequest);
+        } else if (universite != "") {
+            Universite universiteEntity = universiteRepository.findByNomUniversite(decoder(universite));
+            if (universiteEntity == null) {
+                logger.warn("universite not found");
+                throw new RuntimeException("universite not found");
+            }
+            logger.info("universite found successfully");
+            sujetPages = sujetRepository.findAllByEncadrant_Departement_Etablissement_Universite_IdUniversite(universiteEntity.getIdUniversite(), pageableRequest);
+        } else {
+            sujetPages = sujetRepository.findAll(pageableRequest);
+        }
+        for (Sujet sujetEntity : sujetPages) {
+            SujetDto sujetDto = new SujetDto();
+            sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+            sujetDtoList.add(sujetDto);
+        }
+        logger.info("sujet list found successfully");
+
+        return sujetDtoList;
+    }
+
+    @Override
     public List<SujetDto> getAllSujetsByFiliere(String idFiliere, int page, int limit) {
         List<SujetDto> sujetDtoList = new ArrayList<>();
         Page<Sujet> SujetPages = sujetRepository.findAll(PageRequest.of(page, limit));
@@ -323,14 +373,14 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
-    public List<SujetDto> getAllMyLockedSujets(String username,int page, int limit){
+    public List<SujetDto> getAllMyLockedSujets(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {
             logger.warn("enseignant not found");
             throw new RuntimeException(username);
         }
         List<SujetDto> sujetDtoList = new ArrayList<>();
-        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignantAndLocked(enseignant.getIdEnseignant(),true, PageRequest.of(page, limit));
+        Page<Sujet> SujetPages = sujetRepository.findAllByEncadrant_IdEnseignantAndLocked(enseignant.getIdEnseignant(), true, PageRequest.of(page, limit));
         for (Sujet sujetEntity : SujetPages) {
             SujetDto sujetDto = new SujetDto();
             sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
@@ -338,5 +388,9 @@ public class SujetServiceImpl implements SujetService {
         }
         logger.info("sujet list found successfully.");
         return sujetDtoList;
+    }
+
+    String decoder(String encodedString) {
+        return encodedString.replace("~", " ");
     }
 }

@@ -66,7 +66,7 @@ public class EnseignantServiceImpl implements EnseignantService {
     public EnseignantDto addEnseignant(EnseignantDto enseignantDto) {
 
         String domaine = enseignantDto.getEmail().split("@")[1];
-        if (domaineRepository.existsByNomDomaineAndEtudiantIsTrue(domaine)) {
+        if (domaineRepository.findByNomDomaine(domaine) == null || domaineRepository.findByNomDomaine(domaine).getEtudiant()){
             logger.info("le domaine ne figure pas dans la liste des domaines verifie !");
             throw new RuntimeException("le domaine ne figure pas dans la liste des domaines verifie !");
         } else {

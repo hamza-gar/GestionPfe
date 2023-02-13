@@ -278,16 +278,16 @@ public class InitialUsersSetup {
         logger.info("All Domaines created.");
 
         logger.info("Creating Universities...");
-        Universite universite = createUniversite("Université Abdelmalek Essaadi", "Tanger-Tétouan-Al Hoceïma");
-        Universite universite2 = createUniversite("Université Hassan II", "Casablanca-Settat");
-        Universite universite3 = createUniversite("Université Mohammed V", "Rabat-Salé-Kénitra");
+        Universite universite = createUniversite("Universite Abdelmalek Essaadi", "Tanger-Tétouan-Al Hoceïma");
+        Universite universite2 = createUniversite("Universite Hassan II", "Casablanca-Settat");
+        Universite universite3 = createUniversite("Universite Mohammed V", "Rabat-Salé-Kénitra");
 
         logger.info("All Universities created.");
 
         logger.info("Creating Facultes...");
-        Etablissement etablissement = createEtablissement("Faculté des Sciences et Techniques", universite);
-        Etablissement etablissement2 = createEtablissement("Faculté des Sciences Juridiques, Economiques et Sociales", universite);
-        Etablissement etablissement3 = createEtablissement("Faculté des Sciences de la Santé", universite2);
+        Etablissement etablissement = createEtablissement("Faculte des Sciences et Techniques", universite);
+        Etablissement etablissement2 = createEtablissement("Faculte des Sciences Juridiques Economiques et Sociales", universite);
+        Etablissement etablissement3 = createEtablissement("Faculte des Sciences de la Sante", universite2);
 
 
         logger.info("Creating Departements...");
@@ -310,19 +310,51 @@ public class InitialUsersSetup {
         Enseignant enseignant2 = createEnseignant("ens@hotmail.com", enseignantRole, departement);
         Enseignant enseignant3 = createEnseignant("ens2@gmail.com", enseignantRole, departement);
         Enseignant enseignant4 = createEnseignant("ens3@etu.uae.ac.ma", enseignantRole, departement);
+        Enseignant enseignant5 = createEnseignant("medecin1@prof.com", enseignantRole, departement6);
+        Enseignant enseignant6 = createEnseignant("medecin2@prof.com", enseignantRole, departement7);
+        Enseignant enseignant7 = createEnseignant("medecin3@prof.com", enseignantRole, departement7);
+        Enseignant enseignant8 = createEnseignant("medecin4@prof.com", enseignantRole, departement6);
+        Enseignant enseignant9 = createEnseignant("economist1@prof.com", enseignantRole, departement5);
+        Enseignant enseignant10 = createEnseignant("economist2@prof.com", enseignantRole, departement5);
+        Enseignant enseignant11 = createEnseignant("economist3@prof.com", enseignantRole, departement4);
+        Enseignant enseignant12 = createEnseignant("ekdiha@prof.com", enseignantRole, departement2);
+        Enseignant enseignant13 = createEnseignant("zitan@prof.com", enseignantRole, departement2);
+        Enseignant enseignant14 = createEnseignant("kamili@prof.com", enseignantRole, departement3);
         logger.info("Enseignants created.");
 
 
         logger.info("Creating Filieres...");
         Filiere filiere = createFiliere("Informatique", enseignant, departement);
-        logger.info("Filiere Informatique created.");
+        Filiere filiereMath = createFiliere("Mathematique", enseignant12, departement2);
+        Filiere filierePhysique = createFiliere("Physique", enseignant14, departement3);
+        Filiere filiereEconomie = createFiliere("Economie", enseignant11, departement4);
+        Filiere filiereDroit = createFiliere("Droit", enseignant9, departement5);
+        Filiere filiereMedecineGeneral = createFiliere("Ancologie", enseignant7, departement7);
+        logger.info("Filieres created.");
 
         logger.info("Creating Etudiants...");
-        Etudiant etudiant1 = createEtudiant("hamza.garmouch@etu.uae.ac.ma", etudiantRole, filiere);
-        Etudiant etudiant2 = createEtudiant("abdellah.lakhssassi@hotmail.com", etudiantRole, filiere);
-        Etudiant etudiant3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
-        Etudiant etudiant4 = createEtudiant("aba3@etu.com", etudiantRole, filiere);
-        Etudiant etudiant5 = createEtudiant("aba4@etu.com", etudiantRole, filiere);
+        Etudiant etudiantInfo1 = createEtudiant("hamza.garmouch@etu.uae.ac.ma", etudiantRole, filiere);
+        Etudiant etudiantInfo2 = createEtudiant("abdellah.lakhssassi@hotmail.com", etudiantRole, filiere);
+        Etudiant etudiantInfo3 = createEtudiant("aba2@etu.com", etudiantRole, filiere);
+        Etudiant etudiantInfo4 = createEtudiant("aba3@etu.com", etudiantRole, filiere);
+        Etudiant etudiantInfo5 = createEtudiant("aba4@etu.com", etudiantRole, filiere);
+        Etudiant etudiantEco1 = createEtudiant("etueco@etu.com", etudiantRole, filiereEconomie);
+        Etudiant etudiantEco2 = createEtudiant("etueco1@etu.com", etudiantRole, filiereEconomie);
+        Etudiant etudiantEco3 = createEtudiant("etueco3@etu.com", etudiantRole, filiereEconomie);
+        Etudiant etudiantEco4 = createEtudiant("droitetu@etu.com", etudiantRole, filiereDroit);
+        Etudiant etudiantEco5 = createEtudiant("droitetu1@etu.com", etudiantRole, filiereDroit);
+        Etudiant etudiantEco6 = createEtudiant("droitetu2@etu.com", etudiantRole, filiereDroit);
+        Etudiant etudiantMath1 = createEtudiant("mathetu@etu.com", etudiantRole, filiereMath);
+        Etudiant etudiantMath2 = createEtudiant("mathetu2@etu.com", etudiantRole, filiereMath);
+        Etudiant etudiantPC1 = createEtudiant("pcetu@etu.com", etudiantRole, filierePhysique);
+        Etudiant etudiantPC2 = createEtudiant("pcetu2@etu.com", etudiantRole, filierePhysique);
+        Etudiant etudiantPC3 = createEtudiant("pcetu3@etu.com", etudiantRole, filierePhysique);
+        Etudiant etudiantPC4 = createEtudiant("pcetu4@etu.com", etudiantRole, filierePhysique);
+        Etudiant etudiantMed1 = createEtudiant("medetu@etu.com", etudiantRole, filiereMedecineGeneral);
+        Etudiant etudiantMed2 = createEtudiant("medetu2@etu.com", etudiantRole, filiereMedecineGeneral);
+        Etudiant etudiantMed3 = createEtudiant("medetu3@etu.com", etudiantRole, filiereMedecineGeneral);
+        Etudiant etudiantMed4 = createEtudiant("medetu4@etu.com", etudiantRole, filiereMedecineGeneral);
+
         logger.info("Etudiants created.");
 
 
@@ -335,19 +367,81 @@ public class InitialUsersSetup {
         Sujet sujet5 = createSujet("System de securite de porte", "Sujet 1", 3, enseignant2, false, false);
         Sujet sujet6 = createSujet("Gestion de Location de voiture", "Sujet 1", 3, enseignant3, false, false);
         Sujet sujet7 = createSujet("Jeux 2D", "Sujet 1", 2, enseignant4, false, false);
-        logger.info("Subject created.");
+        Sujet sujetMed1 = createSujet("Cancer de la prostate", "Sujet 1", 3, enseignant5, false, false);
+        Sujet sujetMed2 = createSujet("Cancer du poumon", "Sujet 1", 3, enseignant5, false, false);
+        Sujet sujetMed3 = createSujet("Cancer du colon", "Sujet 1", 2, enseignant6, false, false);
+        Sujet sujetMed4 = createSujet("Cancer du foie", "Sujet 1", 3, enseignant6, false, false);
+        Sujet sujetMed5 = createSujet("Cancer du rein", "Sujet 1", 3, enseignant7, false, false);
+        Sujet sujetEco1 = createSujet("Recherche sur l'economie", "Sujet 1", 2, enseignant9, false, false);
+        Sujet sujetEco2 = createSujet("Recherche sur la sociologie", "Sujet 1", 3, enseignant9, false, false);
+        Sujet sujetMath1 = createSujet("Algebre", "Sujet 1", 3, enseignant12, false, false);
+        Sujet sujetMath2 = createSujet("Analyse", "Sujet 1", 2, enseignant12, false, false);
+        Sujet sujetMath3 = createSujet("Calcul", "Sujet 1", 3, enseignant12, false, false);
+        Sujet sujetPC1 = createSujet("Physique", "Sujet 1", 3, enseignant14, false, false);
+        Sujet sujetPC2 = createSujet("Chimie", "Sujet 1", 2, enseignant14, false, false);
+        logger.info("Sujets created.");
 
         logger.info("Creating groupes...");
         Equipe groupe = createEquipe(2, sujet, "ha");
         Equipe groupe2 = createEquipe(2, sujet1, "ha");
+        Equipe groupe3 = createEquipe(3, sujet2, "ha");
+        Equipe groupe4 = createEquipe(3, sujet3, "ha");
+        Equipe groupe5 = createEquipe(2, sujet4, "ha");
+        Equipe groupe6 = createEquipe(3, sujet5, "ha");
+        Equipe groupe7 = createEquipe(3, sujet6, "ha");
+        Equipe groupe8 = createEquipe(2, sujet7, "ha");
+        Equipe groupe9 = createEquipe(3, sujetMed1, "ha");
+        Equipe groupe10 = createEquipe(3, sujetMed2, "ha");
+        Equipe groupe11 = createEquipe(2, sujetMed3, "ha");
+        Equipe groupe12 = createEquipe(3, sujetMed4, "ha");
+        Equipe groupe13 = createEquipe(3, sujetMed5, "ha");
+        Equipe groupe14 = createEquipe(2, sujetEco1, "ha");
+        Equipe groupe15 = createEquipe(3, sujetEco2, "ha");
+        Equipe groupe16 = createEquipe(3, sujetMath1, "ha");
+        Equipe groupe17 = createEquipe(2, sujetMath2, "ha");
+        Equipe groupe18 = createEquipe(3, sujetMath3, "ha");
+        Equipe groupe19 = createEquipe(3, sujetPC1, "ha");
+        Equipe groupe20 = createEquipe(2, sujetPC2, "ha");
 
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
-        groupe = addEtudiantToEquipe(etudiant1, groupe);
-        groupe = addEtudiantToEquipe(etudiant2, groupe);
-        groupe2 = addEtudiantToEquipe(etudiant3, groupe2);
-        groupe2 = addEtudiantToEquipe(etudiant4, groupe2);
+        groupe = addEtudiantToEquipe(etudiantInfo1, groupe);
+        groupe = addEtudiantToEquipe(etudiantInfo2, groupe);
+        groupe2 = addEtudiantToEquipe(etudiantInfo3, groupe2);
+        groupe2 = addEtudiantToEquipe(etudiantInfo4, groupe2);
+        groupe2 = addEtudiantToEquipe(etudiantInfo1, groupe2);
+        groupe3 = addEtudiantToEquipe(etudiantInfo5, groupe3);
+        groupe3 = addEtudiantToEquipe(etudiantInfo2, groupe3);
+        groupe3 = addEtudiantToEquipe(etudiantInfo3, groupe3);
+        groupe4 = addEtudiantToEquipe(etudiantInfo4, groupe4);
+        groupe4 = addEtudiantToEquipe(etudiantInfo5, groupe4);
+        groupe4 = addEtudiantToEquipe(etudiantInfo1, groupe4);
+        groupe5 = addEtudiantToEquipe(etudiantInfo2, groupe5);
+        groupe9 = addEtudiantToEquipe(etudiantMed1, groupe9);
+        groupe9 = addEtudiantToEquipe(etudiantMed2, groupe9);
+        groupe10 = addEtudiantToEquipe(etudiantMed3, groupe10);
+        groupe10 = addEtudiantToEquipe(etudiantMed4, groupe10);
+        groupe11 = addEtudiantToEquipe(etudiantMed1, groupe11);
+        groupe11 = addEtudiantToEquipe(etudiantMed2, groupe11);
+        groupe12 = addEtudiantToEquipe(etudiantMed3, groupe12);
+        groupe12 = addEtudiantToEquipe(etudiantMed4, groupe12);
+        groupe13 = addEtudiantToEquipe(etudiantMed1, groupe13);
+        groupe13 = addEtudiantToEquipe(etudiantMed2, groupe13);
+        groupe14 = addEtudiantToEquipe(etudiantEco1, groupe14);
+        groupe14 = addEtudiantToEquipe(etudiantEco2, groupe14);
+        groupe15 = addEtudiantToEquipe(etudiantEco1, groupe15);
+        groupe15 = addEtudiantToEquipe(etudiantEco2, groupe15);
+        groupe16 = addEtudiantToEquipe(etudiantMath1, groupe16);
+        groupe16 = addEtudiantToEquipe(etudiantMath2, groupe16);
+        groupe17 = addEtudiantToEquipe(etudiantMath1, groupe17);
+        groupe17 = addEtudiantToEquipe(etudiantMath2, groupe17);
+        groupe18 = addEtudiantToEquipe(etudiantMath1, groupe18);
+        groupe18 = addEtudiantToEquipe(etudiantMath2, groupe18);
+        groupe19 = addEtudiantToEquipe(etudiantPC1, groupe19);
+        groupe19 = addEtudiantToEquipe(etudiantPC2, groupe19);
+        groupe20 = addEtudiantToEquipe(etudiantPC1, groupe20);
+
         logger.info("Students added to group.");
 
         logger.info("creating soutenances..");

@@ -11,4 +11,5 @@ public interface DomaineRepository extends PagingAndSortingRepository<Domaine,Lo
     Domaine findByNomDomaine(String nomDomaine);
     Domaine findById(String id);
     Boolean existsByNomDomaineAndEtudiantIsTrue(String nomDomaine);
+    Boolean existsByNomDomaine(String nomDomaine);
 }

@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EtablissementRepository extends JpaRepository<Etablissement, Long> {
     Etablissement findByNomEtablissement(String nomEtablissement);
+    Etablissement findByNomEtablissementAndUniversite_NomUniversite(String nomEtablissement,String nomUniversite);
     Etablissement findByIdEtablissement(String idEtablissement);
 }

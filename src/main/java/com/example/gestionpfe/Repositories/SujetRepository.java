@@ -19,6 +19,10 @@ public interface SujetRepository extends PagingAndSortingRepository<Sujet, Long>
     Page<Sujet> findAllByEncadrant_IdEnseignantAndLocked(String idEnseignant, boolean locked, Pageable pageable);
     Page<Sujet> findAllByEncadrant_IdEnseignant(String idEnseignant, Pageable pageable);
 
+    Page<Sujet> findAllByEncadrant_Departement_IdDepartement(String idDepartement, Pageable pageable);
+    Page<Sujet> findAllByEncadrant_Departement_Etablissement_IdEtablissement(String idEtablissement, Pageable pageable);
+    Page<Sujet> findAllByEncadrant_Departement_Etablissement_Universite_IdUniversite(String idUniversite, Pageable pageable);
+
     long countAllByLocked(boolean locked);
 
 
