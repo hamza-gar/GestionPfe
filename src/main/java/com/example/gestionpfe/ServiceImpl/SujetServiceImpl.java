@@ -270,6 +270,18 @@ public class SujetServiceImpl implements SujetService {
 
         Pageable pageableRequest = PageRequest.of(page, limit);
         Page<Sujet> sujetPages;
+        logger.info("departement ="+departement);
+        logger.info("etablissement ="+etablissement);
+        logger.info("universite ="+universite);
+        if(universite.contains("object")){
+            universite = "";
+        }
+        if(etablissement.contains("object")){
+            etablissement = "";
+        }
+        if(departement.contains("object")){
+            departement = "";
+        }
 
         if (departement != "") {
             Departement departementEntity = departementRepository.findByNomDepartementAndEtablissement_NomEtablissementAndEtablissement_Universite_NomUniversite(decoder(departement), decoder(etablissement), decoder(universite));
