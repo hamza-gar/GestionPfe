@@ -17,6 +17,7 @@ public interface SujetService {
     List<SujetDto> getAllSujetsByFiliere(String filiere, int page, int limit);
     List<SujetDto> getAllMyLockedSujets(String username,int page, int limit);
     long countSujets(String username);
+    long countMySujets(String username);
     List<SujetDto> getAllMySujets(String username,int page, int limit);
     List<SujetDto> getAllSujetsFiltered(int page, int limit,String universite,String etablissement,String departement);
 
