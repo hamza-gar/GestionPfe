@@ -29,4 +29,7 @@ public class Universite {
 
     @OneToMany(mappedBy = "universite")
     private List<Etablissement> etablissements;
+
+    @OneToMany(mappedBy = "universite")
+    private List<Domaine> domaines;
 }

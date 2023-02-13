@@ -270,12 +270,7 @@ public class InitialUsersSetup {
 
         logger.info("All Roles created.");
 
-        logger.info("Creating Domaines...");
-        Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true);
-        Domaine ensDomaine = createDomaine("uae.ac.ma", false);
-        Domaine fake1 = createDomaine("gmail.com", true);
-        Domaine fake2 = createDomaine("hotmail.com", false);
-        logger.info("All Domaines created.");
+
 
         logger.info("Creating Universities...");
         Universite universite = createUniversite("Universite Abdelmalek Essaadi", "Tanger-Tétouan-Al Hoceïma");
@@ -283,6 +278,13 @@ public class InitialUsersSetup {
         Universite universite3 = createUniversite("Universite Mohammed V", "Rabat-Salé-Kénitra");
 
         logger.info("All Universities created.");
+
+        logger.info("Creating Domaines...");
+        Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true,universite);
+        Domaine ensDomaine = createDomaine("uae.ac.ma", false,universite);
+        Domaine fake1 = createDomaine("gmail.com", true,universite);
+        Domaine fake2 = createDomaine("hotmail.com", false,universite);
+        logger.info("All Domaines created.");
 
         logger.info("Creating Facultes...");
         Etablissement etablissement = createEtablissement("Faculte des Sciences et Techniques", universite);
@@ -601,13 +603,13 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Domaine createDomaine(String s, boolean b) {
+    public Domaine createDomaine(String s, boolean b,Universite universite) {
         Domaine domaine = domaineRepository.findByNomDomaine(s);
         if (domaine == null) {
             domaine = new Domaine();
             domaine.setEtudiant(b);
             domaine.setNomDomaine(s);
-            domaine.setEtablissement("abdelmalek Essaadi");
+            domaine.setUniversite(universite);
             domaine = domaineRepository.save(domaine);
         }
         return domaine;

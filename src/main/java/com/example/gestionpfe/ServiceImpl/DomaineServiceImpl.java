@@ -105,7 +105,6 @@ public class DomaineServiceImpl implements DomaineService {
 //            DomaineEntity.setEtudiant(domainDto.getEtudiant());
 //        }
         DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
-        DomaineEntity.setEtablissement(domainDto.getEtablissement());
         DomaineEntity.setEtudiant(domainDto.getEtudiant());
 
         Domaine domaineUpdated = domaineRepository.save(DomaineEntity);

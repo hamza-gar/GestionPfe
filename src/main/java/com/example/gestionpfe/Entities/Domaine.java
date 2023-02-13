@@ -14,10 +14,14 @@ public class Domaine implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private long id;
+
     @Column(nullable = false)
     private String nomDomaine;
-    @Column(nullable = false)
-    private String etablissement;
+
+    @ManyToOne
+    @JoinColumn(name = "universite_id", nullable = false)
+    private Universite universite;
+
     @Column(nullable = false)
     private Boolean etudiant;
 }
