@@ -2,9 +2,14 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.AdminDto;
 import com.example.gestionpfe.Dto.DepartementDto;
+import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Entities.Departement;
+import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DepartementRepository;
+import com.example.gestionpfe.Repositories.DomaineRepository;
+import com.example.gestionpfe.Repositories.UniversiteRepository;
+import com.example.gestionpfe.Requests.DomaineRequest;
 import com.example.gestionpfe.Services.DepartementService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -24,6 +29,8 @@ public class DepartementServiceImpl implements DepartementService {
 
     @Autowired
     DepartementRepository departementRepository;
+
+
 
     @Override
     public DepartementDto addDepartement(DepartementDto departementDTO) {
@@ -124,6 +131,8 @@ public class DepartementServiceImpl implements DepartementService {
         logger.info("departements found successfully");
         return departementDtos;
     }
+
+
 
 
 }

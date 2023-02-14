@@ -3,8 +3,10 @@ package com.example.gestionpfe.ServiceImpl;
 
 import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Entities.Domaine;
+import com.example.gestionpfe.Entities.Universite;
 import com.example.gestionpfe.InitialUsersSetup;
 import com.example.gestionpfe.Repositories.DomaineRepository;
+import com.example.gestionpfe.Repositories.UniversiteRepository;
 import com.example.gestionpfe.Services.DomaineService;
 import com.example.gestionpfe.Shared.Utils;
 import org.modelmapper.ModelMapper;
@@ -34,24 +36,31 @@ public class DomaineServiceImpl implements DomaineService {
     @Autowired
     Utils util;
 
+    @Autowired
+    UniversiteRepository universiteRepository;
     @Override
     public DomaineDto addDomaine(DomaineDto domainDto) {
-        Domaine checkDomaine = domaineRepository.findByNomDomaine(domainDto.getNomDomaine());
+        Universite universiteEntity = universiteRepository.findByIdUniversite(domainDto.getIdUniversite());
+        if(universiteEntity==null) {
+            logger.error("universite not found");
+            throw new UsernameNotFoundException(domainDto.getIdUniversite());
+        }
 
-        if(checkDomaine!=null) throw new RuntimeException("domaine deja exist !!!");
         Domaine domaineEntity = new Domaine();
-        domaineEntity = modelMapper.map(domainDto, Domaine.class);
-
-
+        domaineEntity.setUniversite(universiteEntity);
+        domaineEntity.setNomDomaine(domainDto.getNomDomaine());
+        domaineEntity.setEtudiant(domainDto.getEtudiant());
 
         Domaine newDomaine = domaineRepository.save(domaineEntity);
 
         DomaineDto newDomaineDto = new DomaineDto();
         newDomaineDto = modelMapper.map(newDomaine, DomaineDto.class);
-        logger.info("domaine found successfully");
+        logger.info("domaine saved successfully");
 
         return newDomaineDto;
     }
+
+
 
     @Override
     public DomaineDto getDomaine(String nomDomaine) {

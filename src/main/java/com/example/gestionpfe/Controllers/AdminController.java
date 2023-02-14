@@ -6,12 +6,14 @@ import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Entities.Etablissement;
 import com.example.gestionpfe.Requests.AdminRequest;
 import com.example.gestionpfe.Requests.DepartementRequest;
+import com.example.gestionpfe.Requests.DomaineRequest;
 import com.example.gestionpfe.Responses.AdminResponse;
 import com.example.gestionpfe.Responses.DepartementResponse;
 import com.example.gestionpfe.Responses.DomaineResponse;
 import com.example.gestionpfe.Services.AdminService;
 
 import com.example.gestionpfe.Services.DepartementService;
+import com.example.gestionpfe.Services.DomaineService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class AdminController {
     AdminService adminService;
     @Autowired
     DepartementService departementService;
+
+    @Autowired
+    DomaineService domaineService;
 
     @PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
     @GetMapping(path = "/{id}")
@@ -110,4 +115,17 @@ public class AdminController {
 
         return new ResponseEntity<DepartementResponse>(departementResponse, HttpStatus.CREATED);
     }
+
+    @PostMapping(path = "/domaines")
+    public ResponseEntity<DomaineResponse> addDomaine(@RequestBody DomaineRequest domaineRequest) {
+        DomaineDto domaineDto = new DomaineDto();
+        domaineDto.setIdUniversite(domaineRequest.getIdUniversite());
+        domaineDto.setNomDomaine(domaineRequest.getNomDomaine());
+        domaineDto.setEtudiant(domaineRequest.getEtudiant());
+        domaineDto = domaineService.addDomaine(domaineDto);
+
+        return new ResponseEntity<DomaineResponse>(modelMapper.map(domaineDto, DomaineResponse.class), HttpStatus.CREATED);
+    }
+
+
 }

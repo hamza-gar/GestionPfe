@@ -16,5 +16,6 @@ public class DomaineDto {
     private long id;
     private String nomDomaine;
     private String etablissement;
+    private String idUniversite;
     private Boolean etudiant;
 }
