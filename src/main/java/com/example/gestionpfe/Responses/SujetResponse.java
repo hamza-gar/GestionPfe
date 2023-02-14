@@ -14,6 +14,7 @@ public class SujetResponse {
     private int tailleEquipe;
     private String nomEnseignant;
     private String emailEnseignant;
+    private String enseignantId;
     private Boolean done;
 
 }
