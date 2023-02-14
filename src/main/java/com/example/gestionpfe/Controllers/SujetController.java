@@ -72,8 +72,11 @@ public class SujetController {
         SujetResponse sujet = new SujetResponse();
 
         for (SujetDto sujetDto : sujets) {
+            Enseignant enseignant = sujetDto.getEncadrant();
             sujet = modelMapper.map(sujetDto, SujetResponse.class);
-
+            sujet.setNomEnseignant(enseignant.getNom().substring(0, 1).toUpperCase() + enseignant.getNom().substring(1) +
+                    " " + enseignant.getPrenom().substring(0, 1).toUpperCase() + enseignant.getPrenom().substring(1));
+            sujet.setEmailEnseignant(enseignant.getEmail());
             sujetResponse.add(sujet);
         }
         System.out.println(sujetResponse);

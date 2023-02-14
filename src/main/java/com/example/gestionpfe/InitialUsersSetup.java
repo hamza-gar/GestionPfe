@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Component
-@Transactional
+//@Component
+//@Transactional
 public class InitialUsersSetup {
 
     private final static Logger logger = org.slf4j.LoggerFactory.getLogger(InitialUsersSetup.class);
@@ -73,8 +73,8 @@ public class InitialUsersSetup {
     @Autowired
     EmailSender emailSender;
 
-    @EventListener
-    @Transactional
+//    @EventListener
+//    @Transactional
     public void onApplicationEvent(ApplicationReadyEvent event) {
         /* TODO:
          *   ADD AUTHORITIES.*/
