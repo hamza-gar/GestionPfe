@@ -396,6 +396,48 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public Long countSujetsFiltered(String username, String universite, String etablissement, String departement) {
+        long count;
+        if(universite.contains("object")){
+            universite = "";
+        }
+        if(etablissement.contains("object")){
+            etablissement = "";
+        }
+        if(departement.contains("object")){
+            departement = "";
+        }
+        if (departement != "") {
+            Departement departementEntity = departementRepository.findByNomDepartementAndEtablissement_NomEtablissementAndEtablissement_Universite_NomUniversite(decoder(departement), decoder(etablissement), decoder(universite));
+            if (departementEntity == null) {
+                logger.warn("departement not found");
+                throw new RuntimeException("departement not found");
+            }
+            logger.info("departement found successfully");
+            count = sujetRepository.countAllByEncadrant_Departement_IdDepartement(departementEntity.getIdDepartement());
+        } else if (etablissement != "") {
+            Etablissement etablissementEntity = etablissementRepository.findByNomEtablissementAndUniversite_NomUniversite(decoder(etablissement), decoder(universite));
+            if (etablissementEntity == null) {
+                logger.warn("etablissement not found");
+                throw new RuntimeException("etablissement not found");
+            }
+            logger.info("etablissement found successfully");
+            count = sujetRepository.countAllByEncadrant_Departement_Etablissement_IdEtablissement(etablissementEntity.getIdEtablissement());
+        } else if (universite != "") {
+            Universite universiteEntity = universiteRepository.findByNomUniversite(decoder(universite));
+            if (universiteEntity == null) {
+                logger.warn("universite not found");
+                throw new RuntimeException("universite not found");
+            }
+            logger.info("universite found successfully");
+            count = sujetRepository.countAllByEncadrant_Departement_Etablissement_Universite_IdUniversite(universiteEntity.getIdUniversite());
+        } else {
+            count = sujetRepository.count();
+        }
+        return count;
+    }
+
+    @Override
     public List<SujetDto> getAllMyLockedSujets(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {

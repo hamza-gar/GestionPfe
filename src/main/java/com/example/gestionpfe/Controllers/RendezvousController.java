@@ -121,4 +121,11 @@ public class RendezvousController {
         return ResponseEntity.ok(rendezvousResponse);
     }
 
+//    @GetMapping(path = "/isTaken")
+//    public ResponseEntity<Boolean> isTaken(){
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String username = principal.toString();
+//        return ResponseEntity.ok(rendezvousService.isTaken(username));
+//    }
+
 }

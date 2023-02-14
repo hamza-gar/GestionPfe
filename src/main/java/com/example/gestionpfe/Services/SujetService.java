@@ -22,4 +22,6 @@ public interface SujetService {
     List<SujetDto> getAllSujetsFiltered(int page, int limit,String universite,String etablissement,String departement);
 
     Boolean isValidated(String mail, String idSujet);
+
+    Long countSujetsFiltered(String username, String universite, String etablissement, String departement);
 }

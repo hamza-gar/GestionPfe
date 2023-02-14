@@ -9,6 +9,7 @@ import com.example.gestionpfe.Requests.SujetRequest;
 import com.example.gestionpfe.Responses.SujetResponse;
 import com.example.gestionpfe.Services.EnseignantService;
 import com.example.gestionpfe.Services.SujetService;
+import org.apache.coyote.Response;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -102,6 +103,15 @@ public class SujetController {
             sujetResponse.add(sujet);
         }
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/countFiltered")
+    public ResponseEntity<Long> getCountAllFilteredSujets(@RequestParam(value = "universite") String universite,@RequestParam(value = "etablissement") String etablissement,@RequestParam(value = "departement") String departement) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        Long count = sujetService.countSujetsFiltered(username,universite,etablissement,departement);
+        return new ResponseEntity<Long>(count, HttpStatus.OK);
     }
 
     @GetMapping(path = "/count")

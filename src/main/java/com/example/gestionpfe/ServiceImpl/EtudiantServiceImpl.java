@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -385,6 +386,63 @@ public class EtudiantServiceImpl implements EtudiantService {
             return true;
         if (!equipes.get(0).getSujet().getLocked())
             return true;
+        return false;
+    }
+
+    @Override
+    public boolean isWorking(String username) {
+        Etudiant etudiant = etudianRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with email :" + username);
+            throw new UsernameNotFoundException(username);
+        }
+        List<Equipe> equipes = etudiant.getEquipe();
+        if (equipes.size() != 1)
+            return false;
+        if (equipes.get(0).getSujet() == null)
+            return false;
+        if (equipes.get(0).getSujet().getLocked()){
+            logger.info("Etudiant is working");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasFinished(String username) {
+        Etudiant etudiant = etudianRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with email :" + username);
+            throw new UsernameNotFoundException(username);
+        }
+        List<Equipe> equipes = etudiant.getEquipe();
+        if (equipes.size() != 1)
+            return false;
+        if (equipes.get(0).getSujet() == null)
+            return false;
+        if (equipes.get(0).getSujet().getLocked() && equipes.get(0).getSujet().getDone() && equipes.get(0).getSujet().getSoutenance().getDateSoutenance() != null && equipes.get(0).getSujet().getSoutenance().getDateSoutenance().before(new Date())){
+            logger.info("Etudiant has finished his soutenance.");
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean hasSoutenance(String username) {
+        Etudiant etudiant = etudianRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.info("etudiantEntity not found with email :" + username);
+            throw new UsernameNotFoundException(username);
+        }
+        List<Equipe> equipes = etudiant.getEquipe();
+        if (equipes.size() != 1)
+            return false;
+        if (equipes.get(0).getSujet() == null)
+            return false;
+        if (equipes.get(0).getSujet().getLocked() && equipes.get(0).getSujet().getDone() && equipes.get(0).getSujet().getSoutenance().getDateSoutenance() != null && equipes.get(0).getSujet().getSoutenance().getDateSoutenance().after(new Date())){
+            logger.info("Etudiant has a soutenance.");
+            return true;
+        }
         return false;
     }
 

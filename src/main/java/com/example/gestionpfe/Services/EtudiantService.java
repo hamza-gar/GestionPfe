@@ -19,6 +19,12 @@ public interface EtudiantService extends UserDetailsService {
     Boolean etudiantIn3Sujets(String idEtudiant,String idEnseignant);
 
     boolean estPostulant(String username);
+
+    boolean isWorking(String username);
+
+    boolean hasFinished(String username);
+
+    boolean hasSoutenance(String username);
 }
 
 

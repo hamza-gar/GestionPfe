@@ -15,4 +15,5 @@ public interface RendezvousService {
     RendezvousDto getMonRendezVous(String username);
     void deleteRendezvous(String id);
     List<RendezvousDto> getAllRendezvous(String username,int page, int limit);
+
 }

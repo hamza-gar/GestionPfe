@@ -154,4 +154,31 @@ public class EtudiantController {
         boolean estPostulant = etudiantService.estPostulant(username);
         return new ResponseEntity<Boolean>(estPostulant, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/isWorking")
+    public ResponseEntity<Boolean> isWorking() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        boolean isWorking = etudiantService.isWorking(username);
+        return new ResponseEntity<Boolean>(isWorking, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/hasFinished")
+    public ResponseEntity<Boolean> hasFinished() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        boolean isWorking = etudiantService.hasFinished(username);
+        return new ResponseEntity<Boolean>(isWorking, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/hasSoutenance")
+    public ResponseEntity<Boolean> hasSoutenance() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        boolean isWorking = etudiantService.hasSoutenance(username);
+        return new ResponseEntity<Boolean>(isWorking, HttpStatus.OK);
+    }
 }
