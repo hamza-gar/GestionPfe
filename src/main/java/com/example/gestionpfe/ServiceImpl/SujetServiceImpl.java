@@ -353,6 +353,17 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public long countMySujets(String username) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            throw new RuntimeException("enseignant not found");
+        }
+        return sujetRepository.countAllByEncadrant_IdEnseignant(enseignant.getIdEnseignant());
+    }
+
+
+    @Override
     public List<SujetDto> getAllMySujets(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {
