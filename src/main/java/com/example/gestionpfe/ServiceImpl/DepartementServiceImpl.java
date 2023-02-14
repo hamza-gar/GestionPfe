@@ -58,7 +58,6 @@ public class DepartementServiceImpl implements DepartementService {
         departementDto = modelMapper.map(departementEntity, DepartementDto.class);
         logger.info("departement found successfully");
         return departementDto;
-
     }
 
     @Override

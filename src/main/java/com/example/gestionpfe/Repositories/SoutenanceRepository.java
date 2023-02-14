@@ -19,7 +19,7 @@ public interface SoutenanceRepository extends PagingAndSortingRepository<Soutena
     Soutenance findBySujet_IdSujet(String salleSoutenance);
 
     @Query("SELECT s FROM soutenances s JOIN s.sujet su ON s.sujet.id = su.id JOIN su.encadrant e ON su.encadrant.idEnseignant = e.idEnseignant WHERE e.idEnseignant = :idEncadrant OR EXISTS (SELECT j FROM s.jurys j WHERE j.enseignant.idEnseignant = :encadrantId)")
-    Page<Soutenance> findAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(String idEncadrant, String encadrantId, Pageable pageable);
+    Page<Soutenance> findAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(@Param("idEncadrant") String idEncadrant,@Param("encadrantId") String encadrantId, Pageable pageable);
 
     @Query("SELECT s FROM soutenances s JOIN s.jurys jury WHERE jury.enseignant.email = :mailJury")
     Page<Soutenance> findAllByJuryEmail(@Param("mailJury") String mailJury, Pageable pageable);

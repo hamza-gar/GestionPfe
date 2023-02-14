@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -36,6 +37,10 @@ public interface SujetRepository extends PagingAndSortingRepository<Sujet, Long>
     Page<Sujet> findAllByEncadrant_Departement_Etablissement_Universite_IdUniversite(String idUniversite, Pageable pageable);
 
     long countAllByEncadrant_Departement_Etablissement_Universite_IdUniversite(String idUniversite);
+
+    Page<Sujet> findAllByEquipe_Etudiant_IdEtudiantAndLockedIsFalse(String idEtudiant, Pageable pageable);
+
+    long countAllByEquipe_Etudiant_IdEtudiant(String idEtudiant);
 
 
 }

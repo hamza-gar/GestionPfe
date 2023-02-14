@@ -24,4 +24,6 @@ public interface SujetService {
     Boolean isValidated(String mail, String idSujet);
 
     Long countSujetsFiltered(String username, String universite, String etablissement, String departement);
+
+    List<SujetDto> getAllMyPostulatedSujets(String username, int page, int limit);
 }

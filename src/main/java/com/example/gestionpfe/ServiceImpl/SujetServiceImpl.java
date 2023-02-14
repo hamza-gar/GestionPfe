@@ -41,6 +41,9 @@ public class SujetServiceImpl implements SujetService {
     EnseignantRepository enseignantRepository;
 
     @Autowired
+    EtudiantRepository etudiantRepository;
+
+    @Autowired
     EquipeRepository equipeRepository;
 
     @Autowired
@@ -435,6 +438,23 @@ public class SujetServiceImpl implements SujetService {
             count = sujetRepository.count();
         }
         return count;
+    }
+
+    @Override
+    public List<SujetDto> getAllMyPostulatedSujets(String username, int page, int limit) {
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.warn("etudiant not found");
+            throw new RuntimeException(username);
+        }
+        List<SujetDto> sujetDtoList = new ArrayList<>();
+        Page<Sujet> SujetPages = sujetRepository.findAllByEquipe_Etudiant_IdEtudiantAndLockedIsFalse(etudiant.getIdEtudiant(), PageRequest.of(page, limit));
+        for (Sujet sujetEntity : SujetPages) {
+            SujetDto sujetDto = new SujetDto();
+            sujetDto = modelMapper.map(sujetEntity, SujetDto.class);
+            sujetDtoList.add(sujetDto);
+        }
+        return sujetDtoList;
     }
 
     @Override

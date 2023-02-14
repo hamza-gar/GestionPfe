@@ -164,6 +164,26 @@ public class SujetController {
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/myPostulated")
+    public ResponseEntity<List<SujetResponse>> getMyPostulatedSujets(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        List<SujetResponse> sujetResponse = new ArrayList<>();
+        List<SujetDto> sujets = sujetService.getAllMyPostulatedSujets(username, page, limit);
+
+        for (SujetDto sujetDto : sujets) {
+            Enseignant enseignant = sujetDto.getEncadrant();
+            SujetResponse sujet = new SujetResponse();
+            sujet = modelMapper.map(sujetDto, SujetResponse.class);
+            sujet.setNomEnseignant(enseignant.getNom().substring(0, 1).toUpperCase() + enseignant.getNom().substring(1) +
+                    " " + enseignant.getPrenom().substring(0, 1).toUpperCase() + enseignant.getPrenom().substring(1));
+            sujet.setEmailEnseignant(enseignant.getEmail());
+            sujetResponse.add(sujet);
+        }
+        return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
+    }
+
     @PreAuthorize("hasAuthority('ADD_SUJET_AUTHORITY')")
     @PostMapping
     public ResponseEntity<SujetResponse> addSujet(@RequestBody SujetRequest sujetRequest) {
@@ -199,8 +219,6 @@ public class SujetController {
         SujetDto sujetDto = new SujetDto();
         sujetDto.setIdSujet(sujetRequest.getIdSujet());
         SujetDto response = sujetService.validateSujet(mail, sujetDto, sujetRequest.getDone());
-
-
         return new ResponseEntity<SujetResponse>(modelMapper.map(response, SujetResponse.class), HttpStatus.OK);
     }
 
@@ -229,6 +247,7 @@ public class SujetController {
         sujetResponse = modelMapper.map(updatedSujet, SujetResponse.class);
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasAuthority('DELETE_SUJET_AUTHORITY')")
     @DeleteMapping(path = "/{id}")
