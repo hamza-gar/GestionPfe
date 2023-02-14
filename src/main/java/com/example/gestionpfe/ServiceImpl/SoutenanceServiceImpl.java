@@ -249,15 +249,23 @@ public class SoutenanceServiceImpl implements SoutenanceService {
             logger.warn("Soutenance not found");
             throw new RuntimeException("Soutenance not found");
         }
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+
         Enseignant enseignant = enseignantRepository.findByEmail(username);
-        if (enseignant == null) {
-            logger.warn("Enseignant not found");
-            throw new RuntimeException("Enseignant not found");
+        if (enseignant == null && etudiant == null) {
+            logger.warn("user not found");
+            throw new RuntimeException("user not found");
         }
-        logger.info("Enseignant found successfully : " + username);
-        if (!username.equals(soutenance.getSujet().getEncadrant().getEmail()) && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))) {
-            logger.warn("Enseignant doesnt have access to this soutenance");
-            throw new RuntimeException("Enseignant doesnt have access to this soutenance");
+        logger.info("user found successfully : " + username);
+        if(soutenance.getSujet().getEquipe().size() !=1){
+            logger.warn("Sujet has more than one equipe");
+            throw new RuntimeException("Sujet has more than one equipe");
+        }
+        if (!soutenance.getSujet().getEquipe().get(0).getEtudiant().stream().anyMatch(etudiant1 -> etudiant1.getIdEtudiant().equals(etudiant.getIdEtudiant()))
+                && !username.equals(soutenance.getSujet().getEncadrant().getEmail())
+                && !soutenance.getJurys().stream().anyMatch(jury -> jury.getEnseignant().getEmail().equals(username))) {
+            logger.warn("user doesnt have access to this soutenance");
+            throw new RuntimeException("user doesnt have access to this soutenance");
         }
         logger.info("Soutenance found successfully");
         return modelMapper.map(soutenance, SoutenanceDto.class);

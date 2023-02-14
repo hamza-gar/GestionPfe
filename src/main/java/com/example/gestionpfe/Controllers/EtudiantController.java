@@ -181,4 +181,5 @@ public class EtudiantController {
         boolean isWorking = etudiantService.hasSoutenance(username);
         return new ResponseEntity<Boolean>(isWorking, HttpStatus.OK);
     }
+
 }

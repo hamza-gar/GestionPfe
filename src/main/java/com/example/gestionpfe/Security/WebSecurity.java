@@ -58,7 +58,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/domaines").permitAll()
                 .antMatchers(HttpMethod.GET, "/enseignants/verification/{id:[a-zA-Z0-9]{26}}").permitAll()
                 .antMatchers(HttpMethod.GET, "/etudiants/verification/{id:[a-zA-Z0-9]{26}}").permitAll()
-                .antMatchers(HttpMethod.GET, "/etudiants/*").hasRole("ETUDIANT")
+//                .antMatchers(HttpMethod.GET, "/etudiants/*").hasRole("ETUDIANT")
                 .antMatchers(HttpMethod.GET, "/enseignants/*").hasRole("ENSEIGNANT")
                 .antMatchers(HttpMethod.GET,"/admins/*").hasRole("SUPERADMIN")
                 .and()
