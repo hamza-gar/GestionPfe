@@ -37,6 +37,10 @@ public class SujetController {
         SujetDto sujetDto = sujetService.getSujetById(id);
         SujetResponse sujetResponse = new SujetResponse();
         sujetResponse = modelMapper.map(sujetDto, SujetResponse.class);
+        sujetResponse.setEnseignantId(sujetDto.getEncadrant().getIdEnseignant());
+        sujetResponse.setNomEnseignant(sujetDto.getEncadrant().getNom().substring(0, 1).toUpperCase() + sujetDto.getEncadrant().getNom().substring(1) +
+                " " + sujetDto.getEncadrant().getPrenom().substring(0, 1).toUpperCase() + sujetDto.getEncadrant().getPrenom().substring(1));
+        sujetResponse.setEmailEnseignant(sujetDto.getEncadrant().getEmail());
         return new ResponseEntity<SujetResponse>(sujetResponse, HttpStatus.OK);
     }
 

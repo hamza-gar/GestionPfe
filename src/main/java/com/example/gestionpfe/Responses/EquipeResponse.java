@@ -15,4 +15,5 @@ public class EquipeResponse {
     private Boolean isPrivate;
     private String cryptedPassword;
     private String driveLink;
+    private String sujetId;
 }
