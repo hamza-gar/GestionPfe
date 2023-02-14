@@ -12,6 +12,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class DomaineResponse {
     private String nomDomaine;
-    private String etablissement;
+    private String idUniversite;
     private Boolean etudiant;
 }
