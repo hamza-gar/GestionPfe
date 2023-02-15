@@ -458,6 +458,16 @@ public class SujetServiceImpl implements SujetService {
     }
 
     @Override
+    public Long countMyLockedSujets(String username) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.warn("enseignant not found");
+            throw new RuntimeException(username);
+        }
+        return sujetRepository.countAllByEncadrant_IdEnseignantAndLockedIsTrue(enseignant.getIdEnseignant());
+    }
+
+    @Override
     public List<SujetDto> getAllMyLockedSujets(String username, int page, int limit) {
         Enseignant enseignant = enseignantRepository.findByEmail(username);
         if (enseignant == null) {

@@ -164,6 +164,15 @@ public class SujetController {
         return new ResponseEntity<List<SujetResponse>>(sujetResponse, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/mylockedcount")
+    public ResponseEntity<Long> getCountMyLockedSujets() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        Long count = sujetService.countMyLockedSujets(username);
+        return new ResponseEntity<Long>(count, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/myPostulated")
     public ResponseEntity<List<SujetResponse>> getMyPostulatedSujets(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

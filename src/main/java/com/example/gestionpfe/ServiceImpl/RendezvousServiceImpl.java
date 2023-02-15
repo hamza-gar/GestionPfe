@@ -264,6 +264,16 @@ public class RendezvousServiceImpl implements RendezvousService {
     }
 
     @Override
+    public Float countAllRendezvous(String username) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("Not authorized !!!");
+            throw new RuntimeException("Not authorized !!!");
+        }
+        return rendezvousRepository.countAllByEncadrant_Email(username);
+    }
+
+    @Override
     public RendezvousDto getMonRendezVous(String username){
         Etudiant etudiant = etudiantRepository.findByEmail(username);
         if (etudiant == null) {

@@ -16,4 +16,5 @@ public interface RendezvousService {
     void deleteRendezvous(String id);
     List<RendezvousDto> getAllRendezvous(String username,int page, int limit);
 
+    Float countAllRendezvous(String username);
 }

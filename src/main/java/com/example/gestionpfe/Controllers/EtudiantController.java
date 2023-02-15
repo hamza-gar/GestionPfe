@@ -132,11 +132,11 @@ public class EtudiantController {
     }
 
     @GetMapping(path = "/voirremarque")
-    public ResponseEntity<List<RemarqueResponse>> voirRemarque() {
+    public ResponseEntity<List<RemarqueResponse>> voirRemarque(@RequestParam(value = "page") int page, @RequestParam(value="limit" )int limit) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = principal.toString();
 
-        List<RemarqueDto> remarqueDtos = remarqueService.getMyRemarques(username);
+        List<RemarqueDto> remarqueDtos = remarqueService.getMyRemarques(username, page, limit);
         List<RemarqueResponse> remarqueResponses = new ArrayList<>();
         for (RemarqueDto remarqueDto : remarqueDtos) {
             RemarqueResponse remarqueResponse = new RemarqueResponse();
@@ -144,6 +144,15 @@ public class EtudiantController {
             remarqueResponses.add(remarqueResponse);
         }
         return new ResponseEntity<List<RemarqueResponse>>(remarqueResponses, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/countremarque")
+    public ResponseEntity<Long> countRemarque() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        Long count = remarqueService.countRemarque(username);
+        return new ResponseEntity<Long>(count, HttpStatus.OK);
     }
 
     @GetMapping(path = "/estpostulant")

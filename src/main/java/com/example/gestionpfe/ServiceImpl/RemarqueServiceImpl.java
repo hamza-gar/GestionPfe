@@ -72,13 +72,14 @@ public class RemarqueServiceImpl implements RemarqueService {
     }
 
     @Override
-    public List<RemarqueDto> getMyRemarques(String username) {
+    public List<RemarqueDto> getMyRemarques(String username, int page, int limit) {
         Etudiant etudiant = etudiantRepository.findByEmail(username);
         if (etudiant == null) {
             logger.warn("etudiant not found !!!");
             throw new RuntimeException("etudiant not found !!!");
         }
-        Iterable<Remarque> remarques = remarqueRepository.findAll();
+
+        Iterable<Remarque> remarques = remarqueRepository.findAllByEtudiant_IdEtudiant(etudiant.getIdEtudiant(), PageRequest.of(page, limit));
         List<RemarqueDto> remarqueDtos = new ArrayList<>();
         if (remarques == null) {
             logger.warn("Il n'y a pas de remarques !!!");
@@ -139,6 +140,16 @@ public class RemarqueServiceImpl implements RemarqueService {
         }
 
         return remarqueDto;
+    }
+
+    @Override
+    public Long countRemarque(String username) {
+        Etudiant etudiant = etudiantRepository.findByEmail(username);
+        if (etudiant == null) {
+            logger.warn("etudiant not found !!!");
+            throw new RuntimeException("etudiant not found !!!");
+        }
+        return remarqueRepository.countAllByEtudiant_IdEtudiant(etudiant.getIdEtudiant());
     }
 
 }

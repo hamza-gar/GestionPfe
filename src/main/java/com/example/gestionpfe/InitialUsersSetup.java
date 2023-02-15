@@ -90,7 +90,6 @@ public class InitialUsersSetup {
         etudiantAuthorities.add(GET_BY_IDETUDIANT_AUTHORITY);
 
 
-
         Authority GET_ALL_ETUDIANT_AUTHORITY = createAuthority("GET_ALL_ETUDIANT_AUTHORITY");
         sAdminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
         adminAuthorities.add(GET_ALL_ETUDIANT_AUTHORITY);
@@ -271,7 +270,6 @@ public class InitialUsersSetup {
         logger.info("All Roles created.");
 
 
-
         logger.info("Creating Universities...");
         Universite universite = createUniversite("Universite Abdelmalek Essaadi", "Tanger-Tétouan-Al Hoceïma");
         Universite universite2 = createUniversite("Universite Hassan II", "Casablanca-Settat");
@@ -280,10 +278,10 @@ public class InitialUsersSetup {
         logger.info("All Universities created.");
 
         logger.info("Creating Domaines...");
-        Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true,universite);
-        Domaine ensDomaine = createDomaine("uae.ac.ma", false,universite);
-        Domaine fake1 = createDomaine("gmail.com", true,universite);
-        Domaine fake2 = createDomaine("hotmail.com", false,universite);
+        Domaine etuDomaine = createDomaine("etu.uae.ac.ma", true, universite);
+        Domaine ensDomaine = createDomaine("uae.ac.ma", false, universite);
+        Domaine fake1 = createDomaine("gmail.com", true, universite);
+        Domaine fake2 = createDomaine("hotmail.com", false, universite);
         logger.info("All Domaines created.");
 
         logger.info("Creating Facultes...");
@@ -681,7 +679,6 @@ public class InitialUsersSetup {
         Equipe groupeMed8 = createEquipe(2,sujet148,"ha");
 
 
-
         logger.info("Group created.");
 
         logger.info("Adding students to group...");
@@ -872,18 +869,17 @@ public class InitialUsersSetup {
 
     @Transactional
     public Sujet createSujet(String s, String s1, int tailleEquipe, Enseignant encadrant, Boolean locked, Boolean done) {
-        Sujet sujet = sujetRepository.findByNomSujet(s);
-        if (sujet == null) {
-            sujet = new Sujet();
-            sujet.setIdSujet(utils.generateUserId(32));
-            sujet.setNomSujet(s);
-            sujet.setDescriptionSujet(s1);
-            sujet.setTailleEquipe(tailleEquipe);
-            sujet.setEncadrant(encadrant);
-            sujet.setLocked(locked);
-            sujet.setDone(done);
-            sujet = sujetRepository.save(sujet);
-        }
+
+        Sujet sujet = new Sujet();
+        sujet.setIdSujet(utils.generateUserId(32));
+        sujet.setNomSujet(s);
+        sujet.setDescriptionSujet(s1);
+        sujet.setTailleEquipe(tailleEquipe);
+        sujet.setEncadrant(encadrant);
+        sujet.setLocked(locked);
+        sujet.setDone(done);
+        sujet = sujetRepository.save(sujet);
+
         return sujet;
     }
 
@@ -952,7 +948,7 @@ public class InitialUsersSetup {
     }
 
     @Transactional
-    public Domaine createDomaine(String s, boolean b,Universite universite) {
+    public Domaine createDomaine(String s, boolean b, Universite universite) {
         Domaine domaine = domaineRepository.findByNomDomaine(s);
         if (domaine == null) {
             domaine = new Domaine();

@@ -362,4 +362,17 @@ public class SoutenanceServiceImpl implements SoutenanceService {
         }
         return true;
     }
+
+    @Override
+    public Float getAllMySoutenanceCount(String username) {
+        Enseignant enseignant = enseignantRepository.findByEmail(username);
+        if (enseignant == null) {
+            logger.info("Enseignant not found");
+            throw new RuntimeException("Enseignant not found");
+        }
+        logger.info("Enseignant found successfully : " + username);
+        Float count = soutenanceRepository.countAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(enseignant.getIdEnseignant(), enseignant.getIdEnseignant());
+        logger.info("Soutenances found successfully" + count);
+        return count;
+    }
 }

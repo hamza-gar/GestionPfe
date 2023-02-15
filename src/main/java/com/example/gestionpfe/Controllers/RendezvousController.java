@@ -58,6 +58,16 @@ public class RendezvousController {
     }
 
 
+    @PreAuthorize("hasAuthority('GET_ALL_RENDEZVOUS_AUTHORITY')")
+    @GetMapping(path = "/count")
+    public ResponseEntity<Float> countAllRendezvous(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        Float count = rendezvousService.countAllRendezvous(username);
+        return ResponseEntity.ok(count);
+    }
+
 
     @PreAuthorize("hasAuthority('TAKE_RENDEZVOUS_AUTHORITY')")
     @PostMapping

@@ -25,4 +25,5 @@ public interface SoutenanceRepository extends PagingAndSortingRepository<Soutena
     Page<Soutenance> findAllByJuryEmail(@Param("mailJury") String mailJury, Pageable pageable);
 
 
+    Float countAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(String idEnseignant, String idEnseignant1);
 }

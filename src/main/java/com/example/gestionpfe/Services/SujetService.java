@@ -26,4 +26,6 @@ public interface SujetService {
     Long countSujetsFiltered(String username, String universite, String etablissement, String departement);
 
     List<SujetDto> getAllMyPostulatedSujets(String username, int page, int limit);
+
+    Long countMyLockedSujets(String username);
 }

@@ -17,4 +17,6 @@ public interface RendezvousRepository extends PagingAndSortingRepository<Rendezv
     Rendezvous findByEquipe_IdEquipe(String idEquipe);
 
     Page<Rendezvous> findAllByEncadrant_Email(String email, Pageable pageable);
+
+    Float countAllByEncadrant_Email(String username);
 }

@@ -15,4 +15,6 @@ public interface SoutenanceService {
     List<SoutenanceDto> getAllSoutenance(String username, int page, int limit);
     List<SoutenanceDto> getAllMySoutenance(String username, int page, int limit);
     Boolean isDateSet(String username, String idSujet);
+
+    Float getAllMySoutenanceCount(String username);
 }

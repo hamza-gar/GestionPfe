@@ -92,6 +92,14 @@ public class SoutenanceController {
         return ResponseEntity.ok(soutenanceResponse);
     }
 
+    @GetMapping(path = "/minecount")
+    public ResponseEntity<Float> getAllSoutenancesMineCount() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = principal.toString();
+
+        return ResponseEntity.ok(soutenanceService.getAllMySoutenanceCount(username));
+    }
+
 
     @PostMapping
     public ResponseEntity<SoutenanceResponse> addSoutenance(@RequestBody SoutenanceRequest soutenanceRequest, @RequestParam(value = "idSujet") String idSujet) {

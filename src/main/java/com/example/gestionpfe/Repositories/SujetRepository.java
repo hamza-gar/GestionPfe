@@ -43,4 +43,5 @@ public interface SujetRepository extends PagingAndSortingRepository<Sujet, Long>
     long countAllByEquipe_Etudiant_IdEtudiant(String idEtudiant);
 
 
+    Long countAllByEncadrant_IdEnseignantAndLockedIsTrue(String idEnseignant);
 }
