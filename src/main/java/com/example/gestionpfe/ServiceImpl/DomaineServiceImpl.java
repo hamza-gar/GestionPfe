@@ -86,35 +86,23 @@ public class DomaineServiceImpl implements DomaineService {
     }
 
     @Override
-    public DomaineDto updateDomaine(String id, DomaineDto domainDto) {
+    public DomaineDto updateDomaine(long id, DomaineDto domainDto) {
 
-        Domaine DomaineEntity =  domaineRepository.findById(id);
+        Domaine DomaineEntity =  domaineRepository.getDomaineById(id);
+        Universite universiteEntity = universiteRepository.findByIdUniversite(domainDto.getIdUniversite());
 
-        if(DomaineEntity == null)throw new UsernameNotFoundException(id);
+        if(DomaineEntity == null)throw new UsernameNotFoundException(String.valueOf(id));
 
-        /*TODO: optional fields.*/
+        if (DomaineEntity.getNomDomaine() != null) {
+            DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
+        }
+        if (DomaineEntity.getEtudiant() != null) {
+            DomaineEntity.setEtudiant(domainDto.getEtudiant());
+        }
+        if (universiteEntity != null) {
+            DomaineEntity.setUniversite(universiteEntity);
+        }
 
-//        String nomDomaine1=domaineRepository.findById(id).getNomDomaine();
-//        String etablissement1=domaineRepository.findById(id).getEtablissement();
-//        Boolean etudiant1=domaineRepository.findById(id).getEtudiant();
-//        if(domainDto.getNomDomaine()==null) {
-//            DomaineEntity.setNomDomaine(nomDomaine1);
-//        }else{
-//            DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
-//        }
-//        if(domainDto.getEtablissement()==null) {
-//            DomaineEntity.setEtablissement(etablissement1);
-//        }else{
-//            DomaineEntity.setEtablissement(domainDto.getEtablissement());
-//        }
-//
-//        if(domainDto.getEtudiant()==null) {
-//            DomaineEntity.setEtudiant(etudiant1);
-//        }else{
-//            DomaineEntity.setEtudiant(domainDto.getEtudiant());
-//        }
-        DomaineEntity.setNomDomaine(domainDto.getNomDomaine());
-        DomaineEntity.setEtudiant(domainDto.getEtudiant());
 
         Domaine domaineUpdated = domaineRepository.save(DomaineEntity);
 
@@ -126,10 +114,10 @@ public class DomaineServiceImpl implements DomaineService {
     }
 
     @Override
-    public void deleteDomaine(String id) {
-        Domaine DomaineEntity =  domaineRepository.findById(id);
+    public void deleteDomaine(long id) {
+        Domaine DomaineEntity =  domaineRepository.getDomaineById(id);
 
-        if(DomaineEntity == null)throw new UsernameNotFoundException(id);
+        if(DomaineEntity == null)throw new UsernameNotFoundException(String.valueOf(id));
 
         domaineRepository.delete(DomaineEntity);
     }
@@ -147,7 +135,7 @@ public class DomaineServiceImpl implements DomaineService {
         for(Domaine domaineEntity:domaines){
             DomaineDto domaine = new DomaineDto();
             domaine = modelMapper.map(domaineEntity, DomaineDto.class);
-
+            domaine.setNomUniversite(domaineEntity.getUniversite().getNomUniversite());
 
             domainesDto.add(domaine);
         }

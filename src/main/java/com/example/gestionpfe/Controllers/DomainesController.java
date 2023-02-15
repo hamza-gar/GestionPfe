@@ -68,7 +68,7 @@ public class DomainesController {
 
     @PreAuthorize("hasAuthority('UPDATE_DOMAINE_AUTHORITY')")
     @PutMapping(path="/{id}")
-    public ResponseEntity<DomaineResponse> updateDomaine(@PathVariable String id,@RequestBody DomaineRequest domaineRequest){
+    public ResponseEntity<DomaineResponse> updateDomaine(@PathVariable long id,@RequestBody DomaineRequest domaineRequest){
 
         DomaineDto domainDto = new DomaineDto();
         domainDto = modelMapper.map(domaineRequest,DomaineDto.class);
@@ -83,7 +83,7 @@ public class DomainesController {
 
     @PreAuthorize("hasAuthority('DELETE_DOMAINE_AUTHORITY')")
     @DeleteMapping(path="/{id}")
-    public ResponseEntity<Object> deleteDomaine(@PathVariable String id){
+    public ResponseEntity<Object> deleteDomaine(@PathVariable long id){
         domaineService.deleteDomaine(id);
 
         return new ResponseEntity<>(HttpStatus.OK);

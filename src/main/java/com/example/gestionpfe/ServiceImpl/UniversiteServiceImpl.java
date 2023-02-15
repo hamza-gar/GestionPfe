@@ -1,7 +1,9 @@
 package com.example.gestionpfe.ServiceImpl;
 
+import com.example.gestionpfe.Dto.DomaineDto;
 import com.example.gestionpfe.Dto.EtablissementDto;
 import com.example.gestionpfe.Dto.UniversiteDto;
+import com.example.gestionpfe.Entities.Domaine;
 import com.example.gestionpfe.Entities.Etablissement;
 import com.example.gestionpfe.Entities.Universite;
 import com.example.gestionpfe.Repositories.UniversiteRepository;
@@ -9,6 +11,7 @@ import com.example.gestionpfe.Services.UniversiteService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,8 +30,14 @@ public class UniversiteServiceImpl implements UniversiteService {
 
     @Override
     public UniversiteDto findUniversiteById(String idUniversite) {
+        Universite universiteEntity =  universiteRepository.findByIdUniversite(idUniversite);
 
-        return null;
+        if(universiteEntity == null)throw new UsernameNotFoundException(idUniversite);
+
+        UniversiteDto universiteDto = new UniversiteDto();
+        universiteDto = modelMapper.map(universiteEntity, UniversiteDto.class);
+        logger.info("university found successfully");
+        return universiteDto;
     }
 
     @Override

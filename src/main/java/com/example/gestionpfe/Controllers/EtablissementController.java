@@ -60,6 +60,14 @@ public class EtablissementController {
         }
         return new ResponseEntity<List<UniversiteResponse>>(universiteResponses, HttpStatus.OK);
     }
+    @GetMapping(path = "/universites/{id}")
+    public ResponseEntity<UniversiteResponse> getUniversiteById(@PathVariable("id") String id) {
+        UniversiteResponse universiteResponse = new UniversiteResponse();
+        UniversiteDto universiteDto = universiteService.findUniversiteById(id);
+        universiteResponse = modelMapper.map(universiteDto, UniversiteResponse.class);
+        return new ResponseEntity<UniversiteResponse>(universiteResponse, HttpStatus.OK);
+    }
+
 
     @PostMapping
     public ResponseEntity<List<DepartementResponse>> getDepartementsByEtablissementId(@RequestBody DepartementResponse nomEtablissement) {

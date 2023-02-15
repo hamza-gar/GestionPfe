@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DomaineResponse {
+    private long id;
     private String nomDomaine;
     private String idUniversite;
+    private String nomUniversite;
     private Boolean etudiant;
 }
