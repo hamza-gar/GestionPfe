@@ -26,4 +26,6 @@ public interface SoutenanceRepository extends PagingAndSortingRepository<Soutena
 
 
     Float countAllBySujet_Encadrant_IdEnseignantOrJurys_Enseignant_IdEnseignant(String idEnseignant, String idEnseignant1);
+
+    List<Soutenance> findAllByDateSoutenance(Date dateSoutenance);
 }

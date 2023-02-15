@@ -20,7 +20,6 @@ public class GestionPfeApplication {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();

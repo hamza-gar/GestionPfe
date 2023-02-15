@@ -7,6 +7,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface RendezvousRepository extends PagingAndSortingRepository<Rendezvous, Long> {
@@ -15,6 +16,8 @@ public interface RendezvousRepository extends PagingAndSortingRepository<Rendezv
     Rendezvous findByDateRendezvous(Date dateRendezvous);
 
     Rendezvous findByEquipe_IdEquipe(String idEquipe);
+
+    List<Rendezvous> findAllByDateRendezvous(Date dateRendezvous);
 
     Page<Rendezvous> findAllByEncadrant_Email(String email, Pageable pageable);
 

@@ -326,7 +326,7 @@ public class EmailSender {
         }
         logger.info("Mail send ....");
     }
-    public void RemindeRendesVous(String toEmail, Date date) {
+    public void RendezVousReminder(String toEmail, Date date) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             String pattern = "yyyy-MM-dd";
@@ -343,7 +343,7 @@ public class EmailSender {
         }
         logger.info("Mail send ....");
     }
-    public void SoutenanceRendesVous(String toEmail, Date date) {
+    public void SoutenanceReminder(String toEmail, Date date) {
         MimeMessage message = mailSender.createMimeMessage();
         try {
             String pattern = "yyyy-MM-dd";
