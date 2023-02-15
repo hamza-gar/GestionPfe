@@ -66,6 +66,10 @@ public class EmailSender {
     String ShareLienDrive1 = htmlMessageSender.ShareLienDrive1;
     String ShareLienDrive2 = htmlMessageSender.ShareLienDrive2;
     String ShareLienDrive3 = htmlMessageSender.ShareLienDrive3;
+    String RendezVousReminder1 = htmlMessageSender.RendezVousReminder;
+    String RendezVousReminder2 = htmlMessageSender.RendezVousReminder2;
+    String SoutenanceReminder1 = htmlMessageSender.SoutenanceReminder;
+    String SoutenanceReminder2 = htmlMessageSender.SoutenanceReminder2;
 
     public void sendVerificationMail(String toEmail, String token, String type) {
         MimeMessage message = mailSender.createMimeMessage();
@@ -316,6 +320,40 @@ public class EmailSender {
             helper.setTo(toEmail);
             helper.setSubject("Gestion PFE : Demande Rendez-Vous");
             helper.setText(Header + ShareLienDrive1 + lien + ShareLienDrive2 + simpleDateFormat.format(date) + " a " + simpleTimeFormat.format(date) + ShareLienDrive3 + htmlFooter, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("Mail send ....");
+    }
+    public void RemindeRendesVous(String toEmail, Date date) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            String pattern = "yyyy-MM-dd";
+            String timePattern = "HH:mm";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Gestion PFE : Rendez-vous pris");
+            helper.setText(Header + RendezVousReminder1 + simpleDateFormat.format(date) + RendezVousReminder2 + htmlFooter, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        logger.info("Mail send ....");
+    }
+    public void SoutenanceRendesVous(String toEmail, Date date) {
+        MimeMessage message = mailSender.createMimeMessage();
+        try {
+            String pattern = "yyyy-MM-dd";
+            String timePattern = "HH:mm";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat(timePattern);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(toEmail);
+            helper.setSubject("Gestion PFE : Rendez-vous pris");
+            helper.setText(Header + SoutenanceReminder1 + simpleDateFormat.format(date) + SoutenanceReminder2 + htmlFooter, true);
             mailSender.send(message);
         } catch (Exception e) {
             e.printStackTrace();

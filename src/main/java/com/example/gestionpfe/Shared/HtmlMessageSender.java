@@ -467,4 +467,45 @@ public class HtmlMessageSender {
             "                  <p>Cordialement</p>\n" +
             "                </td>\n" +
             "              </tr>";
+
+/**************************************************************************************************************************************************/
+    static String RendezVousReminder="<tr>\n" +
+        "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+        "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+        "              <tr>\n" +
+        "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+        "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\">Rappel : Rendez-vous</h1>\n" +
+        "\n" +
+        "\n" +
+        "\n" +
+        "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+        "                    Cher/Chère etudiants\n" +
+        "                  </p>\n" +
+        "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+        "                    Je voulais juste vous rappeler de notre rendez-vous prévu pour le\" ";
+
+    static String RendezVousReminder2="</p><p>\nJe tiens à rappeler que ce rendez-vous est important et que votre présence est nécessaire pour la réussite de notre rencontre.\n" +
+            "N'hésitez pas à me contacter si vous avez des questions ou si vous avez besoin de plus d'informations. Je suis impatient de vous voir à notre rendez-vous." +" </p>\n" +
+            "<p>Merci pour votre attention, et à bientôt.\n</p>" +
+            "                  <p>Cordialement</p>\n" ;
+
+    static String SoutenanceReminder="<tr>\n" +
+            "          <td style=\"padding:36px 30px 42px 30px;\">\n" +
+            "            <table role=\"presentation\" style=\"width:100%;border-collapse:collapse;border:0;border-spacing:0;\">\n" +
+            "              <tr>\n" +
+            "                <td style=\"padding:0 0 36px 0;color:#153643;\">\n" +
+            "                  <h1 style=\"font-size:24px;margin:0 0 20px 0;font-family:Arial,sans-serif;\"> Rappel : Soutenance</h1>\n" +
+            "\n" +
+            "\n" +
+            "\n" +
+            "                  <p style=\"text-align: justify;margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Cher/Chère etudiants\n" +
+            "                  </p>\n" +
+            "                  <p style=\"margin:0 0 12px 0;font-size:16px;line-height:24px;font-family:Arial,sans-serif;\">\n" +
+            "                    Je voulais juste vous rappeler de notre rendez-vous prévu pour le\" ";
+
+    static String SoutenanceReminder2="</p><p>\nJe tiens à rappeler que ce rendez-vous est important et que votre présence est nécessaire pour la réussite de notre rencontre.\n" +
+            "N'hésitez pas à me contacter si vous avez des questions ou si vous avez besoin de plus d'informations. Je suis impatient de vous voir à notre rendez-vous." +" </p>\n" +
+            "<p>Merci pour votre attention, et à bientôt.\n</p>" +
+            "                   <p>Cordialement</p>\n" ;
 }
