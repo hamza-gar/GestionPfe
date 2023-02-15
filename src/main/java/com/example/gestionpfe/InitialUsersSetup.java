@@ -443,21 +443,15 @@ public class InitialUsersSetup {
 
         logger.info("Creating subjects...");
         Sujet sujet = createSujet("Chess AI", "Chess has been around for centuries, but the game has recently seen a major " +
-                "shift in its competitive landscape. Thanks to developments in artificial intelligence (AI) technology," +
-                " the use of computer-aided analysis is becoming increasingly prevalent in chess. This begs the question—what " +
-                "are the implications of using AI to play chess? In this blog post, we'll explore the history of chess, how" +
-                " AI is being used to increase competitiveness in the game," +
-                " and some ethical considerations that come with introducing new technologies into an already established game.", 2, enseignant, true, true);
-        Sujet sujet1 = createSujet("Google Map API", "All the information you need to bring the real world to your web and mobile" +
-                " apps with Google Maps Platform SDKs and APIs for Maps, Routes, and Places.", 4, enseignant, true, false);
-        Sujet sujet2 = createSujet("Gestion de Stock", "La gestion de stock est une étude stratégique des besoins de votre" +
-                " commerce en prévision des ventes sur le marché.", 3, enseignant, false, false);
+                "shift in its competitive landscape. ", 2, enseignant, false, false);
+        Sujet sujet1 = createSujet("Google Map API", "All the information you need to bring the real world to your web and mobile"
+                , 4, enseignant, false, false);
+        Sujet sujet2 = createSujet("Gestion de Stock", "La gestion de stock est une étude stratégique des besoins de votre"
+               , 3, enseignant, false, false);
         Sujet sujet3 = createSujet("Gestion pfe", "La gestion de pfe est une étude stratégique des besoins de votre besoin", 3, enseignant, false, false);
-        Sujet sujet4 = createSujet("Robot cuisinier", "Un robot de cuisine ou robot ménager ou robot multifonction, parfois abrégé simplement en « robot », est un appareil électrique de cuisine utilisé pour faciliter" +
-                " diverses tâches répétitives dans le processus de préparation des aliments. ", 2, enseignant, true, true);
+        Sujet sujet4 = createSujet("Robot cuisinier", "Un robot de cuisine ou robot ménager ou robot multifonction,", 2, enseignant, false, false);
 
-        Sujet sujet5 = createSujet("System de securite de porte", "Un système de sécurité de porte est un dispositif ou une combinaison de dispositifs conçus " +
-                "pour protéger une porte contre les intrusions indésirables. ", 3, enseignant2, false, false);
+        Sujet sujet5 = createSujet("System de securite de porte", "Un système de sécurité de porte est un dispositif ", 3, enseignant2, false, false);
         Sujet sujet6 = createSujet("Gestion de Location de voiture", "Sujet 1", 3, enseignant2, false, false);
         Sujet sujet7 = createSujet("Gestion de vente", "Sujet 1", 3, enseignant2, false, false);
         Sujet sujet8 = createSujet("système de covoiturage", "Sujet 1", 3, enseignant2, false, false);
@@ -506,25 +500,21 @@ public class InitialUsersSetup {
         Sujet sujet44 = createSujet("Segmentation d’une image", "Sujet 1", 3, enseignant9, false, false);
         Sujet sujet180 = createSujet("Segmentation d’une image", "Sujet 1", 3, enseignant10, false, false);
 
-        Sujet sujet45 = createSujet("Étude semiclassique des modes de pression chaotiques", "Dans cette section, nous nous intéressons aux pulsateurs" +
-                " en rotation rapide et plus particulièrement aux δ Scuti. Nous verrons que les spectres d’oscillation des δ Scuti ont des propriétés " +
-                "très variées en terme de gamme, de nombre et d’amplitudes des" +
-                " fréquences observées. Pour mieux les comprendre d’un point de vue théorique, ", 3, enseignant21, false, false);
-        Sujet sujet46 = createSujet("Les jeux mathématiques : les aspects théoriques", "Il est facile de constater que le jeu est partout présent dans notre quotidien. Qu’il soit pratiqué en solitaire ou à plusieurs nous observons du jeu en permanence : dans les journaux, à la télévision, à la radio et plus encore sur les ordinateurs, smartphones et autres tablettes." +
-                " Mais que savons-nous réellement du jeu et de son" +
-                " utilité dans un cadre comme celui de l’éducation ?", 2, enseignant21, false, false);
+        Sujet sujet45 = createSujet("Étude semiclassique des modes de pression chaotiques", "Dans cette section, nous nous intéressons aux pulsateurs"
+               , 3, enseignant21, false, false);
+        Sujet sujet46 = createSujet("Les jeux mathématiques : les aspects théoriques", "Il est facile de constater que le jeu  "
+               , 2, enseignant21, false, false);
 
-        Sujet sujet47 = createSujet("Régulation court terme du trafic aérien et optimisation combinatoire", "L’espace aérien est une ressource limitée qui est soumise à une forte demande dans certaines parties du monde telles que l’Europe de l’Ouest, l’Amérique du Nord et l’Asie du Sud Est. Afin d’assurer le respect des normes de sécurité imposant une séparation physique minimale entre deux avions, " +
-                "cet espace aérien a été divisé dans ces zones en différents secteurs aériens", 3, enseignant21, false, false);
+        Sujet sujet47 = createSujet("Régulation court terme du trafic aérien", "L’espace aérien est une ressource limitée "
+                , 3, enseignant21, false, false);
 
-        Sujet sujet48 = createSujet("Retour sur le comportement mécanique", "Toujours en lien avec l’étude du comportement des voies ferroviaires, nous présentons ici plusieurs études (semi-)analytiques et numériques réalisées auparavant. Tout comme la section précédente, cette partie a simplement pour" +
-                " but d’illustrer les différentes démarches possibles à l’aide de certains travaux,", 3, enseignant22, false, false);
+        Sujet sujet48 = createSujet("Retour sur le comportement mécanique", "Toujours en lien avec l’étude du comportement des voies ferroviaires,"
+             , 3, enseignant22, false, false);
 
-        Sujet sujet49 = createSujet("Modes de pression dans les étoiles en rotation rapide ", "Dans cette section, nous nous intéressons aux pulsateurs en rotation rapide et plus particulièrement aux Scuti." +
-                " Nous verrons que les spectres d’oscillation des Scuti ont des propriétés très variées en terme de gamme,", 4, enseignant22, false, false);
+        Sujet sujet49 = createSujet("Modes de pression dans les étoiles en rotation rapide ", "Dans cette section, nous nous intéressons aux "
+                , 4, enseignant22, false, false);
 
-        Sujet sujet50 = createSujet("Modelisation mathematique etformulation numerique ", "Les écoulements des fluides dans les conduites ont fait l’objet de très nombreux travaux aussi" +
-                " bien sur le plan expérimental, théorique que numérique.", 3, enseignant22, false, false);
+        Sujet sujet50 = createSujet("Modelisation mathematique etformulation ", "Les écoulements des fluides dans les conduites ont fait " , 3, enseignant22, false, false);
 
         Sujet sujet51 = createSujet("Rappels sur les processus stochastiques","sujet47",2,enseignant23,false,false);
         Sujet sujet52 = createSujet("Rappels sur les processus stochastiques","sujet48",3,enseignant23,false,false);
@@ -549,21 +539,21 @@ public class InitialUsersSetup {
         Sujet sujet67 = createSujet("Rappels sur les processus stochastiques","sujet58",5,enseignant29,false,false);
         Sujet sujet68 = createSujet("Rappels sur les processus stochastiques","sujet58",4,enseignant30,false,false);
 
-        Sujet sujet69 = createSujet("Rayonnements directement ionisants et indirectement ionisants","Les TNE se développent au sein des organes ayant un rôle glandulaire ou dans un tissu voisin, à partir des cellules neuroendocrines. Elles sont disséminées dans le système neuroendocrine diffus, qui est composé des glandes neuroendocrines" +
-                " et d’autres tissus tels que les poumons, l’appareil digestif ou encore la peau.",4,enseignant31,false,false);
-        Sujet sujet70 = createSujet("Système de micro-cogénération et de ventilation adapté aux logements à très faibles besoins énergétiques","Les défis énergétiques et environnementaux actuels (réchauffement climatique, limitation des ressources énergétiques) appellent diverses solutions. Dans le secteur du bâtiment, ces solutions passent par une réduction des consommations d’énergie," +
-                " en particulier pour les nouvelles constructions.",4,enseignant31,false,false);
-        Sujet sujet71 = createSujet("Méthodes sismologiques pour l’étude de la fracturation dans les glaciers alpins"," On parle de mouvement gravitaire lorsqu’un volume d’un matériau quelconque (ce peut être de la roche, de la glace, de la neige, de la boue…) " +
-                "est soumis à un déplacement sous l’effet de son propre poids.",4,enseignant31,false,false);
+        Sujet sujet69 = createSujet("Rayonnements directement ionisants et","Les TNE se développent au sein des organes ayant un rôle "
+               ,4,enseignant31,false,false);
+        Sujet sujet70 = createSujet("Système de micro-cogénération et de ventilation adapté","Les défis énergétiques "
+                ,4,enseignant31,false,false);
+        Sujet sujet71 = createSujet("Méthodes sismologiques pour l’étude de la fracturation"," On parle de mouvement gravitaire lorsqu’un volume"
+               ,4,enseignant31,false,false);
 
-        Sujet sujet72 = createSujet("Interactions et mobilité des organes abdominaux sous sollicitations dynamiques","     D’un point de vue mécanique, la cavité abdomino-pelvienne dépend des parois qui la composent. Ces parois sont constituées d’un ensemble de muscles qui s’insèrent sur le rachis, le gril costal et le squelette du bassin. Ils existent sur tout le pourtour de la cavité abdominale sauf en bas où celle-ci communique avec la cavité pelvienne. Afin de faciliter la compréhension des parois abdominales, nous considérons que" +
-                " l’abdomen a la forme d’un cylindre qui présente quatre parois (Tableau 1).",2,enseignant32,false,false);
+        Sujet sujet72 = createSujet("Interactions et mobilité des organes abdominaux ","     D’un point de vue mécanique, la cavité abdomino"
+               ,2,enseignant32,false,false);
 
-        Sujet sujet73 = createSujet("Etude de la perception de la voix chez le patient sourd post lingual implanté cochléaire unilatéral"," première étape de transformation de l’énergie sonore : l’information reçue par le tympan va être transformée en information " +
-                "mécanique et acheminée jusqu’à l’oreille interne.",3,enseignant32,false,false);
+        Sujet sujet73 = createSujet("Etude de la perception de la voix chez le patient "," première étape de transformation  "
+               ,3,enseignant32,false,false);
 
-        Sujet sujet74 = createSujet("Méthodes numériques pour l’écoulement de Stokes 3D","Les mucus ne sont pas des fluides homogènes : ils sont essentiellement composés d’eau, comme tous les fluides  biologiques, ainsi que de plusieurs agents : protéines, particules inhalées, diverses cellules… Parmi" +
-                " ces agents, une protéine joue un rôle clé : la mucine. Elle est sécrétée",1,enseignant32,false,false);
+        Sujet sujet74 = createSujet("Méthodes numériques pour l’écoulement de Stokes 3D","Les mucus ne sont pas des fluides homogènes "
+                ,1,enseignant32,false,false);
 
         Sujet sujet75 = createSujet("Evaluation de la technologie Li-ion","sujet70",2,enseignant33,false,false);
         Sujet sujet76 = createSujet("Evaluation de la technologie Li-ion","sujet71",3,enseignant33,false,false);
@@ -580,76 +570,76 @@ public class InitialUsersSetup {
 
         Sujet sujet87 = createSujet("Système bancaire marocain","Système bancaire marocain Système bancaire marocain Système bancaire marocain",1,enseignant41,false,false);
         Sujet sujet88 = createSujet("Gestion du risque de crédit","Gestion du risque de crédit Gestion du risque de crédit Gestion du risque de crédit",2,enseignant41,false,false);
-        Sujet sujet89 = createSujet("L’audit financier « cycle ventes/clients »","L’audit financier « cycle ventes/clients » Système bancaire marocain Système bancaire marocain",3,enseignant41,false,false);
+        Sujet sujet89 = createSujet("L’audit financier « cycle ventes/clients »","L’audit financier « cycle ventes/clients » Système ",3,enseignant41,false,false);
 
         Sujet sujet90 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",2,enseignant42,false,false);
-        Sujet sujet91 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant42,false,false);
-        Sujet sujet92 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant42,false,false);
+        Sujet sujet91 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget ",2,enseignant42,false,false);
+        Sujet sujet92 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie ",2,enseignant42,false,false);
 
         Sujet sujet93 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",3,enseignant43,false,false);
-        Sujet sujet94 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant43,false,false);
-        Sujet sujet95 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant43,false,false);
+        Sujet sujet94 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget ",2,enseignant43,false,false);
+        Sujet sujet95 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de ",2,enseignant43,false,false);
 
         Sujet sujet96 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",1,enseignant44,false,false);
-        Sujet sujet97 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant44,false,false);
-        Sujet sujet98 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant45,false,false);
+        Sujet sujet97 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget ",2,enseignant44,false,false);
+        Sujet sujet98 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de ",2,enseignant45,false,false);
 
         Sujet sujet99 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",5,enseignant45,false,false);
-        Sujet sujet100 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant45,false,false);
-        Sujet sujet101 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant46,false,false);
+        Sujet sujet100 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget ",2,enseignant45,false,false);
+        Sujet sujet101 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de ",2,enseignant46,false,false);
 
         Sujet sujet102 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",3,enseignant47,false,false);
-        Sujet sujet103 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant47,false,false);
-        Sujet sujet104 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant48,false,false);
+        Sujet sujet103 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur ",2,enseignant47,false,false);
+        Sujet sujet104 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation ",2,enseignant48,false,false);
 
         Sujet sujet105 = createSujet("Le Tourisme à la région","Le Tourisme à la régionLe Tourisme à la régionLe Tourisme à la région",4,enseignant49,false,false);
-        Sujet sujet106 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur la productionL’impact du budget sur la production",2,enseignant50,false,false);
-        Sujet sujet107 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation bancaireLa stratégie de fidélisation bancaire",2,enseignant50,false,false);
+        Sujet sujet106 = createSujet("L’impact du budget sur la production","L’impact du budget sur la productionL’impact du budget sur ",2,enseignant50,false,false);
+        Sujet sujet107 = createSujet("La stratégie de fidélisation bancaire","La stratégie de fidélisation bancaireLa stratégie de fidélisation ",2,enseignant50,false,false);
 
-        Sujet sujet108 = createSujet("Le prêt à intérêt en droit marocain","Le prêt à intérêt en droit marocain Le prêt à intérêt en droit marocain Le prêt à intérêt en droit marocain",2,enseignant51,false,false);
+        Sujet sujet108 = createSujet("Le prêt à intérêt en droit marocain","Le prêt à intérêt en droit marocain Le prêt à intérêt en droit marocain ",2,enseignant51,false,false);
         Sujet sujet109 = createSujet("Le capital marque","Le capital marqueLe capital marqueLe capital marqueLe capital marque",3,enseignant51,false,false);
         Sujet sujet110 = createSujet("un objectif primordial","un objectif primordialun objectif primordialun objectif primordialun objectif primordial",4,enseignant51,false,false);
-        Sujet sujet111 = createSujet("Le marketing social pour fidéliser les cadres","Le marketing social pour fidéliser les cadresLe marketing social pour fidéliser les cadresLe marketing social pour fidéliser les cadres",3,enseignant52,false,false);
-        Sujet sujet112 = createSujet("La promotion est-elle un levier de fidélisation ","La promotion est-elle un levier de fidélisation La promotion est-elle un levier de fidélisation ",5,enseignant52,false,false);
-        Sujet sujet113 = createSujet("Géomarketing : localisation commerciale multiple","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant53,false,false);
+        Sujet sujet111 = createSujet("Le marketing social pour fidéliser les cadres","Le marketing social pour fidéliser les cadresLe marketing social",3,enseignant52,false,false);
+        Sujet sujet112 = createSujet("La promotion est-elle un levier de fidélisation ","La promotion est-elle un levier de fidélisation La promotion ",5,enseignant52,false,false);
+        Sujet sujet113 = createSujet("Géomarketing : localisation commerciale multiple","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant53,false,false);
 
-        Sujet sujet114 = createSujet("Mesure de l’efficacité publicitaire: Évaluation de la campagne publicitaire","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant54,false,false);
-        Sujet sujet115 = createSujet("Stratégie de fidélisation dans le marketing des service","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant55,false,false);
-        Sujet sujet116 = createSujet("L’appui de l’INDH aux associations de Laâyoune","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",3,enseignant55,false,false);
-        Sujet sujet117 = createSujet("Investissement culturel et développement ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant55,false,false);
-        Sujet sujet118 = createSujet("Le développement communal cas des communes de la province d’Oujda","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",5,enseignant56,false,false);
-        Sujet sujet119 = createSujet("La politique de restructuration des bidonvilles au Maroc","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant56,false,false);
-        Sujet sujet120 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant57,false,false);
-        Sujet sujet121 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",2,enseignant58,false,false);
-        Sujet sujet122 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant59,false,false);
-        Sujet sujet123 = createSujet("Géomarketing : localisation commerciale multiple","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",3,enseignant59,false,false);
-        Sujet sujet124 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant60,false,false);
+        Sujet sujet114 = createSujet("Mesure de l’efficacité publicitaire: Évaluation de la campagne publicitaire","Géomarketing : localisation commerciale",4,enseignant54,false,false);
+        Sujet sujet115 = createSujet("Stratégie de fidélisation dans le marketing des service","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant55,false,false);
+        Sujet sujet116 = createSujet("L’appui de l’INDH aux associations de Laâyoune","Géomarketing : localisation commerciale multipleGéomarketing ",3,enseignant55,false,false);
+        Sujet sujet117 = createSujet("Investissement culturel et développement ","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant55,false,false);
+        Sujet sujet118 = createSujet("Le développement communal cas des communes de la province d’Oujda","Géomarketing : localisation commerciale multipleGéomarketing",5,enseignant56,false,false);
+        Sujet sujet119 = createSujet("La politique de restructuration des bidonvilles au Maroc","Géomarketing : localisation commerciale multipleGéomarketing",4,enseignant56,false,false);
+        Sujet sujet120 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant57,false,false);
+        Sujet sujet121 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing",2,enseignant58,false,false);
+        Sujet sujet122 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing",4,enseignant59,false,false);
+        Sujet sujet123 = createSujet("Géomarketing : localisation commerciale multiple","Géomarketing : localisation commerciale multipleGéomarketing ",3,enseignant59,false,false);
+        Sujet sujet124 = createSujet("La pratique de l’évaluation des actions publiques ","Géomarketing : localisation commerciale multipleGéomarketing",4,enseignant60,false,false);
 
-        Sujet sujet125 = createSujet("Les maladies endémiques dans le cercle de Matam"," La ruée européenne en Afrique dans la seconde moitié du XIXe siècle a eu des conséquences profondes sur les sociétés africaines. En effet, sous l’égide de la civilisation et de l’évangélisation, ",4,enseignant11,false,false);
-        Sujet sujet126 = createSujet("Les facteurs de risques aux infections respiratoires aigues","Les infections respiratoires aigües comptent dans le monde entier parmi les maladies infantiles les plus courantes. Elles constituent partout la première ou la deuxième cause de présentation de jeune enfant dans les structures sanitaires. ",2,enseignant11,false,false);
-        Sujet sujet127 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","La vaccination prévient 2 à 3 millions de décès dans le monde chaque année (1). Chez les patients atteints de maladies auto-immunes (MAI) elle a fait preuve de son efficacité en réduisant l’incidence de certaines infections (2).",4,enseignant12,false,false);
-        Sujet sujet128 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","L’insuffisance respiratoire aiguë (IRA) est la défaillance d’un ou plusieurs composants du système respiratoire, entrainant une altération aigüe de l’hématose.",3,enseignant13,false,false);
-        Sujet sujet129 = createSujet("L’insuffisance respiratoire aiguë (IRA)","En France, on dénombre chaque année plus de 140 000 nouveaux cas d’accidents vasculaires cérébraux, soit un toutes les quatre minutes. L’AVC représente la première cause de handicap physique acquis de l’adulte.",4,enseignant13,false,false);
+        Sujet sujet125 = createSujet("Les maladies endémiques dans le cercle de Matam"," La ruée européenne en Afrique dans la seconde moitié du XIXe.",4,enseignant11,false,false);
+        Sujet sujet126 = createSujet("Les facteurs de risques aux infections respiratoires aigues","Les infections respiratoires aigües comptent dans le monde",2,enseignant11,false,false);
+        Sujet sujet127 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","La vaccination prévient 2 à 3 millions de décès dans le monde chaque année (1).",4,enseignant12,false,false);
+        Sujet sujet128 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","L’insuffisance respiratoire ",3,enseignant13,false,false);
+        Sujet sujet129 = createSujet("L’insuffisance respiratoire aiguë (IRA)","En France, on dénombre chaque année plus de 140 000 nouveaux ",4,enseignant13,false,false);
         Sujet sujet130 = createSujet("Généralités sur la téléphonie mobile en santé","Généralités sur la téléphonie mobile en santé",5,enseignant14,false,false);
-        Sujet sujet131 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",5,enseignant14,false,false);
-        Sujet sujet132 = createSujet("L’insuffisance respiratoire aiguë (IRA)","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",2,enseignant14,false,false);
-        Sujet sujet133 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",1,enseignant15,false,false);
-        Sujet sujet134 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant16,false,false);
-        Sujet sujet135 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant17,false,false);
-        Sujet sujet136 = createSujet("Les maladies endémiques dans le cercle de Matam ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",3,enseignant18,false,false);
-        Sujet sujet137 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant19,false,false);
-        Sujet sujet138 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",2,enseignant20,false,false);
+        Sujet sujet131 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing ",5,enseignant14,false,false);
+        Sujet sujet132 = createSujet("L’insuffisance respiratoire aiguë (IRA)","Géomarketing : localisation commerciale multipleGéomarketing ",2,enseignant14,false,false);
+        Sujet sujet133 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing ",1,enseignant15,false,false);
+        Sujet sujet134 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","Géomarketing ",4,enseignant16,false,false);
+        Sujet sujet135 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","Géomarketing ",4,enseignant17,false,false);
+        Sujet sujet136 = createSujet("Les maladies endémiques dans le cercle de Matam ","Géomarketing : localisation commerciale multipleGéomarketing ",3,enseignant18,false,false);
+        Sujet sujet137 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant19,false,false);
+        Sujet sujet138 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing ",2,enseignant20,false,false);
 
-        Sujet sujet139 = createSujet("L’insuffisance respiratoire aiguë (IRA)","En France, on dénombre chaque année plus de 140 000 nouveaux cas d’accidents vasculaires cérébraux, soit un toutes les quatre minutes. L’AVC représente la première cause de handicap physique acquis de l’adulte.",4,enseignant61,false,false);
+        Sujet sujet139 = createSujet("L’insuffisance respiratoire aiguë (IRA)","En France, on dénombre chaque année plus de 140 000 nouveaux ",4,enseignant61,false,false);
         Sujet sujet140 = createSujet("Généralités sur la téléphonie mobile en santé","Généralités sur la téléphonie mobile en santé",2,enseignant62,false,false);
-        Sujet sujet141 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",5,enseignant63,false,false);
-        Sujet sujet142 = createSujet("L’insuffisance respiratoire aiguë (IRA)","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",2,enseignant64,false,false);
-        Sujet sujet143 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",1,enseignant65,false,false);
-        Sujet sujet144 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant66,false,false);
-        Sujet sujet145 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant67,false,false);
-        Sujet sujet146 = createSujet("Les maladies endémiques dans le cercle de Matam ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",3,enseignant68,false,false);
-        Sujet sujet147 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",4,enseignant69,false,false);
-        Sujet sujet148 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing : localisation commerciale multiple",2,enseignant70,false,false);
+        Sujet sujet141 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing ",5,enseignant63,false,false);
+        Sujet sujet142 = createSujet("L’insuffisance respiratoire aiguë (IRA)","Géomarketing : localisation commerciale multipleGéomarketing ",2,enseignant64,false,false);
+        Sujet sujet143 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing ",1,enseignant65,false,false);
+        Sujet sujet144 = createSujet("Transferts tendineux pour la prise en charge du pied varus équin post-AVC","Géomarketing : ",4,enseignant66,false,false);
+        Sujet sujet145 = createSujet("Vaccination des patients atteints de maladies auto-immunes systémiques en Martinique","Géomarketing :  ",4,enseignant67,false,false);
+        Sujet sujet146 = createSujet("Les maladies endémiques dans le cercle de Matam ","Géomarketing : localisation commerciale multipleGéomarketing ",3,enseignant68,false,false);
+        Sujet sujet147 = createSujet("Les maladies endémiques dans le cercle de Matam","Géomarketing : localisation commerciale multipleGéomarketing ",4,enseignant69,false,false);
+        Sujet sujet148 = createSujet("Généralités sur la téléphonie mobile en santé ","Géomarketing : localisation commerciale multipleGéomarketing ",2,enseignant70,false,false);
 
 
         logger.info("Sujets created.");
